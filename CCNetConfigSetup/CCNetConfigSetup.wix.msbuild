@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!--
+ * Copyright (c) 2006, Ryan Conrad. All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+ * - Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+ * 
+ * - Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the 
+ *    documentation and/or other materials provided with the distribution.
+ * 
+ * - Neither the name of the Camalot Designs nor the names of its contributors may be used to endorse or promote products derived from this software 
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE 
+ * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH 
+ * DAMAGE.
+ *
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build" InitialTargets="PrepareBuild">
+  <PropertyGroup>
+     <!-- Set some defualts for testing if they dont exist -->
+    <CCNetBuildCondition Condition="'$(CCNetBuildCondition)' == ''">IfModificationExists</CCNetBuildCondition>
+    <IsCCNetBuild Condition="'$(CCNetLabel)' != ''">True</IsCCNetBuild>
+    <CCNetProject Condition="'$(IsCCNetBuild)' == ''">$(MSBuildProjectName)</CCNetProject>
+    <CCNetArtifactDirectory Condition="'$(IsCCNetBuild)' == ''">$(MSBuildProjectDirectory)\bin</CCNetArtifactDirectory>
+    <CCNetLabel Condition="'$(IsCCNetBuild)' == ''">0.0.0.0</CCNetLabel>
+    <CCNetWorkingDirectory Condition="'$(IsCCNetBuild)' == ''">$(MSBuildProjectDirectory)</CCNetWorkingDirectory>
+    <OutputPath Condition="'$(OutputPath)' == ''">$(CCNetArtifactDirectory)\$(Configuration)\$(CCNetLabel)\</OutputPath>
+    
+    <Configuration Condition="'$(CCNetBuildCondition)' == 'ForceBuild'">Release</Configuration>
+    <Configuration Condition="'$(CCNetBuildCondition)' == 'IfModificationExists'">Debug</Configuration>
+    <ProductVersion>3.0</ProductVersion>
+    <ProjectGuid>{3d036348-8b1e-4ec3-aa20-d10bab9fecf6}</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputType>Package</OutputType>
+    <OutputName>$(CCNetProject)$(CCNetLabel)</OutputName>
+    <Cultures>en-US</Cultures>
+    <WixToolPath Condition=" '$(WixToolPath)' == '' ">C:\Program Files\Windows Installer XML v3\bin\</WixToolPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    
+    <DefineConstants>Configuration=$(Configuration);CCNetProject=$(CCNetProject);CCNetLabel=$(CCNetLabel);OutputPath=$(OutputPath)</DefineConstants>
+  </PropertyGroup>
+  
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WiX\v3.0\Wix.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" Condition="'$(MSBuildCommunityTasksPath)' == ''"/>
+
+  <ItemGroup>
+    <SourceFiles Include="*.wxs"/>
+  </ItemGroup>
+
+  <Target Name="PrepareBuild" DependsOnTargets="AddSourceFiles;AddContentFiles" Condition=" '$(CCNetLabel)' != '' ">
+    <MakeDir Directories="$(OutputPath)" Condition="!Exists('$(OutputPath)')" />
+    <Copy SourceFiles="License.rtf" DestinationFolder="$(WixToolPath)" />
+  </Target>
+
+  <Target Name="AddSourceFiles">
+    <CreateItem Include="@(SourceFiles)" ContinueOnError="false">
+      <Output TaskParameter="Include" ItemName="Compile" />
+    </CreateItem>
+  </Target>
+
+  <Target Name="AddContentFiles">
+    <CreateItem Include="$(OutputPath)**\*.exe;$(OutputPath)**\*.dll;$(OutputPath)**\*.config;$(OutputPath)**\*.manifest"
+                ContinueOnError="false">
+      <Output TaskParameter="Include" ItemName="Content" />
+    </CreateItem>
+  </Target>
+
+  <ItemGroup>
+    <WixExtension Include="$(WixToolPath)WixUIExtension.dll" />
+  </ItemGroup>
+</Project>

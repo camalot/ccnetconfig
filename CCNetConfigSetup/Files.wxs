@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006, Ryan Conrad. All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+ * - Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+ * 
+ * - Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the 
+ *    documentation and/or other materials provided with the distribution.
+ * 
+ * - Neither the name of the Camalot Designs nor the names of its contributors may be used to endorse or promote products derived from this software 
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE 
+ * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH 
+ * DAMAGE.
+ *
+-->
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <DirectoryRef Id="TARGETDIR">
+      <Directory Id="DesktopFolder" SourceName="Desktop">
+      </Directory>
+      <Directory Id="ProgramFilesFolder" Name="PFiles">
+        <Directory Id="INSTALLDIR" Name="$(var.CCNetProject)">
+          <Component Id="MainFiles" Guid="557BE312-E78B-4E01-94C9-78870DEC75DC" DiskId="1">
+            <File Source="$(var.OutputPath)CCNetConfig.exe" Id="MainExe" Name="CCNetConfig.exe">
+              <Shortcut Advertise="yes" Directory="ProductPFMenu" Icon="AppIcon.exe"
+                        Name="$(var.CCNetProject)" Id="Programs.lnk" WorkingDirectory="INSTALLDIR" />
+              <Shortcut Directory="DesktopFolder" Icon="AppIcon.exe" Advertise="yes"
+                        Name="$(var.CCNetProject)" Id="Desktop.lnk" WorkingDirectory="INSTALLDIR" />
+            </File>
+            <File Source="$(var.OutputPath)CCNetConfig.exe.config" Id="MainExeConfig" Name="CCNetConfig.exe.config" />
+            <File Source="$(var.OutputPath)CCNetConfig.BugTracking.dll" Id="bugTracking" Name="CCNetConfig.BugTracking.dll" />
+            <File Source="$(var.OutputPath)CCNetConfig.CCNet.dll" Id="ccnet" Name="CCNetConfig.CCNet.dll" />
+            <File Source="$(var.OutputPath)CCNetConfig.Core.dll" Id="core" Name="CCNetConfig.Core.dll" />
+            <File Source="$(var.OutputPath)CCNetConfig.exe.manifest" Id="ccnetConfigManifest" Name="CCNetConfig.exe.manifest" />
+            <File Source="$(var.OutputPath)CCNetConfig.Updater.Core.dll" Id="updaterCore" Name="CCNetConfig.Updater.Core.dll" />
+            <File Source="$(var.OutputPath)CCNetConfig.Updater.exe" Id="updaterExe" Name="CCNetConfig.Updater.exe" />
+            <File Source="$(var.OutputPath)CCNetConfig.Updater.exe.config" Id="updaterExeConfig" Name="CCNetConfig.Updater.exe.config" />
+            <File Source="$(var.OutputPath)CCNetConfig.Updater.exe.manifest" Id="updaterExeManifest" Name="CCNetConfig.Updater.exe.manifest" />
+            <File Source="$(var.OutputPath)License.rtf" Id="license.rtf" Name="License.rtf">
+
+            </File>
+            <File Id="LicenceFile" Source="$(var.OutputPath)License.txt" Name="License.txt" />
+            <File Source="$(var.OutputPath)Unzip.exe" Id="unzip" Name="unzip.exe" />
+            <File Source="$(var.OutputPath)Unzip-LICENSE.txt" Id="unzipLicense" Name="Unzip-LICENSE.txt" />
+
+            <RemoveFile On="uninstall" Directory="DesktopFolder" Id="Desktop.lnk.remove" Name="$(var.CCNetProject)"/>
+            <RemoveFolder On="uninstall" Id="ProductPFMenu.remove" Directory="ProductPFMenu" />
+
+            <!-- Create Url Shortcuts -->
+            <IniFile Id="WebHome" Action="addLine" Directory="ProductPFMenu" Name="$(var.CCNetProject) Home.url" Key="URL" Section="InternetShortcut" Value="http://www.ccnetconfig.org/default.aspx" />
+            <IniFile Id="CCNetHome" Action="addLine" Directory="ProductPFMenu" Name="CruiseControl.Net.url" Key="URL" Section="InternetShortcut" Value="http://confluence.public.thoughtworks.org/display/CCNET/Welcome+to+CruiseControl.NET"/>
+            <IniFile Id="ProjectHome" Action="addLine" Directory="ProductPFMenu" Name="$(var.CCNetProject) Project.url" Key="URL" Section="InternetShortcut" Value="http://www.codeplex.com/ccnetconfig" />
+          </Component>
+
+          <Directory Id="DataDirectory" Name="Data">
+            <Component Id="DataFiles" Guid="AD0072BF-C935-49E8-937A-852E5E165C7C" DiskId="1" >
+              <File Source="$(var.OutputPath)Data\BugTracking.config" Id="bugTrackingConfig" Name="BugTracking.config" Hidden="yes" ReadOnly="yes" />
+              <File Source="$(var.OutputPath)Data\CCNetVersions.config" Id="CCNetVersionsconfig" Name="CCNetVersions.config" Hidden="no" ReadOnly="yes" />
+              <File Source="$(var.OutputPath)Data\Contributors.config" Id="Contributorsconfig" Name="Contributors.config" Hidden="no" ReadOnly="yes" />
+              <File Source="$(var.OutputPath)Data\DefaultSettings.config" Id="DefaultSettingsconfig" Name="DefaultSettings.config" Hidden="no" ReadOnly="yes" />
+              <File Source="$(var.OutputPath)Data\Modules.config" Id="Modulesconfig" Name="Modules.config" Hidden="no" ReadOnly="yes" />
+              <File Source="$(var.OutputPath)Data\UpdaterConfiguration.config" Id="UpdaterConfigurationconfig" Name="UpdaterConfiguration.config" Hidden="yes" ReadOnly="yes" />
+            </Component>
+          </Directory>
+          <Directory Name="src" Id="SourceCodeDirectory">
+            <Component Id="SourceCodeFile" Guid="84B2FF86-C238-4E7B-80D5-63405545DEE2" DiskId="1">
+              <File Id="sourceCodeFile" Source="$(var.OutputPath)$(var.CCNetProject).$(var.CCNetLabel).src.zip" Name="$(var.CCNetProject)-src.zip" />
+            </Component>
+          </Directory>
+        </Directory>
+      </Directory>
+
+      <Directory Id="ProgramMenuFolder" Name="PMenu">
+        <Directory Id="ProductPFMenu" Name="$(var.CCNetProject)">
+          <!--Component Id="ProgramFilesMenuShortCut" DiskId="1" Guid="3290B2A7-EA18-4B51-8408-4BC6091FD1F7">
+            <Shortcut Directory="ProductPFMenu" Id="MainExePFShortcut" Name="[ProductName]"
+                      Target="MainExeShortCut" />
+          </Component-->
+        </Directory>
+      </Directory>
+    </DirectoryRef>
+  </Fragment>
+</Wix>

@@ -1,0 +1,113 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition="'$(CCNetBuildCondition)' != 'ForceBuild'">Debug</Configuration>
+    <Configuration Condition="'$(CCNetBuildCondition)' == 'ForceBuild'">Release</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{99D627BB-4F8C-458D-951F-12CB18D07665}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CCNetConfig.Updater</RootNamespace>
+    <AssemblyName>$(RootNamespace)</AssemblyName>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <StartupObject>
+    </StartupObject>
+    <ApplicationIcon>ccnetconfig.ico</ApplicationIcon>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(CCNetLabel)' != '' ">
+    <DocumentationFile>$(OutputPath)$(AssemblyName).XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(CCNetLabel)' == '' ">
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <DocumentationFile>..\bin\$(Configuration)\$(AssemblyName).XML</DocumentationFile>
+    <OutputPath>..\bin\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="MainForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <Content Include="CCNetConfig.Updater.exe.manifest">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CCNetConfig.Core\CCNetConfig.Core.csproj">
+      <Project>{1687DC58-3374-4D23-8820-1EBB162A32AE}</Project>
+      <Name>CCNetConfig.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CCNetConfig.Updater.Core\CCNetConfig.Updater.Core.csproj">
+      <Project>{7C9B731F-4C64-4D4D-887F-D340A2549432}</Project>
+      <Name>CCNetConfig.Updater.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ccnetconfig.ico" />
+    <Content Include="unzip-LICENSE.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="unzip.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" Condition=" '$(CCNetLabel)' != '' " />
+  <Target Name="BeforeBuild" Condition=" '$(CCNetLabel)' != '' ">
+    <CallTarget Targets="PrepareBuild" />
+  </Target>
+  <Target Name="BuildAssemblyInfo" Outputs="$(MSBuildProjectDirectory)\Properties\AssemblyInfo.cs" Condition=" '$(CCNetLabel)' != '' ">
+    <CreateItem Include="Properties\AssemblyInfo.cs" Condition=" '$(CCNetLabel)' != '' ">
+      <Output TaskParameter="Include" ItemName="Compile" />
+    </CreateItem>
+    <AssemblyInfo CodeLanguage="CS" AssemblyCompany="Camalot Designs" AssemblyCopyright="Copyright © Ryan Conrad 2006. All Rights Reserved." AssemblyDescription="The Updater UI for CCNetConfig" AssemblyProduct="CCNetConfig" AssemblyTitle="CCNetConfig" AssemblyFileVersion="$(CCNetLabel)" AssemblyVersion="$(CCNetLabel)" ComVisible="false" CLSCompliant="true" OutputFile="$(MSBuildProjectDirectory)\Properties\AssemblyInfo.cs" Guid="6e7e047a-437d-42d3-822f-5d9b9a9f2ca5" />
+  </Target>
+  <Target Name="PrepareBuild" DependsOnTargets="BuildAssemblyInfo" Condition=" '$(CCNetLabel)' != '' ">
+    <MakeDir Directories="$(OutputPath)" Condition="!Exists('$(OutputPath)')" />
+  </Target>
+</Project>

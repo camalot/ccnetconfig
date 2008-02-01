@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<UpdateInfo>
+  <Files>
+    <File Size="" Location="http://ccnetconfig.org/updates/$(CCNetProject)$(CCNetLabel).zip" Restart="True" Version="$(CCNetLabel)" />
+  </Files>
+</UpdateInfo>

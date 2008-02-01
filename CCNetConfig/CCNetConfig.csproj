@@ -1,0 +1,315 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition="'$(CCNetBuildCondition)' != 'ForceBuild'">Debug</Configuration>
+    <Configuration Condition="'$(CCNetBuildCondition)' == 'ForceBuild'">Release</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1335A2EF-0FBF-41ED-8485-468871EDE769}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CCNetConfig</RootNamespace>
+    <AssemblyName>$(RootNamespace)</AssemblyName>
+    <StartupObject>
+    </StartupObject>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <ApplicationIcon>ccnetconfig.ico</ApplicationIcon>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(CCNetLabel)' != '' ">
+    <DocumentationFile>$(OutputPath)$(AssemblyName).XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(CCNetLabel)' == '' ">
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <DocumentationFile>..\bin\$(Configuration)\$(AssemblyName).XML</DocumentationFile>
+    <OutputPath>..\bin\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Compile Include="Components\BackupControler.cs" />
+    <Compile Include="Components\BackupFileEventArgs.cs" />
+    <Compile Include="Components\BackupFileListViewItem.cs" />
+    <Compile Include="Components\CannotDeserialzeXmlException.cs" />
+    <Compile Include="Components\ClipboardManager.cs" />
+    <Compile Include="Components\CruiseControlTreeNode.cs" />
+    <Compile Include="Components\CustomToolStripMenuItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Components\CustomTreeNode.cs" />
+    <Compile Include="Components\ListViewColumnDateTimeSorter.cs" />
+    <Compile Include="Components\ListViewColumnSorter.cs" />
+    <Compile Include="Components\NativeMethods.cs" />
+    <Compile Include="Components\VersionFileDialog.cs" />
+    <Compile Include="Controls\CollapsibleSplitter.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\PropertyGridEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\AboutForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\AboutForm.Designer.cs">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ConfigurationPropertiesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ConfigurationPropertiesForm.Designer.cs">
+      <DependentUpon>ConfigurationPropertiesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\NewProjectForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\NewProjectForm.Designer.cs">
+      <DependentUpon>NewProjectForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\OptionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\OptionsForm.Designer.cs">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="UI\UpdateChecker.cs" />
+    <Compile Include="UI\UpdateInformationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\UpdateInformationForm.Designer.cs">
+      <DependentUpon>UpdateInformationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Util.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\CollapsibleSplitter.resx">
+      <DependentUpon>CollapsibleSplitter.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\AboutForm.resx">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ConfigurationPropertiesForm.resx">
+      <DependentUpon>ConfigurationPropertiesForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\NewProjectForm.resx">
+      <DependentUpon>NewProjectForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\OptionsForm.resx">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Strings.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\UpdateInformationForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>UpdateInformationForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="CCNetConfig.exe.manifest">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ccnetconfig.ico" />
+    <None Include="Data\CCNetVersions.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\Contributors.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Content Include="Data\DefaultSettings.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Modules.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="License.rtf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\directories_16x16.png" />
+    <None Include="Resources\documents_16x16.png" />
+    <None Include="Resources\editfile_16x16.png" />
+    <None Include="Resources\edit_16x16.png" />
+    <None Include="Resources\export_16x16.png" />
+    <None Include="Resources\folder_16x16.png" />
+    <None Include="Resources\forward_16x16.png" />
+    <None Include="Resources\hd_16x16.png" />
+    <None Include="Resources\buttonyellow_16x16.png" />
+    <None Include="Resources\calendar_16x16.png" />
+    <None Include="Resources\checkmark_16x16.png" />
+    <None Include="Resources\close_16x16.png" />
+    <None Include="Resources\computer_16x16.png" />
+    <None Include="Resources\computeroff_16x16.png" />
+    <None Include="Resources\computertrouble_16x16.png" />
+    <None Include="Resources\configure_16x16.png" />
+    <None Include="Resources\copy_16x16.png" />
+    <None Include="Resources\cutfile_16x16.png" />
+    <None Include="Resources\delete_16x16.png" />
+    <None Include="Resources\add_16x16.png" />
+    <None Include="Resources\addbox_16x16.png" />
+    <None Include="Resources\appfolder_16x16.png" />
+    <None Include="Resources\applications_16x16.png" />
+    <None Include="Resources\block_16x16.png" />
+    <None Include="Resources\buttonblue_16x16.png" />
+    <None Include="Resources\buttongreen_16x16.png" />
+    <None Include="Resources\box_extension_16x16.png" />
+    <None Include="Resources\deletebox_16x16.png" />
+    <None Include="Resources\help_16x16.png" />
+    <None Include="Resources\configProperties_16x16.png" />
+    <Content Include="License.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\ccnetconfig.ico" />
+    <Content Include="Resources\Images\Green Down.png" />
+    <Content Include="Resources\Images\Green Up.png" />
+    <Content Include="Resources\Images\logo16.png" />
+    <Content Include="Resources\Images\logo32.png" />
+    <Content Include="Resources\Images\logo48.png" />
+    <Content Include="Resources\Images\logo96.png" />
+    <Content Include="Resources\Images\WindowEdit.ico" />
+    <Content Include="Resources\Images\WindowEdit.png" />
+    <Content Include="Data\BugTracking.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\UpdaterConfiguration.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="Resources\updatesIcon.png" />
+    <None Include="Resources\updates.png" />
+    <None Include="Resources\Warning.png" />
+    <None Include="Resources\paste_16x16.png" />
+    <None Include="Resources\padlockopen_16x16.png" />
+    <None Include="Resources\padlockclosed_16x16.png" />
+    <None Include="Resources\sourcecontrol_folder2_16x16.png" />
+    <None Include="Resources\window_protected_16x16.png" />
+    <None Include="Resources\sourcecontrol_folder_16x16.png" />
+    <None Include="Resources\wizard_16x16.png" />
+    <None Include="Resources\windowsfolder_16x16.png" />
+    <None Include="Resources\window_16x16.png" />
+    <None Include="Resources\undo_16x16.png" />
+    <None Include="Resources\search_16x16.png" />
+    <None Include="Resources\saveas_16x16.png" />
+    <None Include="Resources\saveas2_16x16.png" />
+    <None Include="Resources\save_16x16.png" />
+    <None Include="Resources\save2_16x16.png" />
+    <None Include="Resources\refresh_16x16.png" />
+    <None Include="Resources\redo_16x16.png" />
+    <None Include="Resources\rec_16x16.png" />
+    <None Include="Resources\preferences_16x16.png" />
+    <None Include="Resources\options_16x16.png" />
+    <None Include="Resources\open_16x16.png" />
+    <None Include="Resources\opendocument_16x16.png" />
+    <None Include="Resources\notepad_16x16.png" />
+    <None Include="Resources\new_16x16.png" />
+    <None Include="Resources\my documents_16x16.png" />
+    <None Include="Resources\move_16x16.png" />
+    <None Include="Resources\info_16x16.png" />
+    <None Include="Resources\import_16x16.png" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CCNetConfig.BugTracking\CCNetConfig.BugTracking.csproj">
+      <Project>{5B91896A-B9CB-4C25-BA45-7AA3A27AAC11}</Project>
+      <Name>CCNetConfig.BugTracking</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CCNetConfig.Core\CCNetConfig.Core.csproj">
+      <Project>{1687DC58-3374-4D23-8820-1EBB162A32AE}</Project>
+      <Name>CCNetConfig.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CCNetConfig.Updater.Core\CCNetConfig.Updater.Core.csproj">
+      <Project>{7C9B731F-4C64-4D4D-887F-D340A2549432}</Project>
+      <Name>CCNetConfig.Updater.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" Condition=" '$(CCNetLabel)' != '' " />
+  <Target Name="BeforeBuild" Condition=" '$(CCNetLabel)' != '' ">
+    <CallTarget Targets="PrepareBuild" />
+  </Target>
+  <Target Name="AssemblyInfo" Outputs="$(MSBuildProjectDirectory)\Properties\AssemblyInfo.cs" Condition=" '$(CCNetLabel)' != '' ">
+    <CreateItem Include="Properties\AssemblyInfo.cs" Condition=" '$(CCNetLabel)' != '' ">
+      <Output TaskParameter="Include" ItemName="Compile" />
+    </CreateItem>
+    <AssemblyInfo CodeLanguage="CS" AssemblyCompany="Camalot Designs" AssemblyCopyright="Copyright © Ryan Conrad 2006. All Rights Reserved." AssemblyDescription="A GUI Configuration Tool for CruiseControl.Net" AssemblyProduct="CCNetConfig" AssemblyTitle="CCNetConfig" AssemblyFileVersion="$(CCNetLabel)" AssemblyVersion="$(CCNetLabel)" ComVisible="false" CLSCompliant="true" OutputFile="$(MSBuildProjectDirectory)\Properties\AssemblyInfo.cs" Guid="2351f08c-1dce-4cd9-b0d7-ec7adce69010" />
+  </Target>
+  <Target Name="PrepareBuild" DependsOnTargets="AssemblyInfo" Condition=" '$(CCNetLabel)' != '' ">
+    <MakeDir Directories="$(OutputPath)" Condition="!Exists('$(OutputPath)')" />
+  </Target>
+</Project>

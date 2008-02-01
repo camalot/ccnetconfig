@@ -1,0 +1,98 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D783641F-DF08-48EF-8965-516DE5606CFD}"
+	ProjectSection(SolutionItems) = preProject
+		CCNetConfigFull.msbuild = CCNetConfigFull.msbuild
+		License.rtf = License.rtf
+		License.txt = License.txt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCNetConfig", "CCNetConfig\CCNetConfig.csproj", "{1335A2EF-0FBF-41ED-8485-468871EDE769}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCNetConfig.Core", "CCNetConfig.Core\CCNetConfig.Core.csproj", "{1687DC58-3374-4D23-8820-1EBB162A32AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCNetConfig.CCNet", "CCNetConfig.CCNet\CCNetConfig.CCNet.csproj", "{A1B9DE7D-33B2-431A-A805-E52000592F51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCNetConfig.BugTracking", "CCNetConfig.BugTracking\CCNetConfig.BugTracking.csproj", "{5B91896A-B9CB-4C25-BA45-7AA3A27AAC11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCNetConfig.Updater", "CCNetConfig.Updater\CCNetConfig.Updater.csproj", "{99D627BB-4F8C-458D-951F-12CB18D07665}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCNetConfig.Updater.Core", "CCNetConfig.Updater.Core\CCNetConfig.Updater.Core.csproj", "{7C9B731F-4C64-4D4D-887F-D340A2549432}"
+EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "CCNetConfigSetup", "CCNetConfigSetup\CCNetConfigSetup.wixproj", "{3D036348-8B1E-4EC3-AA20-D10BAB9FECF6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCNetConfig.Tests", "CCNetConfig.Tests\CCNetConfig.Tests.csproj", "{E0F777C7-2820-4CB0-84CC-485BCE9E6627}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 9
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs01.codeplex.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = CCNetConfig.BugTracking\\CCNetConfig.BugTracking.csproj
+		SccProjectName1 = CCNetConfig.BugTracking
+		SccLocalPath1 = CCNetConfig.BugTracking
+		SccProjectUniqueName2 = CCNetConfig.CCNet\\CCNetConfig.CCNet.csproj
+		SccProjectName2 = CCNetConfig.CCNet
+		SccLocalPath2 = CCNetConfig.CCNet
+		SccProjectUniqueName3 = CCNetConfig.Core\\CCNetConfig.Core.csproj
+		SccProjectName3 = CCNetConfig.Core
+		SccLocalPath3 = CCNetConfig.Core
+		SccProjectUniqueName4 = CCNetConfig\\CCNetConfig.csproj
+		SccProjectName4 = CCNetConfig
+		SccLocalPath4 = CCNetConfig
+		SccProjectUniqueName5 = CCNetConfig.Updater\\CCNetConfig.Updater.csproj
+		SccProjectName5 = CCNetConfig.Updater
+		SccLocalPath5 = CCNetConfig.Updater
+		SccProjectUniqueName6 = CCNetConfig.Updater.Core\\CCNetConfig.Updater.Core.csproj
+		SccProjectName6 = CCNetConfig.Updater.Core
+		SccLocalPath6 = CCNetConfig.Updater.Core
+		SccProjectUniqueName7 = CCNetConfigSetup\\CCNetConfigSetup.wixproj
+		SccProjectName7 = CCNetConfigSetup
+		SccLocalPath7 = CCNetConfigSetup
+		SccProjectUniqueName8 = CCNetConfig.Tests\\CCNetConfig.Tests.csproj
+		SccProjectName8 = CCNetConfig.Tests
+		SccLocalPath8 = CCNetConfig.Tests
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1335A2EF-0FBF-41ED-8485-468871EDE769}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1335A2EF-0FBF-41ED-8485-468871EDE769}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1335A2EF-0FBF-41ED-8485-468871EDE769}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1335A2EF-0FBF-41ED-8485-468871EDE769}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1687DC58-3374-4D23-8820-1EBB162A32AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1687DC58-3374-4D23-8820-1EBB162A32AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1687DC58-3374-4D23-8820-1EBB162A32AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1687DC58-3374-4D23-8820-1EBB162A32AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1B9DE7D-33B2-431A-A805-E52000592F51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1B9DE7D-33B2-431A-A805-E52000592F51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1B9DE7D-33B2-431A-A805-E52000592F51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1B9DE7D-33B2-431A-A805-E52000592F51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B91896A-B9CB-4C25-BA45-7AA3A27AAC11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B91896A-B9CB-4C25-BA45-7AA3A27AAC11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B91896A-B9CB-4C25-BA45-7AA3A27AAC11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B91896A-B9CB-4C25-BA45-7AA3A27AAC11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99D627BB-4F8C-458D-951F-12CB18D07665}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99D627BB-4F8C-458D-951F-12CB18D07665}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99D627BB-4F8C-458D-951F-12CB18D07665}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99D627BB-4F8C-458D-951F-12CB18D07665}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C9B731F-4C64-4D4D-887F-D340A2549432}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C9B731F-4C64-4D4D-887F-D340A2549432}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C9B731F-4C64-4D4D-887F-D340A2549432}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C9B731F-4C64-4D4D-887F-D340A2549432}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D036348-8B1E-4EC3-AA20-D10BAB9FECF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D036348-8B1E-4EC3-AA20-D10BAB9FECF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D036348-8B1E-4EC3-AA20-D10BAB9FECF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0F777C7-2820-4CB0-84CC-485BCE9E6627}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0F777C7-2820-4CB0-84CC-485BCE9E6627}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0F777C7-2820-4CB0-84CC-485BCE9E6627}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0F777C7-2820-4CB0-84CC-485BCE9E6627}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

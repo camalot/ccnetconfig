@@ -1,0 +1,239 @@
+﻿<!--
+/*
+ * Copyright (c) 2007-2008, Ryan Conrad. All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+ * - Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+ * 
+ * - Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the 
+ *    documentation and/or other materials provided with the distribution.
+ * 
+ * - Neither the name of the Camalot Designs nor the names of its contributors may be used to endorse or promote products derived from this software 
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE 
+ * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH 
+ * DAMAGE.
+ */
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="BuildAll" >
+  <PropertyGroup>
+    <Configuration Condition="'$(CCNetBuildCondition)' == 'ForceBuild'">Release</Configuration>
+    <Configuration Condition="'$(CCNetBuildCondition)' != 'ForceBuild'">Debug</Configuration>
+    <BuildAllDependsOn>CleanBuild;CoreBuild;ZipRelease;ReleaseCleanup</BuildAllDependsOn>
+    <OutputPath>$(CCNetArtifactDirectory)\$(Configuration)\$(CCNetLabel)\</OutputPath>
+    <CompileDependsOn>PrepareBuild;$(CompileDependsOn)</CompileDependsOn>
+   
+    <MSBuildExtendedTasksTargets>$(MSBuildExtensionsPath)\MSBuildExtendedTasks\MSBuild.Extended.Tasks.Targets</MSBuildExtendedTasksTargets>
+
+    <!-- Nightly Version Information -->
+    <XmlNightlyFile>$(CCNetArtifactDirectory)\$(Configuration)\NightlyVersion.xml</XmlNightlyFile>
+    <!-- source stats properties -->
+    <XmlSourceCodeStatsDestination>$(CCNetArtifactDirectory)\</XmlSourceCodeStatsDestination>
+    <SourceStatsProjectName>$(CCNetProject)</SourceStatsProjectName>
+    <SourceStatsCodeProcessor>SourceCodeStatsGenerator.GenericCodeProcessor, SourceCodeStatsGenerator</SourceStatsCodeProcessor>
+
+    <MSBuildProperties>Configuration=$(Configuration);OutputPath=$(OutputPath);CCNetLabel=$(CCNetLabel);CCNetIntegrationStatus=$(CCNetIntegrationStatus);CCNetBuildCondition=$(CCNetBuildCondition);CCNetProject=$(CCNetProject);CCNetBuildDate=$(CCNetBuildDate);CCNetLastIntegrationStatus=$(CCNetLastIntegrationStatus);CCNetBuildTime=$(CCNetBuildTime);CCNetArtifactDirectory=$(CCNetArtifactDirectory);CCNetWorkingDirectory=$(CCNetWorkingDirectory);CCNetRequestSource=$(CCNetRequestSource)</MSBuildProperties>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- How the hell do i remove a project from source control? -->
+    <ProjectsToBuild Include="**\*csproj" Exclude="**\CCNetConfigUpdatesFileGen.csproj;**\CCNetConfig.Resources.csproj;**\CCNetConfig.Tests.csproj;" />
+    <InstallProjectToBuild Include="**\*.wix.msbuild" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <SourceFiles Include="$(CCNetWorkingDirectory)\$(CCNetProject)\**\*.*" Exclude="$(CCNetWorkingDirectory)\$(CCNetProject)\*.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DocReferences Include="$(SYSTEMROOT)\Microsoft.NET\Framework\v2.0.50727\System.Data.dll" />
+    <DocReferences Include="$(SYSTEMROOT)\Microsoft.NET\Framework\v2.0.50727\System.Configuration.dll" />
+    <DocReference Include="$(SYSTEMROOT)\Microsoft.NET\Framework\v2.0.50727\System.Design.dll" />
+    <DocReference Include="$(SYSTEMROOT)\Microsoft.NET\Framework\v2.0.50727\System.Drawing.dll" />
+    <DocReference Include="$(SYSTEMROOT)\Microsoft.NET\Framework\v2.0.50727\System.Web.Services.dll" />
+    <DocReference Include="$(SYSTEMROOT)\Microsoft.NET\Framework\v2.0.50727\System.Windows.Forms.dll" />
+    <DocReference Include="$(SYSTEMROOT)\Microsoft.NET\Framework\v2.0.50727\System.Xml.dll" />
+    <DocReference Include="$(SYSTEMROOT)\Microsoft.NET\Framework\v2.0.50727\System.Web.dll" />
+  </ItemGroup>
+
+  <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" Condition="'$(MSBuildCommunityTasksPath)' == ''"/>
+  <Import Project="$(MSBuildExtensionsPath)\SourceStatsGen\SourceCodeStats.Generator.Targets" />
+  <Import Project="$(MSBuildExtendedTasksTargets)" Condition="Exists($(MSBuildExtendedTasksTargets))" />
+
+  <Target Name="CleanBuild">
+    <Message Text="CCNetBuildCondition = $(CCNetBuildCondition)" />
+    <Message Text="Configuration = $(Configuration)" />
+    <RemoveDir Directories="$(OutputPath)" Condition="Exists('$(OutputPath)')" ContinueOnError="true" />
+    <MakeDir Directories="$(OutputPath)" Condition="!Exists('$(OutputPath)')" />
+  </Target>
+
+  <Target Name="CoreBuild">
+    <MSBuild Projects ="@(ProjectsToBuild)" ContinueOnError ="false"
+             Properties="$(MSBuildProperties)">
+      <Output ItemName="OutputFiles" TaskParameter="TargetOutputs"/>
+    </MSBuild>
+  </Target>
+
+  <Target Name="ZipRelease" DependsOnTargets="">
+    <CreateItem Include="$(OutputPath)*.*;$(OutputPath)Data\*.*" Exclude="$(OutputPath)*.zip;$(OutputPath)Help\**\*.*">
+      <Output ItemName="ZipFiles" TaskParameter="Include" />
+    </CreateItem>
+
+    <Zip Comment="$(CCNetBuildDate) $(CCNetBuildTime) $(CCNetProject) version $(CCNetLabel)" Files="@(ZipFiles)"
+         WorkingDirectory="$(OutputPath)"
+         ZipFileName="$(OutputPath)$(CCNetProject).$(CCNetLabel).zip" ZipLevel="9" Flatten="False" />
+
+    <Zip Comment="$(CCNetBuildDate) $(CCNetBuildTime) $(CCNetProject) version $(CCNetLabel) Source"
+      Files="@(SourceFiles)" WorkingDirectory="$(CCNetWorkingDirectory)\$(CCNetProject)\"
+      ZipFileName="$(OutputPath)$(CCNetProject).$(CCNetLabel).src.zip" Flatten="False" ZipLevel="9" />
+
+    <CallTarget Targets="BuildInstall" ContinueOnError="false" />
+
+    <CreateItem Include="$(OutputPath)\*.msi">
+      <Output ItemName="MSIFile" TaskParameter="Include" />
+    </CreateItem>
+
+    <Zip Comment="$(CCNetBuildDate) $(CCNetBuildTime) $(CCNetProject) version $(CCNetLabel) Installer"
+      Files="@(MSIFile)" WorkingDirectory="$(OutputPath)"
+      ZipFileName="$(OutputPath)$(CCNetProject).$(CCNetLabel).msi.zip" Flatten="True" ZipLevel="9" />
+
+    <CallTarget Targets="GenerateUpdateFile" />
+    <CallTarget Targets="UpdateNightlyBuildInfo" ContinueOnError="true" />
+  </Target>
+
+  <Target Name="ReleaseCleanup" DependsOnTargets="ZipRelease">
+    <CreateItem Include="$(OutputPath)**\*.*" Exclude="$(OutputPath)*.zip">
+      <Output ItemName="DeadFiles" TaskParameter="Include" />
+    </CreateItem>
+    <CreateItem Include="$(OutputPath)**\">
+      <Output ItemName="DeadFolders" TaskParameter="Include" />
+    </CreateItem>
+    <Delete Files="@(DeadFiles)" ContinueOnError="true" />
+    <RemoveDir Directories="@(DeadFolders)" ContinueOnError="true" />
+    <RemoveDir Directories="$(OutputPath)Data" Condition="Exists('$(OutputPath)')" ContinueOnError="true" />
+  </Target>
+
+  <Target Name="GenerateUpdateFile" Condition=" '$(CCNetIntegrationStatus)' == 'Success' And '$(CCNetBuildCondition)' == 'ForceBuild' " >
+    <Exec WorkingDirectory="F:\Tools\"
+       Command="CCNetConfigUpdatesFileGen.exe $(CCNetLabel) &quot;$(CCNetProject)&quot;  &quot;$(CCNetArtifactDirectory)\$(Configuration)\$(CCNetLabel)\&quot;"
+       ContinueOnError="false"/>
+  </Target>
+  
+  <!-- this can be removed after the next final release -->
+  <Target Name="UpdateNightlyBuildInfo" Condition=" '$(CCNetIntegrationStatus)' == 'Success'">
+    <XmlUpdate XmlFileName="$(CCNetArtifactDirectory)\NightlyVersion.xml" XPath="/NightlyBuild/Version/@Value" Value="$(CCNetLabel)" />
+    <XmlUpdate XmlFileName="$(CCNetArtifactDirectory)\NightlyVersion.xml" XPath="/NightlyBuild/@Configuration" Value="$(Configuration)" />
+    <XmlUpdate XmlFileName="$(CCNetArtifactDirectory)\NightlyVersion.xml" XPath="/NightlyBuild/Binary/@Value" Value="$(CCNetProject).&#123;0&#125;.zip" />
+    <XmlUpdate XmlFileName="$(CCNetArtifactDirectory)\NightlyVersion.xml" XPath="/NightlyBuild/Source/@Value" Value="$(CCNetProject).&#123;0&#125;.src.zip" />
+    <XmlUpdate XmlFileName="$(CCNetArtifactDirectory)\NightlyVersion.xml" XPath="/NightlyBuild/Installer/@Value" Value="$(CCNetProject).&#123;0&#125;.msi.zip" />
+    <!-- Reset download counts -->
+    <XmlUpdate XmlFileName="$(CCNetArtifactDirectory)\NightlyVersion.xml" XPath="/NightlyBuild/Binary/@DownloadCount" Value="0" />
+    <XmlUpdate XmlFileName="$(CCNetArtifactDirectory)\NightlyVersion.xml" XPath="/NightlyBuild/Source/@DownloadCount" Value="0" />
+    <XmlUpdate XmlFileName="$(CCNetArtifactDirectory)\NightlyVersion.xml" XPath="/NightlyBuild/Installer/@DownloadCount" Value="0" />
+  </Target>
+
+  <Target Name="CopySourceCodeStatsXml" Condition=" '$(CCNetIntegrationStatus)' == 'Success' ">
+    <Copy SourceFiles="$(CCNetWorkingDirectory)$(CCNetProject)\$(SourceStatsProjectName).xml" DestinationFolder="$(XmlSourceCodeStatsDestination)" />
+  </Target>
+
+  <Target Name="BuildAll" DependsOnTargets="GenerateSourceCodeStats;CleanBuild;CoreBuild;ReleaseCleanup;CopyDefaultAspxPage;CopySourceCodeStatsXml">
+  </Target>
+
+  <Target Name="BuildInstall">
+    <MSBuild Projects="@(InstallProjectToBuild)"
+             Properties="Configuration=$(Configuration);OutputPath=$(OutputPath);CCNetLabel=$(CCNetLabel);CCNetIntegrationStatus=$(CCNetIntegrationStatus);CCNetBuildCondition=$(CCNetBuildCondition);CCNetProject=$(CCNetProject);CCNetBuildDate=$(CCNetBuildDate);CCNetLastIntegrationStatus=$(CCNetLastIntegrationStatus);CCNetBuildTime=$(CCNetBuildTime);CCNetArtifactDirectory=$(CCNetArtifactDirectory);CCNetWorkingDirectory=$(CCNetWorkingDirectory);CCNetRequestSource=$(CCNetRequestSource)">
+      <Output ItemName="OutputFiles" TaskParameter="TargetOutputs"/>
+    </MSBuild>
+  </Target>
+
+
+  <Target Name="BuildDocumentation">
+    <CreateItem Include="$(OutputPath)*.XML">
+      <Output ItemName="SandCastleCommentFiles" TaskParameter="Include"/>
+    </CreateItem>
+    <CreateItem Include="$(OutputPath)*.dll">
+      <Output ItemName="Assemblies" TaskParameter="Include"/>
+    </CreateItem>
+    <CreateItem Include="@(Assemblies);@(DocReferences)">
+      <Output ItemName="DependencyFiles" TaskParameter="Include"/>
+    </CreateItem>
+
+    <GenerateDocumentation SandcastlePath="C:\Program Files\Sandcastle" HelpName="$(CCNetProject)"
+                           OutputPath="$(OutputPath)Help" Assemblies="@(Assemblies)"
+                           Dependencies="@(DependencyFiles)" XmlDocumentationFiles="@(SandCastleCommentFiles)" 
+                           BuildCHM="True"
+                           DocumentStyle="Standard" PresentationType="VS2005" FileNameStyle="Friendly"
+                           CleanUpDocumentationFiles="True" DeleteHtml="False" UseCodeSyntaxHighlighterComponent="True"
+                           LocalReferenceLinkResolveType="Local" ExternalReferenceLinkResolveType="MSDN"
+                           ReflectionToHtmlTocTransform="$(MSBuildExtensionsPath)\MSBuildExtendedTasks\Sandcastle\Transforms\ReflectionToHtmlToc.xsl" 
+                           ContinueOnError="true" />
+
+    <!-- Create Frame Index Page -->
+    <Message Text="Creating $(OutputPath)Help\Html\index.htm" />
+    <AddXmlElement XmlFile="$(OutputPath)Help\Html\index.htm" Name="html" ContinueOnError="true" />
+    <AddXmlElement XmlFile="$(OutputPath)Help\Html\index.htm" Name="head" XPath="/html" ContinueOnError="true" />
+    <AddXmlElement XmlFile="$(OutputPath)Help\Html\index.htm" Name="title" XPath="/html/head" ContinueOnError="true" />
+    <SetXmlElementInnerText XmlFile="$(OutputPath)Help\Html\index.htm" XPath="/html/head/title"
+                            InnerText="$(CCNetProject)" ContinueOnError="true" />
+    <AddXmlElement XmlFile="$(OutputPath)Help\Html\index.htm" Name="frameset" XPath="/html" ContinueOnError="true" />
+    <SetXmlElementAttribute XmlFile="$(OutputPath)Help\Html\index.htm" Name="cols" XPath="/html/frameset"
+                            Value="25&#37;,75&#37;" ContinueOnError="true" />
+    <AddXmlElement XmlFile="$(OutputPath)Help\Html\index.htm" Name="frame" XPath="/html/frameset" ContinueOnError="true" />
+    <SetXmlElementAttribute XmlFile="$(OutputPath)Help\Html\index.htm" Name="name" XPath="/html/frameset/frame[1]"
+                            Value="tocFrame" ContinueOnError="true" />
+    <SetXmlElementAttribute XmlFile="$(OutputPath)Help\Html\index.htm" Name="src" XPath="/html/frameset/frame[1]"
+                            Value="toc.htm" ContinueOnError="true" />
+    <AddXmlElement XmlFile="$(OutputPath)Help\Html\index.htm" Name="frame" XPath="/html/frameset" ContinueOnError="true" />
+    <SetXmlElementAttribute XmlFile="$(OutputPath)Help\Html\index.htm" Name="name" XPath="/html/frameset/frame[2]"
+                          Value="contentFrame" ContinueOnError="true" />
+    <SetXmlElementAttribute XmlFile="$(OutputPath)Help\Html\index.htm" Name="src" XPath="/html/frameset/frame[2]"
+                            Value="R_Project.htm" ContinueOnError="true" />
+
+    <!-- Delete existing html help docs -->
+    <CreateItem Include="$(CCNetArtifactDirectory)\Docs\**\**"  >
+      <Output ItemName="DeleteHelpFiles" TaskParameter="Include" />
+    </CreateItem>
+    <Delete Files="@(DeleteHelpFiles)" ContinueOnError="true" />
+
+    <!-- Build page to redirect to the actual documentation page. -->
+    <AddXmlElement XmlFile="$(CCNetArtifactDirectory)\Docs\index.html" Name="html" ContinueOnError="true" />
+    <AddXmlElement XmlFile="$(CCNetArtifactDirectory)\Docs\index.html" Name="head" XPath="/html" ContinueOnError="true" />
+    <AddXmlElement XmlFile="$(CCNetArtifactDirectory)\Docs\index.html" Name="meta" XPath="/html/head"  ContinueOnError="true" />
+    <SetXmlElementAttribute XmlFile="$(CCNetArtifactDirectory)\Docs\index.html" XPath="/html/head/meta[1]" Name="http-equiv" 
+                            Value="refresh" ContinueOnError="true" />
+    <SetXmlElementAttribute XmlFile="$(CCNetArtifactDirectory)\Docs\index.html" XPath="/html/head/meta[1]"
+                            Name="content" Value="0;url=html/index.htm" ContinueOnError="true" />
+
+
+    <!-- Copy all the html docs to the specified directory -->
+    <CreateItem Include="$(OutputPath)Help\**\*.js;$(OutputPath)Help\**\*.htm;$(OutputPath)Help\**\*.gif;$(OutputPath)Help\**\*.css;">
+      <Output ItemName="HelpFilesSource" TaskParameter="Include" />
+    </CreateItem>
+    <Copy SkipUnchangedFiles="true" SourceFiles="@(HelpFilesSource)" 
+          DestinationFolder="$(CCNetArtifactDirectory)\Docs\%(RecursiveDir)" ContinueOnError="true" />
+    <Copy Condition="Exists('$(OutputPath)Help\$(CCNetProject).chm')"  
+          SourceFiles="$(OutputPath)Help\$(CCNetProject).chm" DestinationFolder="$(OutputPath)" 
+          ContinueOnError="true" />
+    <Copy Condition="Exists('$(OutputPath)Help\$(CCNetProject).chm')" 
+          SourceFiles="$(OutputPath)Help\$(CCNetProject).chm" DestinationFolder="$(CCNetArtifactDirectory)\Docs\" 
+          ContinueOnError="true" />
+
+
+    <CreateItem Include="$(OutputPath)Help\**\*">
+      <Output ItemName="DeadFiles" TaskParameter="Include" />
+    </CreateItem>
+    <CreateItem Include="$(OutputPath)Help\**;$(OutputPath)Help\**\**">
+      <Output ItemName="DeadFolders" TaskParameter="Include" />
+    </CreateItem>
+    <Delete Files="@(DeadFiles)" ContinueOnError="true" />
+    <RemoveDir Directories="@(DeadFolders);$(OutputPath)Help" ContinueOnError="true" />
+  </Target>
+
+  <Target Name="CopyDefaultAspxPage">
+    <Copy SourceFiles="$(CCNetArtifactDirectory)\Default.aspx" DestinationFolder="$(OutputPath)" />
+  </Target>
+</Project>

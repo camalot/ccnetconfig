@@ -1,0 +1,39 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <ProductVersion>3.0</ProductVersion>
+    <ProjectGuid>{3d036348-8b1e-4ec3-aa20-d10bab9fecf6}</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputName>CCNetConfigSetup</OutputName>
+    <OutputType>Package</OutputType>
+    <WixToolPath>E:\Program Files\Windows Installer XML v3\bin\</WixToolPath>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <IntermediateOutputPath>obj\Debug\</IntermediateOutputPath>
+    <DefineConstants>Debug</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <IntermediateOutputPath>obj\Release\</IntermediateOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="CCNetConfigSetup.wxs" />
+    <Compile Include="Features.wxs" />
+    <Compile Include="Files.wxs" />
+    <Compile Include="Properties.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CCNetConfigSetup.wix.msbuild" />
+    <Content Include="License.rtf" />
+    <Content Include="License.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="E:\Program Files\Windows Installer XML v3\bin\WixUIExtension.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WiX\v3.0\Wix.targets" />
+</Project>

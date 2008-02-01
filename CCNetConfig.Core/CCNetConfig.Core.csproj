@@ -1,0 +1,177 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition="'$(CCNetBuildCondition)' != 'ForceBuild'">Debug</Configuration>
+    <Configuration Condition="'$(CCNetBuildCondition)' == 'ForceBuild'">Release</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1687DC58-3374-4D23-8820-1EBB162A32AE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CCNetConfig.Core</RootNamespace>
+    <AssemblyName>$(RootNamespace)</AssemblyName>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(CCNetLabel)' != '' ">
+    <DocumentationFile>$(OutputPath)$(AssemblyName).XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(CCNetLabel)' == '' ">
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <DocumentationFile>..\bin\$(Configuration)\$(AssemblyName).XML</DocumentationFile>
+    <OutputPath>..\bin\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AlienbrainUri.cs" />
+    <Compile Include="CloneableList.cs" />
+    <Compile Include="Collections\ProjectList.cs" />
+    <Compile Include="Components\AlienbrainUriTypeConverter.cs" />
+    <Compile Include="Components\BrowseForFolderUIEditor.cs" />
+    <Compile Include="Components\BrowseForFolderDescriptionAttribute.cs" />
+    <Compile Include="Components\CollectionEditor.cs" />
+    <Compile Include="Components\FileTypeFilterAttribute.cs" />
+    <Compile Include="Components\MaximumStringLengthAttribute.cs" />
+    <Compile Include="Components\MinimumValueAttribute.cs" />
+    <Compile Include="Components\MultilineStringEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\MultilineStringEditorForm.Designer.cs">
+      <DependentUpon>MultilineStringEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\MultilineStringUIEditor.cs" />
+    <Compile Include="Components\NumericUpDownUIEditor.cs" />
+    <Compile Include="Components\OpenFileDialogUIEditor.cs" />
+    <Compile Include="Components\OpenFileDialogTitleAttribute.cs" />
+    <Compile Include="Components\PluginAttribute.cs" />
+    <Compile Include="Components\SourceControlListUIEditor.cs" />
+    <Compile Include="Components\DatePickerUIEditor.cs" />
+    <Compile Include="Components\DefaultableBooleanUIEditor.cs" />
+    <Compile Include="Components\DefaultableEnumUIEditor.cs" />
+    <Compile Include="Components\LabellerUIEditor.cs" />
+    <Compile Include="Components\PasswordTypeConverter.cs" />
+    <Compile Include="Components\IListTypeConverter.cs" />
+    <Compile Include="Components\SourceControlUIEditor.cs" />
+    <Compile Include="Components\StateUIEditor.cs" />
+    <Compile Include="Components\StringListUIEditor.cs" />
+    <Compile Include="Components\TimeUIEditor.cs" />
+    <Compile Include="Components\TriggerListUIEditor.cs" />
+    <Compile Include="Components\TriggerSelectorUIEditor.cs" />
+    <Compile Include="Components\DayOfWeekUIEditor.cs" />
+    <Compile Include="Components\UserGroupUIEditor.cs" />
+    <Compile Include="Components\VersionAttribute.cs" />
+    <Compile Include="Components\VersionBasedTypeDescriptionProvider.cs" />
+    <Compile Include="Components\VersionBasedTypeDescriptor.cs" />
+    <Compile Include="Configuration\BackupSettings.cs" />
+    <Compile Include="Configuration\CCNetConfigConfiguration.cs" />
+    <Compile Include="Configuration\CCNetConfigSettings.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\UpdateProxySettings.cs" />
+    <Compile Include="Configuration\UpdateSettings.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\Handlers\CCNetConfigConfigurationSectionHandler.cs" />
+    <Compile Include="Configuration\Handlers\CCnetConfigSettingsConfigurationSectionHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\ComponentSettings.cs" />
+    <Compile Include="Configuration\ComponentSettingsList.cs" />
+    <Compile Include="CruiseControl.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="Exceptions\DuplicateProjectNameException.cs" />
+    <Compile Include="Exceptions\RequiredAttributeException.cs" />
+    <Compile Include="Exceptions\VersionNotSelectedException.cs" />
+    <Compile Include="ExternalLink.cs" />
+    <Compile Include="ICCNetDocumentation.cs" />
+    <Compile Include="ICCNetObject.cs" />
+    <Compile Include="NameValue.cs" />
+    <Compile Include="ProjectExtension.cs" />
+    <Compile Include="Labeller.cs" />
+    <Compile Include="HiddenPassword.cs" />
+    <Compile Include="Project.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="PublishersList.cs" />
+    <Compile Include="PublisherTask.cs" />
+    <Compile Include="SerializableList.cs" />
+    <Compile Include="Serialization\ISerialize.cs" />
+    <Compile Include="SourceControl.cs" />
+    <Compile Include="State.cs" />
+    <Compile Include="Timeout.cs" />
+    <Compile Include="Trigger.cs" />
+    <Compile Include="TriggersList.cs" />
+    <Compile Include="Util.cs" />
+    <Compile Include="WebUrlBuilder.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Components\MultilineStringEditorForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MultilineStringEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ccnet.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ccnet.xsx">
+      <DependentUpon>ccnet.xsd</DependentUpon>
+    </None>
+    <None Include="CCNetConfig.Core.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="License.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" Condition=" '$(CCNetLabel)' != '' " />
+  <Target Name="BeforeBuild" Condition=" '$(CCNetLabel)' != '' ">
+    <CallTarget Targets="PrepareBuild" />
+  </Target>
+  <Target Name="BuildAssemblyInfo" Outputs="$(MSBuildProjectDirectory)\Properties\AssemblyInfo.cs" Condition=" '$(CCNetLabel)' != '' ">
+    <CreateItem Include="Properties\AssemblyInfo.cs" Condition=" '$(CCNetLabel)' != '' ">
+      <Output TaskParameter="Include" ItemName="Compile" />
+    </CreateItem>
+    <AssemblyInfo CodeLanguage="CS" AssemblyCompany="Camalot Designs" AssemblyCopyright="Copyright © Ryan Conrad 2006. All Rights Reserved." AssemblyDescription="Core Components for CCNetConfig" AssemblyProduct="CCNetConfig.Core" AssemblyTitle="CCNetConfig.Core" AssemblyFileVersion="$(CCNetLabel)" AssemblyVersion="$(CCNetLabel)" ComVisible="false" CLSCompliant="true" OutputFile="$(MSBuildProjectDirectory)\Properties\AssemblyInfo.cs" Guid="df51342f-c763-4fa4-a2c4-6b91e94ec1e1" />
+  </Target>
+  <Target Name="PrepareBuild" DependsOnTargets="BuildAssemblyInfo" Condition=" '$(CCNetLabel)' != '' ">
+    <MakeDir Directories="$(OutputPath)" Condition="!Exists('$(OutputPath)')" />
+  </Target>
+</Project>

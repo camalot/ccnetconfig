@@ -1,0 +1,140 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition="'$(CCNetBuildCondition)' != 'ForceBuild'">Debug</Configuration>
+    <Configuration Condition="'$(CCNetBuildCondition)' == 'ForceBuild'">Release</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A1B9DE7D-33B2-431A-A805-E52000592F51}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CCNetConfig.CCNet</RootNamespace>
+    <AssemblyName>$(RootNamespace)</AssemblyName>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(CCNetLabel)' != '' ">
+    <DocumentationFile>$(OutputPath)$(AssemblyName).XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(CCNetLabel)' == '' ">
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <DocumentationFile>..\bin\$(Configuration)\$(AssemblyName).XML</DocumentationFile>
+    <OutputPath>..\bin\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Labeller\BrekiLabeller.cs" />
+    <Compile Include="Labeller\FileLabeller.cs" />
+    <Compile Include="Labeller\LastChangeLabeller.cs" />
+    <Compile Include="Labeller\LastChangeVersionLabeller.cs" />
+    <Compile Include="Labeller\MSProjectLabeller.cs" />
+    <Compile Include="Labeller\SubversionLabeller.cs" />
+    <Compile Include="PublisherTask\CodePlexReleasePublisher.cs" />
+    <Compile Include="PublisherTask\FinalBuilderTask.cs" />
+    <Compile Include="PublisherTask\RssBuildsPublisher.cs" />
+    <Compile Include="PublisherTask\TeamBuildTask.cs" />
+    <Compile Include="PublisherTask\TwitterPublisher.cs" />
+    <Compile Include="PublisherTask\TypeMockTask.cs" />
+    <Compile Include="SourceControl\AccuRevSourceControl.cs" />
+    <Compile Include="SourceControl\BazaarSourceControl.cs" />
+    <Compile Include="SourceControl\BitKeeperSourceControl.cs" />
+    <Compile Include="SourceControl\AlienbrainSourceControl.cs" />
+    <Compile Include="PublisherTask\BuildPublisher.cs" />
+    <Compile Include="SourceControl\CodePlexSourceControl.cs" />
+    <Compile Include="SourceControl\CvsSourceControl.cs" />
+    <Compile Include="Labeller\DateLabeller.cs" />
+    <Compile Include="Labeller\DefaultLabeller.cs" />
+    <Compile Include="PublisherTask\EmailPublisher.cs" />
+    <Compile Include="PublisherTask\ExecutableTask.cs" />
+    <Compile Include="PublisherTask\FileMergeTaskPublisher.cs" />
+    <Compile Include="SourceControl\FileSystemSourceControl.cs" />
+    <Compile Include="SourceControl\FilteredSourceControl.cs" />
+    <Compile Include="SourceControl\JediVcsSourceControl.cs" />
+    <Compile Include="SourceControl\MksSourceIntegritySourceControl.cs" />
+    <Compile Include="SourceControl\MultiSourceControl.cs" />
+    <Compile Include="SourceControl\PerforceSourceControl.cs" />
+    <Compile Include="SourceControl\PvcsSourceControl.cs" />
+    <Compile Include="SourceControl\RationalClearCaseSourceControl.cs" />
+    <Compile Include="SourceControl\SeapineSurroundSourceControl.cs" />
+    <Compile Include="SourceControl\SourceGearVaultSourceControl.cs" />
+    <Compile Include="SourceControl\StarTeamSourceControl.cs" />
+    <Compile Include="SourceControl\SubversionSourceControl.cs" />
+    <Compile Include="SourceControl\TelelogicSynergySourceControl.cs" />
+    <Compile Include="SourceControl\VisualSourceSafeSourceControl.cs" />
+    <Compile Include="SourceControl\VSTeamFoundationServerSourceControl.cs" />
+    <Compile Include="State\FileStateManager.cs" />
+    <Compile Include="Trigger\FilterTrigger.cs" />
+    <Compile Include="PublisherTask\ForceBuildPublisher.cs" />
+    <Compile Include="Trigger\IntervalTrigger.cs" />
+    <Compile Include="Labeller\IterationLabeller.cs" />
+    <Compile Include="PublisherTask\ModificationWriterTask.cs" />
+    <Compile Include="PublisherTask\MSBuildTask.cs" />
+    <Compile Include="Trigger\MultiTrigger.cs" />
+    <Compile Include="PublisherTask\NAntTask.cs" />
+    <Compile Include="SourceControl\NullSourceControl.cs" />
+    <Compile Include="PublisherTask\NullTask.cs" />
+    <Compile Include="PublisherTask\NUnitTask.cs" />
+    <Compile Include="Trigger\ProjectTrigger.cs" />
+    <Compile Include="Labeller\RemoteProjectLabeller.cs" />
+    <Compile Include="Trigger\ScheduleTrigger.cs" />
+    <Compile Include="Labeller\StateFileLabeller.cs" />
+    <Compile Include="PublisherTask\StatisticsPublisher.cs" />
+    <Compile Include="Trigger\UrlTrigger.cs" />
+    <Compile Include="PublisherTask\VisualStudioTask.cs" />
+    <Compile Include="PublisherTask\XmlLogPublisher.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CCNetConfig.Core\CCNetConfig.Core.csproj">
+      <Project>{1687DC58-3374-4D23-8820-1EBB162A32AE}</Project>
+      <Name>CCNetConfig.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="License.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" Condition=" '$(CCNetLabel)' != '' " />
+  <Target Name="BeforeBuild" Condition=" '$(CCNetLabel)' != '' ">
+    <CallTarget Targets="PrepareBuild" />
+  </Target>
+  <Target Name="BuildAssemblyInfo" Outputs="$(MSBuildProjectDirectory)\Properties\AssemblyInfo.cs" Condition=" '$(CCNetLabel)' != '' ">
+    <CreateItem Include="Properties\AssemblyInfo.cs" Condition=" '$(CCNetLabel)' != '' ">
+      <Output TaskParameter="Include" ItemName="Compile" />
+    </CreateItem>
+    <AssemblyInfo CodeLanguage="CS" AssemblyCompany="Camalot Designs" AssemblyCopyright="Copyright © Ryan Conrad 2006. All Rights Reserved." AssemblyDescription="Components for CCNet Configuration Blocks." AssemblyProduct="CCNetConfig.CCNet" AssemblyTitle="CCNetConfig.CCNet" AssemblyFileVersion="$(CCNetLabel)" AssemblyVersion="$(CCNetLabel)" ComVisible="false" CLSCompliant="true" OutputFile="$(MSBuildProjectDirectory)\Properties\AssemblyInfo.cs" Guid="cebb4b65-87fd-441e-b648-019575353bda" />
+  </Target>
+  <Target Name="PrepareBuild" DependsOnTargets="BuildAssemblyInfo" Condition=" '$(CCNetLabel)' != '' ">
+    <MakeDir Directories="$(OutputPath)" Condition="!Exists('$(OutputPath)')" />
+  </Target>
+</Project>
