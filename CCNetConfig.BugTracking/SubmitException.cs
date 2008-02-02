@@ -25,12 +25,14 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
+using System.IO;
 
 namespace CCNetConfig.BugTracking {
   public partial class SubmitException : Form {
     Exception _exception = null;
     BugTracker _bugTracker = null;
     XmlDocument _configDoc = null;
+    FileInfo _loadedFile = null;
     /// <summary>
     /// Initializes a new instance of the <see cref="SubmitException"/> class.
     /// </summary>
@@ -46,9 +48,26 @@ namespace CCNetConfig.BugTracking {
       this._bugTracker.SubmissionCompleted += new EventHandler ( _bugTracker_SubmissionCompleted );
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SubmitException"/> class.
+    /// </summary>
+    /// <param name="bugTracker">The bug tracker.</param>
+    /// <param name="ex">The ex.</param>
+    /// <param name="configDoc">The config doc.</param>
     public SubmitException ( BugTracker bugTracker, Exception ex, XmlDocument configDoc )
       : this ( bugTracker, ex ) {
       _configDoc = configDoc;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SubmitException"/> class.
+    /// </summary>
+    /// <param name="bugTracker">The bug tracker.</param>
+    /// <param name="ex">The ex.</param>
+    /// <param name="loadedFile">The loaded file.</param>
+    public SubmitException ( BugTracker bugTracker, Exception ex, FileInfo loadedFile )
+      : this ( bugTracker, ex ) {
+      _loadedFile = loadedFile;
     }
 
     /// <summary>
@@ -60,8 +79,23 @@ namespace CCNetConfig.BugTracking {
       this.Cursor = Cursors.WaitCursor;
       this.noSubmit.Enabled = false;
       this.submitBug.Enabled = false;
-      string format = "{0}\n\n{1}";
-      string details = string.Format ( format, _exception.ToString (), _configDoc.OuterXml );
+      string format = "{4}{3}{3}{5}{3}{3}{0}{3}{3}{1}{3}{3}{2}";
+      StringBuilder loadedFileData = new StringBuilder ( );
+      if ( this._loadedFile != null && this._loadedFile.Exists ) {
+        try {
+          StreamReader reader = this._loadedFile.OpenText ( );
+          using ( reader ) {
+            while ( !reader.EndOfStream ) {
+              loadedFileData.AppendLine ( reader.ReadLine ( ) );
+            }
+          }
+        } catch { }
+      }
+      string configXml = string.Empty;
+      if ( _configDoc != null )
+        configXml = _configDoc.OuterXml;
+      string details = string.Format ( format, _exception.ToString ( ), configXml, 
+        loadedFileData.ToString(), Environment.NewLine, Utils.GetOSInformation(), Utils.GetAssemblyInformation());
       this._bugTracker.SubmitBug ( _exception.Message, details, null );
     }
 

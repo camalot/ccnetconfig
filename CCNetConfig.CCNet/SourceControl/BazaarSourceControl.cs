@@ -27,6 +27,9 @@ using System.Drawing.Design;
 using System.Xml;
 
 namespace CCNetConfig.CCNet {
+  /// <summary>
+  /// A Bazaar Source Control
+  /// </summary>
   [ Plugin, MinimumVersion( "1.3") ]
   public class BazaarSourceControl : SourceControl, ICCNetDocumentation {
     private Uri _branchUrl;
@@ -36,6 +39,9 @@ namespace CCNetConfig.CCNet {
     private string _workingDirectory;
     private string _executable;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BazaarSourceControl"/> class.
+    /// </summary>
     public BazaarSourceControl ( ) : base( "bzr" ) {
 
     }

@@ -1,5 +1,5 @@
-/*
- * Copyright (c) 2007-2008, Ryan Conrad. All rights reserved.
+﻿/*
+ * Copyright (c) 2006, Ryan Conrad. All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
  * - Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
@@ -20,17 +20,35 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using NUnit.Framework;
+using CCNetConfig.Core;
+using CCNetConfig.Core.Serialization;
+using CCNetConfig.CCNet;
+using System.Xml;
 
-namespace CCNetConfig.Components {
-  /// <summary>
-  /// 
-  /// </summary>
-  public class CannotDeserialzeXmlException : Exception {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="CannotDeserialzeXmlException"/> class.
-    /// </summary>
-    public CannotDeserialzeXmlException ( ) :base("Can not deserialize the specified xml to an object") {
+namespace CCNetConfig.Tests {
+  [TestFixture]
+  public class SerializerTests {
+    [Test]
+    public void EmailPublisherSerializerTest ( ) {
+      Serializer<EmailPublisher> ser = new Serializer<EmailPublisher> ( );
 
+      EmailPublisher ep = new EmailPublisher ( );
+      ep.From = "no-email@to-spam.com";
+      ep.MailHost = "fake.mail.host.com";
+      HiddenPassword hp = new HiddenPassword();
+      hp.Password = "myPassW0rd";
+      ep.MailHostPassword = hp;
+      ep.MailHostUserName = "user";
+      User u = new User();
+      u.Address ="foo@bar.com";
+      u.Name= "foo bar";
+      ep.Users.Add ( u );
+
+      XmlElement ele = ser.Serialize ( ep );
+      Assert.IsNotNull ( ele );
+      Console.WriteLine ( ele.OuterXml );
+      
     }
   }
 }

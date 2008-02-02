@@ -118,7 +118,7 @@ namespace CCNetConfig.Core.Enums {
     /// <summary>
     /// send mail when the status of the build changes from "Failed" to "Success". (available from version 1.3.0.2966) 
     /// </summary>
-    [MinimumVersion ( "1.3" )]
+    [MinimumVersion ( "1.4" )]
     Fixed
   }
 

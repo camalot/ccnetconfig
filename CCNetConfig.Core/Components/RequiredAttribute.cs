@@ -1,5 +1,5 @@
-/*
- * Copyright (c) 2007-2008, Ryan Conrad. All rights reserved.
+﻿/*
+ * Copyright (c) 2006-2008, Ryan Conrad. All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
  * - Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
@@ -21,16 +21,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CCNetConfig.Components {
-  /// <summary>
-  /// 
-  /// </summary>
-  public class CannotDeserialzeXmlException : Exception {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="CannotDeserialzeXmlException"/> class.
-    /// </summary>
-    public CannotDeserialzeXmlException ( ) :base("Can not deserialize the specified xml to an object") {
-
-    }
+namespace CCNetConfig.Core.Components {
+  [AttributeUsage(AttributeTargets.Class | AttributeTargets.Field | AttributeTargets.Property )]
+  public class RequiredAttribute : Attribute {
   }
 }

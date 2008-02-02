@@ -24,17 +24,17 @@ namespace CCNetConfig.BugTracking {
     /// </summary>
     private void InitializeComponent () {
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager ( typeof ( SubmitException ) );
-      this.submitBug = new System.Windows.Forms.Button ();
-      this.noSubmit = new System.Windows.Forms.Button ();
-      this.errorMessage = new System.Windows.Forms.Label ();
-      this.showDetails = new System.Windows.Forms.Button ();
-      this.textdetails = new System.Windows.Forms.TextBox ();
-      this.SuspendLayout ();
+      this.submitBug = new System.Windows.Forms.Button ( );
+      this.noSubmit = new System.Windows.Forms.Button ( );
+      this.errorMessage = new System.Windows.Forms.Label ( );
+      this.showDetails = new System.Windows.Forms.Button ( );
+      this.textdetails = new System.Windows.Forms.TextBox ( );
+      this.SuspendLayout ( );
       // 
       // submitBug
       // 
-      this.submitBug.Anchor = ( (System.Windows.Forms.AnchorStyles)( ( System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right ) ) );
-      this.submitBug.Location = new System.Drawing.Point ( 283, 87 );
+      this.submitBug.Anchor = ( ( System.Windows.Forms.AnchorStyles ) ( ( System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right ) ) );
+      this.submitBug.Location = new System.Drawing.Point ( 283, 91 );
       this.submitBug.Name = "submitBug";
       this.submitBug.Size = new System.Drawing.Size ( 170, 27 );
       this.submitBug.TabIndex = 0;
@@ -44,8 +44,8 @@ namespace CCNetConfig.BugTracking {
       // 
       // noSubmit
       // 
-      this.noSubmit.Anchor = ( (System.Windows.Forms.AnchorStyles)( ( System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right ) ) );
-      this.noSubmit.Location = new System.Drawing.Point ( 176, 87 );
+      this.noSubmit.Anchor = ( ( System.Windows.Forms.AnchorStyles ) ( ( System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right ) ) );
+      this.noSubmit.Location = new System.Drawing.Point ( 176, 91 );
       this.noSubmit.Name = "noSubmit";
       this.noSubmit.Size = new System.Drawing.Size ( 101, 27 );
       this.noSubmit.TabIndex = 1;
@@ -57,13 +57,13 @@ namespace CCNetConfig.BugTracking {
       // 
       this.errorMessage.Location = new System.Drawing.Point ( 12, 9 );
       this.errorMessage.Name = "errorMessage";
-      this.errorMessage.Size = new System.Drawing.Size ( 441, 66 );
+      this.errorMessage.Size = new System.Drawing.Size ( 441, 75 );
       this.errorMessage.TabIndex = 2;
       // 
       // showDetails
       // 
-      this.showDetails.Anchor = ( (System.Windows.Forms.AnchorStyles)( ( System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right ) ) );
-      this.showDetails.Location = new System.Drawing.Point ( 12, 87 );
+      this.showDetails.Anchor = ( ( System.Windows.Forms.AnchorStyles ) ( ( System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right ) ) );
+      this.showDetails.Location = new System.Drawing.Point ( 12, 91 );
       this.showDetails.Name = "showDetails";
       this.showDetails.Size = new System.Drawing.Size ( 79, 27 );
       this.showDetails.TabIndex = 3;
@@ -73,7 +73,7 @@ namespace CCNetConfig.BugTracking {
       // 
       // textdetails
       // 
-      this.textdetails.Location = new System.Drawing.Point ( 12, 92 );
+      this.textdetails.Location = new System.Drawing.Point ( 12, 94 );
       this.textdetails.Multiline = true;
       this.textdetails.Name = "textdetails";
       this.textdetails.ReadOnly = true;
@@ -84,6 +84,7 @@ namespace CCNetConfig.BugTracking {
       // 
       // SubmitException
       // 
+      this.AcceptButton = this.submitBug;
       this.AutoScaleDimensions = new System.Drawing.SizeF ( 6F, 13F );
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size ( 465, 126 );
@@ -93,7 +94,7 @@ namespace CCNetConfig.BugTracking {
       this.Controls.Add ( this.submitBug );
       this.Controls.Add ( this.textdetails );
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-      this.Icon = ( (System.Drawing.Icon)( resources.GetObject ( "$this.Icon" ) ) );
+      this.Icon = ( ( System.Drawing.Icon ) ( resources.GetObject ( "$this.Icon" ) ) );
       this.MaximizeBox = false;
       this.MinimizeBox = false;
       this.Name = "SubmitException";
@@ -101,7 +102,7 @@ namespace CCNetConfig.BugTracking {
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
       this.Text = "Submit Bug";
       this.ResumeLayout ( false );
-      this.PerformLayout ();
+      this.PerformLayout ( );
 
     }
 

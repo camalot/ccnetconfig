@@ -274,6 +274,20 @@ namespace CCNetConfig.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap green_arrow1 {
+            get {
+                object obj = ResourceManager.GetObject("green_arrow1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap green_arrow2 {
+            get {
+                object obj = ResourceManager.GetObject("green_arrow2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Green_Down {
             get {
                 object obj = ResourceManager.GetObject("Green_Down", resourceCulture);

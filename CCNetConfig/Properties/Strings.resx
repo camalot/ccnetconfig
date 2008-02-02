@@ -157,6 +157,15 @@
   <data name="OpenSaveFilter" xml:space="preserve">
     <value>CCNet Configuration|ccnet.config|Configuration Files|*.config|XML Files|*.xml|All Files|*.*</value>
   </data>
+  <data name="ReadonlyFileCommandButtons" xml:space="preserve">
+    <value>Save As New File|Remove Readonly Flag and Save|Cancel Save</value>
+  </data>
+  <data name="ReadonlyFileMessage" xml:space="preserve">
+    <value>The currently opened configuration file you are trying to save is marked readonly. What would you like to do?</value>
+  </data>
+  <data name="ReadonlyFileTitle" xml:space="preserve">
+    <value>Configuration File is readonly</value>
+  </data>
   <data name="UnableToSaveConfiguration" xml:space="preserve">
     <value>Unable to save configuration.</value>
   </data>

@@ -40,6 +40,7 @@ using System.Diagnostics;
 using System.Threading;
 using CCNetConfig.Core.Exceptions;
 using CCNetConfig.Core.Enums;
+using CCNetConfig.Controls;
 
 namespace CCNetConfig.UI {
   /// <summary>
@@ -921,8 +922,8 @@ namespace CCNetConfig.UI {
         SetContextMenuItemsVisible ( null );
         copyItemsToolStripMenuItem.Visible = true;
         copyItemsToolStripMenuItem.Text = "Copy Configuration";
-        if ( _copyMenuItemEventHandler != null )
-          _copyMenuItemEventHandler = _copyMenuItemEventHandler;
+        //if ( _copyMenuItemEventHandler != null )
+          //_copyMenuItemEventHandler = _copyMenuItemEventHandler;
         _copyMenuItemEventHandler = delegate ( object sender, EventArgs evt ) {
           ClipboardManager.CopyToClipboard<CCNetConfig.Core.CruiseControl> ( this.CruiseControl );
         };
@@ -1469,13 +1470,29 @@ namespace CCNetConfig.UI {
       try {
         this._backupControler.BackupFile ( file );
         loadedConfigFile = file;
+        if ( file.IsReadOnly && file.Exists ) {
+          TaskDialog.ForceEmulationMode = true;
+          TaskDialog.ShowTaskDialogBox ( Properties.Strings.ReadonlyFileTitle, Properties.Strings.ReadonlyFileTitle,
+            Properties.Strings.ReadonlyFileMessage, string.Empty, string.Empty, string.Empty, string.Empty,
+            Properties.Strings.ReadonlyFileCommandButtons, TaskDialogButtons.None, SysIcons.Warning, SysIcons.Information );
+          switch ( (ReadOnlyTaskDialogCommandButton)TaskDialog.CommandButtonResult ) {
+            case ReadOnlyTaskDialogCommandButton.SaveAs:
+              loadedConfigFile = SaveAs ( );
+              return;
+            case ReadOnlyTaskDialogCommandButton.RemoveReadOnly:
+              file.Attributes -= FileAttributes.ReadOnly;
+              break;
+            case ReadOnlyTaskDialogCommandButton.Cancel:
+              return;
+          }
+         
+        }
         // changing FileMode to Create will solve any issues with "stray" characters from config if it was longer then new one.
         FileStream fs = new FileStream ( file.FullName, FileMode.Create, FileAccess.Write );
         rootNode.CruiseControl.SaveConfig ( fs );
         OnConfigurationModified ( new CancelEventArgs ( true ) );
       } catch ( Exception ex ) {
-        XmlDocument doc = Program.CruiseControlToXmlDocument ( this.CruiseControl );
-        Program.BugTracker.SubmitExceptionDialog ( this, ex, doc );
+        Program.BugTracker.SubmitExceptionDialog ( this, ex, file );
       }
     }
 

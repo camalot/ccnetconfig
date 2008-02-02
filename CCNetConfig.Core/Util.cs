@@ -622,12 +622,44 @@ namespace CCNetConfig.Core {
     /// <summary>
     /// Gets the minimum version attribute for a property.
     /// </summary>
+    /// <param name="mi">The mi.</param>
+    /// <returns></returns>
+    public static Version GetMinimumVersion ( MemberInfo mi ) {
+      if ( mi == null )
+        return null;
+      PropertyDescriptorCollection properties = TypeDescriptor.GetProperties ( mi.DeclaringType );
+      PropertyDescriptor pd = properties.Find ( mi.Name, false );
+      if ( pd != null )
+        return GetMinimumVersion ( pd );
+      else
+        return null;
+    }
+
+    /// <summary>
+    /// Gets the minimum version attribute for a property.
+    /// </summary>
     /// <param name="pd">The pd.</param>
     /// <returns></returns>
     public static Version GetMinimumVersion ( PropertyDescriptor pd ) {
       MinimumVersionAttribute minVersion = pd.Attributes[ typeof ( MinimumVersionAttribute ) ] as MinimumVersionAttribute;
       if ( minVersion != null )
         return minVersion.Version;
+      else
+        return null;
+    }
+
+    /// <summary>
+    /// Gets the minimum version attribute for a property.
+    /// </summary>
+    /// <param name="mi">The mi.</param>
+    /// <returns></returns>
+    public static Version GetMaximumVersion ( MemberInfo mi ) {
+      if ( mi == null )
+        return null;
+      PropertyDescriptorCollection properties = TypeDescriptor.GetProperties ( mi.DeclaringType );
+      PropertyDescriptor pd = properties.Find ( mi.Name, false );
+      if ( pd != null )
+        return GetMaximumVersion ( pd );
       else
         return null;
     }
@@ -641,6 +673,22 @@ namespace CCNetConfig.Core {
       MaximumVersionAttribute maxVersion = pd.Attributes[ typeof ( MaximumVersionAttribute ) ] as MaximumVersionAttribute;
       if ( maxVersion != null )
         return maxVersion.Version;
+      else
+        return null;
+    }
+
+    /// <summary>
+    /// Gets the minimum version attribute for a property.
+    /// </summary>
+    /// <param name="mi">The mi.</param>
+    /// <returns></returns>
+    public static Version GetExactVersion ( MemberInfo mi ) {
+      if ( mi == null )
+        return null;
+      PropertyDescriptorCollection properties = TypeDescriptor.GetProperties ( mi.DeclaringType );
+      PropertyDescriptor pd = properties.Find ( mi.Name, false );
+      if ( pd != null )
+        return GetExactVersion ( pd );
       else
         return null;
     }
@@ -764,6 +812,74 @@ namespace CCNetConfig.Core {
     /// <returns>0 or 1</returns>
     public static int BooleanToInteger ( bool val ) {
       return val ? 1 : 0;
+    }
+
+    /// <summary>
+    /// Gets the reflector name attribute value.
+    /// </summary>
+    /// <param name="type">The type.</param>
+    /// <returns></returns>
+    /// <exception cref="System.ArgumentNullException">Throws if the type does not contain the attribute.</exception>
+    public static string GetReflectorNameAttributeValue ( Type type ) {
+      ReflectorNameAttribute rna = Util.GetCustomAttribute<ReflectorNameAttribute> ( type );
+      if ( rna != null )
+        return rna.Name;
+      else
+        throw new ArgumentNullException ( string.Format ( "Type ({0}) does not contain a ReflectorName Attribute", type.Name ) );
+    }
+    /// <summary>
+    /// Gets the reflector name attribute value.
+    /// </summary>
+    /// <param name="mi">The member info.</param>
+    /// <returns></returns>
+    /// <exception cref="System.ArgumentNullException">Throws if the type does not contain the attribute.</exception>
+    public static string GetReflectorNameAttributeValue ( MemberInfo mi ) {
+      ReflectorNameAttribute rna = Util.GetCustomAttribute<ReflectorNameAttribute> ( mi );
+      if ( rna != null )
+        return rna.Name;
+      else
+        throw new ArgumentNullException ( string.Format ( "Member ({0}) does not contain a ReflectorName Attribute", mi.Name ) );
+    }
+
+    /// <summary>
+    /// Gets the type of the reflector node.
+    /// </summary>
+    /// <param name="mi">The mi.</param>
+    /// <returns></returns>
+    public static ReflectorNodeTypes GetReflectorNodeType ( MemberInfo mi ) {
+      ReflectorNodeTypeAttribute rnta = Util.GetCustomAttribute<ReflectorNodeTypeAttribute> ( mi );
+      if ( rnta != null )
+        return rnta.Type;
+      else
+        return ReflectorNodeTypes.Element;
+    }
+
+    /// <summary>
+    /// Gets the attribute.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="type">The type.</param>
+    /// <returns></returns>
+    public static T GetCustomAttribute<T> ( Type type ) {
+      object[ ] attr = type.GetCustomAttributes ( typeof(T), true ) as Attribute[ ];
+      if ( attr != null && attr.Length > 0 ) {
+        return (T)attr[ 0 ];
+      } else
+        return default(T);
+    }
+
+    /// <summary>
+    /// Gets the attribute.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="mi">The mi.</param>
+    /// <returns></returns>
+    public static T GetCustomAttribute<T> ( MemberInfo mi ) {
+      object[ ] attr = mi.GetCustomAttributes ( typeof ( T ), true ) as Attribute[ ];
+      if ( attr != null && attr.Length > 0 ) {
+        return ( T ) attr[ 0 ];
+      } else
+        return default ( T );
     }
 
     /// <summary>
@@ -1087,6 +1203,7 @@ namespace CCNetConfig.Core {
     /// was found and we create an instance of it and return it.
     /// </remarks>
     public static State GetStateFromElement ( XmlElement element ) {
+      // this is no longer needed. it was used by early versions.
       if ( !string.IsNullOrEmpty ( element.GetAttribute ( "ccnetconfigType" ) ) ) {
         Type t = CreateTypeFromString ( element.GetAttribute ( "ccnetconfigType" ) );
         if ( t.IsSubclassOf ( typeof ( State ) ) ) {
@@ -1189,6 +1306,17 @@ namespace CCNetConfig.Core {
       else {
         return ( T ) Enum.Parse ( typeof(T), val, true );
       }
+    }
+
+    /// <summary>
+    /// Determines whether the specified t is nullable.
+    /// </summary>
+    /// <param name="t">The t.</param>
+    /// <returns>
+    /// 	<c>true</c> if the specified t is nullable; otherwise, <c>false</c>.
+    /// </returns>
+    public static bool IsNullable ( Type t ) {
+      return ( t.IsGenericType && t.GetGenericTypeDefinition ( ).Equals( typeof ( Nullable<> ) ) );
     }
   }
 

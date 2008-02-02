@@ -48,6 +48,10 @@ namespace CCNetConfig.CCNet {
       _assemblies = new CloneableList<string> ( );
     }
 
+    /// <summary>
+    /// Gets or sets the runner path.
+    /// </summary>
+    /// <value>The runner path.</value>
     [Editor ( typeof ( OpenFileDialogUIEditor ), typeof ( UITypeEditor ) ),
 FileTypeFilter ( "TypeMockRunner|tmockrunner.exe;" ),
 Category ( "Optional" ),

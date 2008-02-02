@@ -160,6 +160,33 @@ namespace CCNetConfig.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save As New File|Remove Readonly Flag and Save|Cancel Save.
+        /// </summary>
+        internal static string ReadonlyFileCommandButtons {
+            get {
+                return ResourceManager.GetString("ReadonlyFileCommandButtons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The currently opened configuration file you are trying to save is marked readonly. What would you like to do?.
+        /// </summary>
+        internal static string ReadonlyFileMessage {
+            get {
+                return ResourceManager.GetString("ReadonlyFileMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configuration File is readonly.
+        /// </summary>
+        internal static string ReadonlyFileTitle {
+            get {
+                return ResourceManager.GetString("ReadonlyFileTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to save configuration..
         /// </summary>
         internal static string UnableToSaveConfiguration {

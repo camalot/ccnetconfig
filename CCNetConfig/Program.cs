@@ -74,7 +74,7 @@ namespace CCNetConfig {
     /// <param name="e">The <see cref="System.UnhandledExceptionEventArgs"/> instance containing the event data.</param>
     private static void OnUnhandledException ( object sender, UnhandledExceptionEventArgs e ) {
       Exception ex = e.ExceptionObject as Exception;
-      Program.BugTracker.SubmitExceptionDialog ( null, ex, null );
+      Program.BugTracker.SubmitExceptionDialog ( null, ex, (XmlDocument)null );
       //Environment.Exit ( 1 );
     }
 

@@ -65,14 +65,13 @@ namespace CCNetConfig.Components {
       } catch {
         throw new CannotDeserialzeXmlException ( );
       }
-      return default ( T );
+      //return default ( T );
     }
 
     /// <summary>
     /// Determines whether the clipboard contains a serializable object.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="element">The element, if return <see langword="true" />.</param>
+    /// <param name="element">The element, if return <see langword="true"/>.</param>
     /// <returns>
     /// 	<see langword="true"/> if the clipboard contains a serializable object.; otherwise, <see langword="false"/>.
     /// </returns>
@@ -97,7 +96,6 @@ namespace CCNetConfig.Components {
     /// <summary>
     /// Determines whether the clipboard contains a serializable object.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     /// <returns>
     /// 	<see langword="true"/> if the clipboard contains a serializable object; otherwise, <see langword="false"/>.
     /// </returns>

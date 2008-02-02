@@ -44,7 +44,8 @@ namespace CCNetConfig.Core.Components {
     /// The new value of the object. If the value of the object has not changed, this should return the same object it was passed.
     /// </returns>
     public override object EditValue ( ITypeDescriptorContext context, IServiceProvider provider, object value ) {
-      frmsvr = (IWindowsFormsEditorService)provider.GetService ( typeof ( IWindowsFormsEditorService ) );
+      Version versionInfo = Util.GetTypeDescriptionProviderVersion ( typeof ( PublisherTask ) );
+      frmsvr = ( IWindowsFormsEditorService ) provider.GetService ( typeof ( IWindowsFormsEditorService ) );
       if ( frmsvr != null ) {
         ListBox lst = new ListBox ();
         lst.BorderStyle = BorderStyle.None;
@@ -58,7 +59,12 @@ namespace CCNetConfig.Core.Components {
           throw new NotSupportedException ( "Invalid Type for this Editor" );
 
         foreach ( object dow in Enum.GetValues ( enumType ) ) {
-          li.Add ( dow );
+          System.Reflection.MemberInfo fld = enumType.GetField ( dow.ToString ( ) );
+          Version min = Util.GetMinimumVersion ( fld );
+          Version max = Util.GetMaximumVersion ( fld );
+          Version exact = Util.GetExactVersion ( fld );
+          if ( Util.IsExactVersion(exact,versionInfo) || Util.IsInVersionRange(min,max,versionInfo) )
+            li.Add ( dow );
         }
 
         lst.DataSource = li;

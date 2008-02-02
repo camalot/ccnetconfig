@@ -1,5 +1,5 @@
-/*
- * Copyright (c) 2007-2008, Ryan Conrad. All rights reserved.
+﻿/*
+ * Copyright (c) 2006-2008, Ryan Conrad. All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
  * - Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
@@ -21,16 +21,25 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CCNetConfig.Components {
+namespace CCNetConfig.Core.Components {
   /// <summary>
-  /// 
+  /// Represents the name of the element or attribute defined by the Reflector Attribute.
   /// </summary>
-  public class CannotDeserialzeXmlException : Exception {
+  [AttributeUsage ( AttributeTargets.Class | AttributeTargets.Field | AttributeTargets.Property )]
+  public class ReflectorNameAttribute : Attribute {
+    private string _name = string.Empty;
     /// <summary>
-    /// Initializes a new instance of the <see cref="CannotDeserialzeXmlException"/> class.
+    /// Initializes a new instance of the <see cref="ReflectorNameAttribute"/> class.
     /// </summary>
-    public CannotDeserialzeXmlException ( ) :base("Can not deserialize the specified xml to an object") {
-
+    /// <param name="name">The name.</param>
+    public ReflectorNameAttribute ( string name ) {
+      _name = name;
     }
+
+    /// <summary>
+    /// Gets or sets the name.
+    /// </summary>
+    /// <value>The name.</value>
+    public string Name { get { return this._name; } set { this._name = value; } }
   }
 }

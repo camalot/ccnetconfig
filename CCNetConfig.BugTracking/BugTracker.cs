@@ -132,6 +132,18 @@ namespace CCNetConfig.BugTracking {
     }
 
     /// <summary>
+    /// Submits the exception dialog.
+    /// </summary>
+    /// <param name="owner">The owner.</param>
+    /// <param name="ex">The ex.</param>
+    /// <param name="configFile">The config file.</param>
+    /// <returns></returns>
+    public DialogResult SubmitExceptionDialog ( IWin32Window owner, Exception ex, FileInfo configFile ) {
+      CCNetConfig.BugTracking.SubmitException submitException = new CCNetConfig.BugTracking.SubmitException ( this, ex, configFile );
+      return submitException.ShowDialog ( owner );
+    }
+
+    /// <summary>
     /// Submits the bug.
     /// </summary>
     /// <param name="item">The item.</param>

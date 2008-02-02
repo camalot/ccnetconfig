@@ -1,5 +1,5 @@
-/*
- * Copyright (c) 2007-2008, Ryan Conrad. All rights reserved.
+﻿/*
+ * Copyright (c) 2006-2008, Ryan Conrad. All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
  * - Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
@@ -20,17 +20,51 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using CCNetConfig.Core.Components;
+using CCNetConfig.Core;
+using System.ComponentModel;
+using System.Drawing.Design;
 
-namespace CCNetConfig.Components {
+namespace CCNetConfig.CCNet {
   /// <summary>
   /// 
   /// </summary>
-  public class CannotDeserialzeXmlException : Exception {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="CannotDeserialzeXmlException"/> class.
-    /// </summary>
-    public CannotDeserialzeXmlException ( ) :base("Can not deserialize the specified xml to an object") {
+  [MinimumVersion ( "1.0" )]
+  public class RssPublisher : PublisherTask, ICCNetDocumentation {
+    private string _filename = string.Empty;
+
+    public RssPublisher (  ) : base("rss") {
 
     }
+
+    [Description("The file name for the rss data."), Category("Required"),
+    MinimumVersion("1.0"), MaximumVersion("1.3"), DisplayName("(FileName)"),
+    DefaultValue(null), FileTypeFilter("Xml Files|*.xml;*.rss"), OpenFileDialogTitle("Select File Name."),
+    Editor(typeof(OpenFileDialogUIEditor), typeof(UITypeEditor)),
+    ReflectorName("filename")]
+    public string FileName { get { return this._filename; } set { this._filename = value; } }
+    /// <summary>
+    /// Serializes this instance.
+    /// </summary>
+    /// <returns></returns>
+    public override System.Xml.XmlElement Serialize ( ) {
+      throw new NotImplementedException ( );
+    }
+
+    public override void Deserialize ( System.Xml.XmlElement element ) {
+      throw new NotImplementedException ( );
+    }
+
+    public override PublisherTask Clone ( ) {
+      throw new NotImplementedException ( );
+    }
+
+    #region ICCNetDocumentation Members
+
+    public Uri DocumentationUri {
+      get { throw new NotImplementedException ( ); }
+    }
+
+    #endregion
   }
 }

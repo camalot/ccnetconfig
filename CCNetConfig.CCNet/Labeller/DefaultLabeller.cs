@@ -38,6 +38,7 @@ namespace CCNetConfig.CCNet {
   public class DefaultLabeller : Labeller, ICCNetDocumentation {
     private string _prefix;
     private bool? _incrementOnFailure = null;
+    private string _labelFormat = string.Empty;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DefaultLabeller"/> class.
@@ -62,6 +63,13 @@ namespace CCNetConfig.CCNet {
     public bool? IncrementOnFailure { get { return this._incrementOnFailure; } set { this._incrementOnFailure = value; } }
 
     /// <summary>
+    /// Gets or sets the label format.
+    /// </summary>
+    /// <value>The label format.</value>
+    [Description("A format applied to the buildnumber."), DefaultValue("0"), Category("Optional"), 
+    MinimumVersion("1.3")]
+    public string LabelFormat { get { return this._labelFormat; } set { this._labelFormat = value; } }
+    /// <summary>
     /// Creates a copy of the DefaultLabeller object.
     /// </summary>
     /// <returns></returns>
@@ -76,6 +84,7 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     /// <returns></returns>
     public override System.Xml.XmlElement Serialize() {
+      Version versionInfo = Util.GetTypeDescriptionProviderVersion ( typeof ( Labeller ) );
       XmlDocument doc = new XmlDocument ();
       XmlElement root = doc.CreateElement ("labeller");
       //root.SetAttribute ("ccnetconfigType", string.Format ("{0}, {1}", this.GetType ().FullName, this.GetType ().Assembly.GetName ().Name));
@@ -92,6 +101,15 @@ namespace CCNetConfig.CCNet {
         ele = doc.CreateElement ("incrementOnFailure");
         ele.InnerText = this.IncrementOnFailure.Value.ToString ();
         root.AppendChild (ele);
+      }
+
+      Version propVersion = Util.GetMinimumVersion ( this.GetType ( ).GetProperty ( "LabelFormat" ) );
+      if ( Util.IsInVersionRange ( propVersion, null, versionInfo ) ) {
+        if ( !string.IsNullOrEmpty ( this.LabelFormat ) ) {
+          ele = doc.CreateElement ( "labelFormat" );
+          ele.InnerText = this.LabelFormat;
+          root.AppendChild ( ele );
+        }
       }
       return root;
     }
@@ -113,6 +131,8 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     /// <param name="element">The element.</param>
     public override void Deserialize( XmlElement element ) {
+      Version versionInfo = Util.GetTypeDescriptionProviderVersion ( typeof ( Labeller ) );
+
       this.IncrementOnFailure = null;
       this.Prefix = null;
      
@@ -129,7 +149,12 @@ namespace CCNetConfig.CCNet {
         if ( bool.TryParse (s, out i) )
           this.IncrementOnFailure = i;
       }
-
+      Version propVersion = Util.GetMinimumVersion ( this.GetType ( ).GetProperty ( "LabelFormat" ) );
+      if ( Util.IsInVersionRange ( propVersion, null, versionInfo ) ) {
+        s = Util.GetElementOrAttributeValue ( "labelFormat", element );
+        if ( !string.IsNullOrEmpty ( s ) )
+          this.LabelFormat = s;
+      }
     }
   }
 }

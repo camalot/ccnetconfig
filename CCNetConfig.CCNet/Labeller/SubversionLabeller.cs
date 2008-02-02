@@ -44,6 +44,9 @@ namespace CCNetConfig.CCNet {
     private string _workingDirectory = null;
 
     // we pass the name of the labeller to the base constructor.
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SubversionLabeller"/> class.
+    /// </summary>
     public SubversionLabeller ( ) : base ( "SvnLabeller" ) {
 
     }

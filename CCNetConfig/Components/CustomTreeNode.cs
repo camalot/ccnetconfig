@@ -206,12 +206,23 @@ namespace CCNetConfig.Components {
     
     }
 
+    /// <summary>
+    /// Creates the queue.
+    /// </summary>
+    /// <param name="project">The project.</param>
     public void CreateQueue ( Project project ) {
 
     }
   }
 
+  /// <summary>
+  /// 
+  /// </summary>
   public class IntegrationQueueTreeNode : TreeNode {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="IntegrationQueueTreeNode"/> class.
+    /// </summary>
+    /// <param name="name">The name.</param>
     public IntegrationQueueTreeNode ( string name ) : base(name) {
 
     }
