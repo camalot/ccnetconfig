@@ -161,6 +161,7 @@
       <DependentUpon>ccnet.xsd</DependentUpon>
     </None>
     <None Include="CCNetConfig.Core.cd" />
+    <Compile Include="Components\FormatProviderAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="License.txt" />

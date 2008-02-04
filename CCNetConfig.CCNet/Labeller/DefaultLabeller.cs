@@ -50,7 +50,8 @@ namespace CCNetConfig.CCNet {
     /// <summary>
     /// Any string to be put in front of all labels
     /// </summary>
-    [Description ( "Any string to be put in front of all labels" ), DefaultValue ( null ), Category ( "Optional" )]
+    [Description ( "Any string to be put in front of all labels" ), DefaultValue ( null ), Category ( "Optional" ),
+    ReflectorName("prefix")]
     public string Prefix { get { return this._prefix; } set { this._prefix = value; } }
     /// <summary>
     /// If true, the label will be incremented even if the build fails. Otherwise it will only be 
@@ -58,7 +59,7 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     [Description ( "If true, the label will be incremented even if the build fails. Otherwise it will only be incremented if the build succeeds." ),
       Editor ( typeof ( DefaultableBooleanUIEditor ), typeof ( UITypeEditor ) ),
-      TypeConverter ( typeof ( DefaultableBooleanTypeConverter ) ),
+      TypeConverter ( typeof ( DefaultableBooleanTypeConverter ) ), ReflectorName("incrementOnFailure"),
      DefaultValue ( null ), Category ( "Optional" ), MinimumVersion( "1.1" )]
     public bool? IncrementOnFailure { get { return this._incrementOnFailure; } set { this._incrementOnFailure = value; } }
 
@@ -67,7 +68,7 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     /// <value>The label format.</value>
     [Description("A format applied to the buildnumber."), DefaultValue("0"), Category("Optional"), 
-    MinimumVersion("1.3")]
+    MinimumVersion("1.3"), ReflectorName("labelFormat")]
     public string LabelFormat { get { return this._labelFormat; } set { this._labelFormat = value; } }
     /// <summary>
     /// Creates a copy of the DefaultLabeller object.
@@ -84,6 +85,8 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     /// <returns></returns>
     public override System.Xml.XmlElement Serialize() {
+      return new CCNetConfig.Core.Serialization.Serializer<DefaultLabeller> ( ).Serialize ( this );
+      /*
       Version versionInfo = Util.GetTypeDescriptionProviderVersion ( typeof ( Labeller ) );
       XmlDocument doc = new XmlDocument ();
       XmlElement root = doc.CreateElement ("labeller");
@@ -112,14 +115,15 @@ namespace CCNetConfig.CCNet {
         }
       }
       return root;
-    }
+      */
+  }
 
     #region ICCNetDocumentation Members
     /// <summary>
     /// Gets the documentation URI.
     /// </summary>
     /// <value>The documentation URI.</value>
-    [Browsable(false)]
+    [Browsable(false), ReflectorIgnore]
     public Uri DocumentationUri {
       get { return new Uri ( "http://confluence.public.thoughtworks.org/display/CCNET/Default+Labeller?decorator=printable" ); }
     }

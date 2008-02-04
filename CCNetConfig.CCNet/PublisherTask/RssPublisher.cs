@@ -24,45 +24,67 @@ using CCNetConfig.Core.Components;
 using CCNetConfig.Core;
 using System.ComponentModel;
 using System.Drawing.Design;
+using CCNetConfig.Core.Serialization;
 
 namespace CCNetConfig.CCNet {
   /// <summary>
-  /// 
+  /// This publisher generates a rss file reporting the latest results for a Project.
   /// </summary>
-  [MinimumVersion ( "1.0" )]
+  [MinimumVersion ( "1.0" ), ReflectorName("rss")]
   public class RssPublisher : PublisherTask, ICCNetDocumentation {
     private string _filename = string.Empty;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RssPublisher"/> class.
+    /// </summary>
     public RssPublisher (  ) : base("rss") {
 
     }
 
+    /// <summary>
+    /// Gets or sets the name of the file.
+    /// </summary>
+    /// <value>The name of the file.</value>
     [Description("The file name for the rss data."), Category("Required"),
     MinimumVersion("1.0"), MaximumVersion("1.3"), DisplayName("(FileName)"),
     DefaultValue(null), FileTypeFilter("Xml Files|*.xml;*.rss"), OpenFileDialogTitle("Select File Name."),
     Editor(typeof(OpenFileDialogUIEditor), typeof(UITypeEditor)),
-    ReflectorName("filename")]
+    ReflectorName("filename"), Required,ReflectorNodeType(ReflectorNodeTypes.Attribute)]
     public string FileName { get { return this._filename; } set { this._filename = value; } }
     /// <summary>
     /// Serializes this instance.
     /// </summary>
     /// <returns></returns>
     public override System.Xml.XmlElement Serialize ( ) {
-      throw new NotImplementedException ( );
+      return new Serializer<RssPublisher>().Serialize(this);
     }
 
+    /// <summary>
+    /// Deserializes the specified element.
+    /// </summary>
+    /// <param name="element">The element.</param>
     public override void Deserialize ( System.Xml.XmlElement element ) {
-      throw new NotImplementedException ( );
+      this.FileName = string.Empty;
+      new Serializer<RssPublisher>().Deserialize(element,this);
     }
 
+    /// <summary>
+    /// Creates a copy of this object.
+    /// </summary>
+    /// <returns></returns>
     public override PublisherTask Clone ( ) {
-      throw new NotImplementedException ( );
+      return this.MemberwiseClone ( ) as RssPublisher;
     }
 
     #region ICCNetDocumentation Members
 
+    /// <summary>
+    /// Gets the documentation URI.
+    /// </summary>
+    /// <value>The documentation URI.</value>
+    [Browsable(false),ReflectorIgnore]
     public Uri DocumentationUri {
-      get { throw new NotImplementedException ( ); }
+      get { return new Uri ( "http://confluence.public.thoughtworks.org/display/CCNET/Welcome+to+CruiseControl.NET" ); }
     }
 
     #endregion

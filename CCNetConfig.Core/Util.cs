@@ -609,14 +609,14 @@ namespace CCNetConfig.Core {
     /// Gets the type description provider version.
     /// </summary>
     /// <param name="type">The type.</param>
-    /// <returns></returns>
+    /// <returns>The version selected for the configuration or version 1.3 is unable to return a version.</returns>
     public static Version GetTypeDescriptionProviderVersion ( Type type ) {
       TypeDescriptionProvider tdp = GetTypeDescriptionProvider ( type );
       if ( tdp.GetType ( ) == typeof ( VersionBasedTypeDescriptionProvider ) ) {
         VersionBasedTypeDescriptionProvider vtdp = tdp as VersionBasedTypeDescriptionProvider;
         return vtdp.Version;
       } else
-        return null;
+        return new Version("1.3");
     }
 
     /// <summary>
@@ -805,6 +805,15 @@ namespace CCNetConfig.Core {
         return false;
     }
 
+    public static string GetFormatAttributeValue ( MemberInfo mi ) {
+      FormatProviderAttribute fpa = Util.GetCustomAttribute<FormatProviderAttribute> ( mi );
+      if ( fpa != null ) {
+        return fpa.Format;
+      } else {
+        return string.Empty;
+      }
+    }
+
     /// <summary>
     /// Converts a Boolean to an integer.
     /// </summary>
@@ -824,8 +833,12 @@ namespace CCNetConfig.Core {
       ReflectorNameAttribute rna = Util.GetCustomAttribute<ReflectorNameAttribute> ( type );
       if ( rna != null )
         return rna.Name;
-      else
-        throw new ArgumentNullException ( string.Format ( "Type ({0}) does not contain a ReflectorName Attribute", type.Name ) );
+      else {
+        if ( type.BaseType != typeof ( Object ) )
+          return Util.GetReflectorNameAttributeValue ( type.BaseType );
+        else
+          throw new ArgumentNullException ( string.Format ( "Type ({0}) does not contain a ReflectorName Attribute", type.Name ) );
+      }
     }
     /// <summary>
     /// Gets the reflector name attribute value.

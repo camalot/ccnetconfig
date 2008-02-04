@@ -30,7 +30,7 @@ namespace CCNetConfig.CCNet {
   /// The Date Labeller is used to generate labels in the format "yyyy.mm.dd.build". Using the Date Labeller makes it easy for the user to identify and communicate the date that a particular build occurred.
   /// </summary>
   [TypeConverter (typeof (ExpandableObjectConverter)),
-  MinimumVersion( "1.0" )]
+  MinimumVersion ( "1.0" )]
   public class DateLabeller : Labeller, ICCNetDocumentation {
     /// <summary>
     /// creates a new DateLabeller
@@ -52,12 +52,15 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     /// <returns></returns>
     public override System.Xml.XmlElement Serialize() {
+      return new CCNetConfig.Core.Serialization.Serializer<DateLabeller> ( ).Serialize ( this );
+      /*
       XmlDocument doc = new XmlDocument ();
       XmlElement root = doc.CreateElement ("labeller");
       root.SetAttribute ("type", this.TypeName);
       //root.SetAttribute ("ccnetconfigType", string.Format ("{0}, {1}", this.GetType ().FullName, this.GetType ().Assembly.GetName ().Name));
 
       return root;
+      */
     }
 
     #region ICCNetDocumentation Members
@@ -65,7 +68,7 @@ namespace CCNetConfig.CCNet {
     /// Gets the documentation URI.
     /// </summary>
     /// <value>The documentation URI.</value>
-    [Browsable(false)]
+    [Browsable(false), ReflectorIgnore]
     public Uri DocumentationUri {
       get { return new Uri ( "http://confluence.public.thoughtworks.org/display/CCNET/Date+Labeller?decorator=printable" ); }
     }

@@ -101,19 +101,21 @@ namespace CCNetConfig.CCNet {
      "parse the file). This information is used to extract the major and minor numbers and release start " +
      "date (labeller uses last modified time of the file as a release start date)." ), Category ( "Optional" ),
    DefaultValue ( null ),Editor( typeof( OpenFileDialogUIEditor ),typeof( UITypeEditor ) ), FileTypeFilter( "All Files (*.*)|*.*" ),
-    OpenFileDialogTitle( "Select Version File." )]
+    OpenFileDialogTitle ( "Select Version File." ), ReflectorName ( "VersionFilePath" )]
     public string VersionFilePath { get { return this._versionFilePath; } set { this._versionFilePath = value; } }
     /// <summary>
     /// Gets or sets the major number of the build.
     /// </summary>
     /// <value>The major number.</value>
-    [Description ( "Major number for the build." ), Category ( "Optional" ), DefaultValue ( null )]
+    [Description ( "Major number for the build." ), Category ( "Optional" ), DefaultValue ( null ),
+    ReflectorName ( "MajorNumber" )]
     public int? MajorNumber { get { return this._majorNum; } set { this._majorNum = value; } }
     /// <summary>
     /// Gets or sets the minor number of the build.
     /// </summary>
     /// <value>The minor number.</value>
-    [Description ( "Minor number for the build." ), Category ( "Optional" ), DefaultValue ( null )]
+    [Description ( "Minor number for the build." ), Category ( "Optional" ), DefaultValue ( null ),
+    ReflectorName ( "MinorNumber" )]
     public int? MinorNumber { get { return this._minorNum; } set { this._minorNum = value; } }
     /// <summary>
     /// Defines how the build number (x.x.B.x) will be calculated.
@@ -121,7 +123,7 @@ namespace CCNetConfig.CCNet {
     /// <value>The build number scheme.</value>
     [Description ( "Defines how the build number (x.x.B.x) will be calculated." ),
    Category ( "Optional" ), DefaultValue ( null ), TypeConverter ( typeof ( DefaultableEnumTypeConverter ) ),
-   Editor ( typeof ( DefaultableEnumUIEditor ), typeof ( UITypeEditor ) )]
+   Editor ( typeof ( DefaultableEnumUIEditor ), typeof ( UITypeEditor ) ), ReflectorName ( "BuildNumberScheme" )]
     public BuildNumberSchemeType? BuildNumberScheme { get { return this._buildNumberScheme; } set { this._buildNumberScheme = value; } }
     /// <summary>
     /// Defines the algorithm for generating release numbers (x.x.x.R).
@@ -129,15 +131,15 @@ namespace CCNetConfig.CCNet {
     /// <value>The build number scheme.</value>
     [Description ( "Defines the algorithm for generating release numbers (x.x.x.R)." ),
    Category ( "Optional" ), DefaultValue ( null ), TypeConverter ( typeof ( DefaultableEnumTypeConverter ) ),
-   Editor ( typeof ( DefaultableEnumUIEditor ), typeof ( UITypeEditor ) )]
+   Editor ( typeof ( DefaultableEnumUIEditor ), typeof ( UITypeEditor ) ), ReflectorName ( "RevisionNumberScheme" )]
     public RevisionNumberSchemeType? RevisionNumberScheme { get { return this._revisionNumberScheme; } set { this._revisionNumberScheme = value; } }
     /// <summary>
     /// Release date to use to set the muild/revision.
     /// </summary>
     /// <value>The release start date.</value>
     [Description ( "Release date to use to set the muild/revision." ),
-   Category ( "Optional" ), DefaultValue ( null ),
-   Editor ( typeof ( DatePickerUIEditor ), typeof ( UITypeEditor ) )]
+   Category ( "Optional" ), DefaultValue ( null ), FormatProvider("M/d/yyyy"),
+   Editor ( typeof ( DatePickerUIEditor ), typeof ( UITypeEditor ) ), ReflectorName ( "ReleaseStartDate" )]
     public DateTime? ReleaseStartDate { get { return this._releaseStartDate; } set { this._releaseStartDate = value; } }
     /// <summary>
     /// defines a text which will be prefixed to the version number to form a label (example: 
@@ -149,7 +151,7 @@ namespace CCNetConfig.CCNet {
     [Description ( "defines a text which will be prefixed to the version number to form a label " +
       "(example: MyProject-1.3.43.2). This is useful when there are several projects building in " +
       "the same source control repository and you want to be able to distinguish labels from different " +
-      "projects." ),
+      "projects." ), ReflectorName("Prefix"),
     Category ( "Optional" ), DefaultValue ( null )]
     public string Prefix { get { return this._prefix; } set { this._prefix = value; } }
     /// <summary>
@@ -157,6 +159,8 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     /// <returns></returns>
     public override System.Xml.XmlElement Serialize () {
+      return new CCNetConfig.Core.Serialization.Serializer<BrekiLabeller> ( ).Serialize(this);
+      /*
       XmlDocument doc = new XmlDocument ();
       XmlElement root = doc.CreateElement ( "labeller" );
       root.SetAttribute ( "type", this.TypeName );
@@ -200,11 +204,12 @@ namespace CCNetConfig.CCNet {
 
       if ( this.ReleaseStartDate.HasValue ) {
         ele = doc.CreateElement ( "ReleaseStartDate" );
-        ele.InnerText = this.MinorNumber.Value.ToString ( "m/d/yyyy" );
+        ele.InnerText = this.ReleaseStartDate.Value.ToString ( "M/d/yyyy" );
         root.AppendChild ( ele );
       }
 
       return root;
+      */
     }
 
     /// <summary>
@@ -268,7 +273,7 @@ namespace CCNetConfig.CCNet {
     /// Gets the documentation URI.
     /// </summary>
     /// <value>The documentation URI.</value>
-    [Browsable ( false )]
+    [Browsable ( false ), ReflectorIgnore]
     public Uri DocumentationUri {
       get { return new Uri ( "http://www.igorbrejc.com/content/view/14/27/" ); }
     }

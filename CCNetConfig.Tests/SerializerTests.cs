@@ -32,7 +32,6 @@ namespace CCNetConfig.Tests {
     [Test]
     public void EmailPublisherSerializerTest ( ) {
       Serializer<EmailPublisher> ser = new Serializer<EmailPublisher> ( );
-
       EmailPublisher ep = new EmailPublisher ( );
       ep.From = "no-email@to-spam.com";
       ep.MailHost = "fake.mail.host.com";
@@ -49,6 +48,46 @@ namespace CCNetConfig.Tests {
       Assert.IsNotNull ( ele );
       Console.WriteLine ( ele.OuterXml );
       
+    }
+    [Test]
+    public void RssPublisherSerializerTest ( ) {
+      Serializer<RssPublisher> ser = new Serializer<RssPublisher> ( );
+      RssPublisher rp = new RssPublisher ( );
+      rp.FileName = "foo";
+      XmlElement ele = ser.Serialize ( rp );
+      Assert.IsNotNull ( ele );
+      Console.WriteLine ( ele.OuterXml );
+    }
+
+    [Test]
+    public void DateLabellerSerializerTest ( ) {
+      Serializer<DateLabeller> ser = new Serializer<DateLabeller> ( );
+      DateLabeller dl = new DateLabeller ( );
+      XmlElement ele = ser.Serialize ( dl );
+      Assert.IsNotNull ( ele );
+      Console.WriteLine ( ele.OuterXml );
+    }
+
+    [Test]
+    public void BrekiLabellerSerializerTest ( ) {
+      Serializer<BrekiLabeller> ser = new Serializer<BrekiLabeller> ( );
+      BrekiLabeller bl = new BrekiLabeller ( );
+      bl.MajorNumber = 1;
+      bl.MinorNumber = 0;
+      bl.ReleaseStartDate = DateTime.Now;
+      XmlElement ele = ser.Serialize ( bl );
+      Assert.IsNotNull ( ele );
+      Console.WriteLine ( ele.OuterXml );
+    }
+
+    [Test]
+    public void DefaultLabellerSerializerTest ( ) {
+      Serializer<DefaultLabeller> ser = new Serializer<DefaultLabeller> ( );
+      DefaultLabeller dl = new DefaultLabeller ( );
+      dl.Prefix = "myApplication-";      
+      XmlElement ele = ser.Serialize ( dl );
+      Assert.IsNotNull ( ele );
+      Console.WriteLine ( ele.OuterXml );
     }
   }
 }
