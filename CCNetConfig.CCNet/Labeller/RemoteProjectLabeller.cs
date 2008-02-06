@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, Ryan Conrad. All rights reserved.
+ * Copyright (c) 2006-2008, Ryan Conrad. All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
  * - Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
@@ -46,13 +46,14 @@ namespace CCNetConfig.CCNet {
     /// <summary>
     /// The project to retrieve the label from.
     /// </summary>
-    [Description ( "The project to retrieve the label from." ), DefaultValue ( null ), DisplayName ( "(Project)" ), Category ( "Required" )]
+    [Description ( "The project to retrieve the label from." ), DefaultValue ( null ), 
+    DisplayName ( "(Project)" ), Category ( "Required" ), Required, ReflectorName("project")]
     public string Project { get { return this._project; } set { this._project = Util.CheckRequired ( this, "project", value ); } }
     /// <summary>
     /// The URI to the remote cruise server containing the project to use (defaults to use the local build server).
     /// </summary>
     [Description ( "The URI to the remote cruise server containing the project to use (defaults to use the local build server)." ),
-   DefaultValue ( null ), Category ( "Optional" )]
+   DefaultValue ( null ), Category ( "Optional" ), ReflectorName("serverUri")]
     public Uri ServerUri { get { return this._serverUri; } set { this._serverUri = value; } }
 
     /// <summary>
@@ -72,11 +73,10 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     /// <returns></returns>
     public override System.Xml.XmlElement Serialize () {
-      XmlDocument doc = new XmlDocument ();
+      return new CCNetConfig.Core.Serialization.Serializer<RemoteProjectLabeller> ( ).Serialize ( this );
+      /*XmlDocument doc = new XmlDocument ();
       XmlElement root = doc.CreateElement ( "labeller" );
       root.SetAttribute ( "type", this.TypeName );
-      //root.SetAttribute ( "ccnetconfigType", string.Format ( "{0}, {1}", this.GetType ().FullName, this.GetType ().Assembly.GetName ().Name ) );
-
       XmlElement ele = doc.CreateElement ( "project" );
       ele.InnerText = Util.CheckRequired ( this, "project", this.Project );
       root.AppendChild ( ele );
@@ -86,7 +86,7 @@ namespace CCNetConfig.CCNet {
         ele.InnerText = this.ServerUri.ToString ();
         root.AppendChild ( ele );
       }
-      return root;
+      return root;*/
     }
 
     #region ICCNetDocumentation Members
@@ -94,7 +94,7 @@ namespace CCNetConfig.CCNet {
     /// Gets the documentation URI.
     /// </summary>
     /// <value>The documentation URI.</value>
-    [Browsable ( false )]
+    [Browsable ( false ), ReflectorIgnore]
     public Uri DocumentationUri {
       get { return new Uri ( "http://ccnet.thoughtworks.net/display/CCNET/Remote+Project+Labeller?decorator=printable" ); }
     }

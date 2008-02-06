@@ -22,7 +22,16 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace CCNetConfig.Core.Components {
-  [AttributeUsage(AttributeTargets.Class | AttributeTargets.Field | AttributeTargets.Property )]
+  /// <summary>
+  /// Indicates that a property or field is required
+  /// </summary>
+  [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property )]
   public class RequiredAttribute : Attribute {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RequiredAttribute"/> class.
+    /// </summary>
+    public RequiredAttribute ( ) {
+
+    }
   }
 }

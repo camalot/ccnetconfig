@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, Ryan Conrad. All rights reserved.
+ * Copyright (c) 2006-2008, Ryan Conrad. All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
  * - Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
@@ -48,7 +48,7 @@ namespace CCNetConfig.CCNet {
     /// Any string to be put in front of the change number.
     /// </summary>
     [Description ( "Any string to be put in front of the change number." ), 
-    DefaultValue ( null ), Category ( "Optional" )]
+    DefaultValue ( null ), Category ( "Optional" ), ReflectorName("prefix")]
     public string Prefix { get { return this._prefix; } set { this._prefix = value; } }
 
     /// <summary>
@@ -56,10 +56,9 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     /// <returns></returns>
     public override System.Xml.XmlElement Serialize () {
-      XmlDocument doc = new XmlDocument ();
+      return new CCNetConfig.Core.Serialization.Serializer<LastChangeLabeller> ( ).Serialize ( this );
+      /*XmlDocument doc = new XmlDocument ();
       XmlElement root = doc.CreateElement ( "labeller" );
-      //root.SetAttribute ("ccnetconfigType", string.Format ("{0}, {1}", this.GetType ().FullName, this.GetType ().Assembly.GetName ().Name));
-
       root.SetAttribute ( "type", this.TypeName );
       XmlElement ele = null;
 
@@ -69,7 +68,7 @@ namespace CCNetConfig.CCNet {
         root.AppendChild ( ele );
       }
 
-      return root;
+      return root;*/
     }
 
     /// <summary>
@@ -100,7 +99,7 @@ namespace CCNetConfig.CCNet {
     /// Gets the documentation URI.
     /// </summary>
     /// <value>The documentation URI.</value>
-    [ Browsable( false ) ]
+    [ Browsable( false ), ReflectorIgnore ]
     public Uri DocumentationUri {
       get { return new Uri( "http://confluence.public.thoughtworks.org/display/CCNET/Last+Change+Labeller?decorator=printable" ); }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006-2007, Ryan Conrad. All rights reserved.
+ * Copyright (c) 2006-2008, Ryan Conrad. All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
  * - Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
@@ -50,7 +50,8 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     /// <value>The release date.</value>
     [Category ( "Optional" ), DefaultValue ( null ), Description ( "The date of the iteration release" ),
-   Editor ( typeof ( DatePickerUIEditor ), typeof ( UITypeEditor ) )]
+   Editor ( typeof ( DatePickerUIEditor ), typeof ( UITypeEditor ) ), ReflectorName("releaseStartDate"),
+    FormatProvider("yyyy/MM/dd")]
     public DateTime? ReleaseDate {
       get { return _releaseDate; }
       set { _releaseDate = value; }
@@ -61,7 +62,7 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     /// <value>The minor.</value>
     [Category ( "Optional" ), DefaultValue ( null ), Description ( "The Minor value of the version." ),
-   Editor ( typeof ( NumericUpDownUIEditor ), typeof ( UITypeEditor ) ), MinimumValue ( 0 )]
+   Editor ( typeof ( NumericUpDownUIEditor ), typeof ( UITypeEditor ) ), MinimumValue ( 0 ), ReflectorName("labelMinor")]
     public int? Minor {
       get { return _minor; }
       set { _minor = value; }
@@ -72,7 +73,7 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     /// <value>The major.</value>
     [Category ( "Optional" ), DefaultValue ( null ), Description ( "The Major value of the version." ),
-   Editor ( typeof ( NumericUpDownUIEditor ), typeof ( UITypeEditor ) ), MinimumValue ( 0 )]
+   Editor ( typeof ( NumericUpDownUIEditor ), typeof ( UITypeEditor ) ), MinimumValue ( 0 ), ReflectorName("labelMajor")]
     public int? Major {
       get { return _major; }
       set { _major = value; }
@@ -83,7 +84,8 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     /// <value>The increment on failure.</value>
     [Category ( "Optional" ), DefaultValue ( null ), Description ( "Indicates if the label should be incremented even if the build fails." ),
-   Editor ( typeof ( DefaultableBooleanUIEditor ), typeof ( UITypeEditor ) ), TypeConverter ( typeof ( DefaultableBooleanTypeConverter ) )]
+   Editor ( typeof ( DefaultableBooleanUIEditor ), typeof ( UITypeEditor ) ), ReflectorName("incrementOnFailure"),
+    TypeConverter ( typeof ( DefaultableBooleanTypeConverter ) )]
     public bool? IncrementOnFailure {
       get { return _incrementOnFailure; }
       set { _incrementOnFailure = value; }
@@ -95,7 +97,8 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     /// <returns></returns>
     public override System.Xml.XmlElement Serialize ( ) {
-      XmlDocument doc = new XmlDocument ( );
+      return new CCNetConfig.Core.Serialization.Serializer<MSProjectLabeller> ( ).Serialize ( this );
+      /*XmlDocument doc = new XmlDocument ( );
       XmlElement root = doc.CreateElement ( "labeller" );
 
       root.SetAttribute ( "type", this.TypeName );
@@ -124,7 +127,7 @@ namespace CCNetConfig.CCNet {
         root.AppendChild ( ele );
       }
 
-      return root;
+      return root;*/
     }
 
     /// <summary>
@@ -184,7 +187,7 @@ namespace CCNetConfig.CCNet {
     /// Gets the documentation URI.
     /// </summary>
     /// <value>The documentation URI.</value>
-    [ Browsable( false ),EditorBrowsable( EditorBrowsableState.Never ) ]
+    [ Browsable( false ),EditorBrowsable( EditorBrowsableState.Never ), ReflectorIgnore ]
     public Uri DocumentationUri {
       get { return new Uri ( "http://nimtug.org/blogs/simon/pages/CCNet-MS-Project-Labeller.aspx" ); }
     }

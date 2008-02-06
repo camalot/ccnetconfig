@@ -22,6 +22,7 @@ using System.Reflection;
 using System.Xml;
 using CCNetConfig.Core.Components;
 using System.Collections;
+using CCNetConfig.Exceptions;
 
 namespace CCNetConfig.Core.Serialization {
   /// <summary>
@@ -38,8 +39,13 @@ namespace CCNetConfig.Core.Serialization {
     /// <returns></returns>
     public System.Xml.XmlElement Serialize ( T obj ) {
       Type type = obj.GetType ( );
-      PropertyInfo[ ] props = type.GetProperties ( BindingFlags.Public | System.Reflection.BindingFlags.Instance );
-      //try {
+      try {
+        // should the version of the object be checked before any other stuff is done? 
+        // no need to do anything if it doesn't event belong in here anyhow.
+
+        // should limit to public, instance, read/write properties... 
+        PropertyInfo[ ] props = type.GetProperties ( BindingFlags.Public | BindingFlags.Instance | (BindingFlags.GetProperty & BindingFlags.SetProperty) | (BindingFlags.GetField & BindingFlags.SetField) );
+
         string rootTypeName = Util.GetReflectorNameAttributeValue ( type );
         Version versionInfo = Util.GetTypeDescriptionProviderVersion ( typeof ( T ) );
         XmlDocument doc = new XmlDocument ( );
@@ -48,11 +54,13 @@ namespace CCNetConfig.Core.Serialization {
         foreach ( PropertyInfo pi in props ) {
           bool required = Util.GetCustomAttribute<RequiredAttribute> ( pi ) != null;
           bool ignore = Util.GetCustomAttribute<ReflectorIgnoreAttribute> ( pi ) != null;
+          // get the version info for the property...
           Version minVer = Util.GetMinimumVersion ( pi );
           Version maxVer = Util.GetMaximumVersion ( pi );
           Version exactVer = Util.GetExactVersion ( pi );
-          if ( ignore || ( !Util.IsExactVersion(exactVer,versionInfo) && !Util.IsInVersionRange(minVer,maxVer,versionInfo) ) )
+          if ( ignore || ( !Util.IsExactVersion ( exactVer, versionInfo ) && !Util.IsInVersionRange ( minVer, maxVer, versionInfo ) ) )
             continue;
+          // get node name
           string name = Util.GetReflectorNameAttributeValue ( pi );
           ReflectorNodeTypes nodeType = Util.GetReflectorNodeType ( pi );
           XmlNode node = null;
@@ -61,6 +69,11 @@ namespace CCNetConfig.Core.Serialization {
             case ReflectorNodeTypes.Attribute:
               node = doc.CreateAttribute ( name );
               if ( required ) {
+                // checks if null or empty...
+                // CheckRequired needs to be modified to account that the type is going to alway be
+                // an object. 
+                if ( val == null || val.ToString ( ) == string.Empty )
+                  throw new RequiredAttributeException ( obj, name );
                 node.InnerText = Util.CheckRequired ( obj, name, val ).ToString ( );
               } else {
                 if ( val != null )
@@ -72,6 +85,11 @@ namespace CCNetConfig.Core.Serialization {
             case ReflectorNodeTypes.Element:
               node = doc.CreateElement ( name );
               if ( required ) {
+                // checks if null or empty...
+                // CheckRequired needs to be modified to account that the type is going to alway be
+                // an object. 
+                if ( val == null || val.ToString ( ) == string.Empty )
+                  throw new RequiredAttributeException ( obj, name );
                 node.InnerText = Util.CheckRequired ( obj, name, val ).ToString ( );
               } else {
                 if ( val != null ) {
@@ -79,17 +97,18 @@ namespace CCNetConfig.Core.Serialization {
                   if ( valType.IsPrimitive ) {
                     node.InnerText = val.ToString ( );
                   } else {
+                    // handle clonable lists
                     if ( valType.IsGenericType && valType.GetGenericTypeDefinition ( ).Equals ( typeof ( CloneableList<> ) ) ) {
                       foreach ( ICCNetObject o in ( System.Collections.IList ) val ) {
                         node.AppendChild ( doc.ImportNode ( new Serializer<ICCNetObject> ( ).Serialize ( o as ICCNetObject ), true ) );
                       }
-                    } else if ( valType.GetInterface ( typeof ( ICCNetObject ).FullName ) != null ) {
+                    } else if ( valType.GetInterface ( typeof ( ICCNetObject ).FullName ) != null ) { // handle other ICCNetObjects
                       node.AppendChild ( doc.ImportNode ( new Serializer<ICCNetObject> ( ).Serialize ( val as ICCNetObject ), true ) );
-                    } else if ( valType == typeof ( HiddenPassword ) ) {
+                    } else if ( valType == typeof ( HiddenPassword ) ) { // handle the hidden password object
                       node.InnerText = ( ( HiddenPassword ) val ).GetPassword ( );
-                    } else {
-                      string formatString = Util.GetFormatAttributeValue(pi);
-                      if ( valType.GetInterface(typeof(IFormattable).FullName) != null && !string.IsNullOrEmpty( formatString ) ) {
+                    } else { // eveything else
+                      string formatString = Util.GetFormatAttributeValue ( pi );
+                      if ( valType.GetInterface ( typeof ( IFormattable ).FullName ) != null && !string.IsNullOrEmpty ( formatString ) ) {
                         node.InnerText = ( ( IFormattable ) val ).ToString ( formatString, null );
                       } else {
                         node.InnerText = val.ToString ( );
@@ -98,13 +117,14 @@ namespace CCNetConfig.Core.Serialization {
                   }
                 }
               }
-              if ( ( Util.IsNullable ( pi.PropertyType ) && val != null || !Util.IsNullable ( pi.PropertyType ) && !string.IsNullOrEmpty ( val.ToString ( ) ) ) )
+              // if it should be added, add it...
+              if ( ( Util.IsNullable ( pi.PropertyType ) && val != null ) || !Util.IsNullable ( pi.PropertyType ) && val != null && !string.IsNullOrEmpty ( val.ToString ( ) ) )
                 root.AppendChild ( node );
               break;
           }
         }
         return root;
-     // } catch { throw; }
+      } catch { throw; }
     }
 
     /// <summary>

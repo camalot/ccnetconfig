@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, Ryan Conrad. All rights reserved.
+ * Copyright (c) 2006-2008, Ryan Conrad. All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
  * - Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
@@ -52,30 +52,34 @@ namespace CCNetConfig.CCNet {
     /// <summary>
     /// Any string to be put in front of all labels
     /// </summary>
-    [Description ( "Any string to be put in front of all labels" ), DefaultValue ( null ), Category ( "Optional" )]
+    [Description ( "Any string to be put in front of all labels" ), DefaultValue ( null ), Category ( "Optional" ),
+    ReflectorName("prefix")]
     public string Prefix { get { return this._prefix; } set { this._prefix = value; } }
     /// <summary>
     /// The duration of the iteration in weeks
     /// </summary>
-    [Description ( "The duration of the iteration in weeks" ), DefaultValue ( null ), Category ( "Optional" )]
+    [Description ( "The duration of the iteration in weeks" ), DefaultValue ( null ), Category ( "Optional" ),
+    ReflectorName("duration")]
     public int? Duration { get { return this._duration; } set { this._duration = value; } }
     /// <summary>
     /// The start date for the release (the start date of iteration one)
     /// </summary>
     [Editor ( typeof ( DatePickerUIEditor ), typeof ( UITypeEditor ) ), Category ( "Required" ),DisplayName("(ReleaseStartDate)"),
-    DefaultValue (null), Description ("The start date for the release (the start date of iteration one)")]
+    DefaultValue (null), Description ("The start date for the release (the start date of iteration one)"),
+    ReflectorName("releaseStartDate"), FormatProvider("yyyy/MM/dd")]
     public DateTime ReleaseStartDate { get { return this._releaseStartDate.Value; } set { this._releaseStartDate = Util.CheckRequired (this, "releaseStartDate", value); } }
     /// <summary>
     /// The separator between the iteration number and the build number.
     /// </summary>
-    [Description ( "The separator between the iteration number and the build number." ), DefaultValue ( null ), Category ( "Optional" )]
+    [Description ( "The separator between the iteration number and the build number." ), DefaultValue ( null ),
+    Category ( "Optional" ), ReflectorName ( "separator" )]
     public string Separator { get { return this._separator; } set { this._separator = value; } }
     /// <summary>
     /// If true, the label will be incremented even if the build fails. Otherwise it will only be incremented if the build succeeds. (Added in CCNet 1.1)
     /// </summary>
     [Description ("If true, the label will be incremented even if the build fails. Otherwise it will only be incremented if the build succeeds. (Added in CCNet 1.1)"),
     Editor (typeof (DefaultableBooleanUIEditor), typeof (UITypeEditor)),
-      TypeConverter (typeof (DefaultableBooleanTypeConverter)),
+      TypeConverter (typeof (DefaultableBooleanTypeConverter)), ReflectorName("incrementOnFailure"),
      DefaultValue ( null ), Category ( "Optional" ), MinimumVersion( "1.1" )]
     public bool? IncrementOnFailure { get { return this._incrementOnFailure; } set { this._incrementOnFailure = value; } }
 
@@ -84,13 +88,7 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     /// <returns></returns>
     public override Labeller Clone () {
-      IterationLabeller il = this.MemberwiseClone(  ) as IterationLabeller;
-      /*il.Duration = this.Duration;
-      il.IncrementOnFailure = this.IncrementOnFailure;
-      il.Prefix = this.Prefix;
-      il.ReleaseStartDate = this.ReleaseStartDate;
-      il.Separator = this.Separator;*/
-      return il;
+      return this.MemberwiseClone ( ) as IterationLabeller;
     }
 
     /// <summary>
@@ -98,7 +96,9 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     /// <returns></returns>
     public override System.Xml.XmlElement Serialize() {
-      XmlDocument doc = new XmlDocument ();
+      return new CCNetConfig.Core.Serialization.Serializer<IterationLabeller> ( ).Serialize ( this );
+      
+      /*XmlDocument doc = new XmlDocument ();
       XmlElement root = doc.CreateElement ("labeller");
       //root.SetAttribute ("ccnetconfigType", string.Format ("{0}, {1}", this.GetType ().FullName, this.GetType ().Assembly.GetName ().Name));
 
@@ -132,7 +132,7 @@ namespace CCNetConfig.CCNet {
         ele.InnerText = this.IncrementOnFailure.Value.ToString ();
         root.AppendChild (ele);
       }
-      return root;
+      return root;*/
     }
 
     #region ICCNetDocumentation Members
@@ -140,7 +140,7 @@ namespace CCNetConfig.CCNet {
     /// Gets the documentation URI.
     /// </summary>
     /// <value>The documentation URI.</value>
-    [Browsable (false)]
+    [Browsable (false), ReflectorIgnore]
     public Uri DocumentationUri {
       get { return new Uri ("http://ccnet.thoughtworks.net/display/CCNET/Iteration+Labeller?decorator=printable"); }
     }

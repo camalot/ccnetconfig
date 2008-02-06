@@ -82,7 +82,7 @@
     <CreateItem Include="$(OutputPath)*.*;$(OutputPath)Data\*.*" Exclude="$(OutputPath)*.zip;$(OutputPath)Help\**\*.*">
       <Output ItemName="ZipFiles" TaskParameter="Include" />
     </CreateItem>
-
+    
     <Zip Comment="$(CCNetBuildDate) $(CCNetBuildTime) $(CCNetProject) version $(CCNetLabel)" Files="@(ZipFiles)"
          WorkingDirectory="$(OutputPath)"
          ZipFileName="$(OutputPath)$(CCNetProject).$(CCNetLabel).zip" ZipLevel="9" Flatten="False" />
@@ -122,7 +122,7 @@
        Command="CCNetConfigUpdatesFileGen.exe $(CCNetLabel) &quot;$(CCNetProject)&quot;  &quot;$(CCNetArtifactDirectory)\$(Configuration)\$(CCNetLabel)\&quot;"
        ContinueOnError="false"/>
   </Target>
-  
+ 
   <!-- this can be removed after the next final release -->
   <Target Name="UpdateNightlyBuildInfo" Condition=" '$(CCNetIntegrationStatus)' == 'Success'">
     <XmlUpdate XmlFileName="$(CCNetArtifactDirectory)\NightlyVersion.xml" XPath="/NightlyBuild/Version/@Value" Value="$(CCNetLabel)" />

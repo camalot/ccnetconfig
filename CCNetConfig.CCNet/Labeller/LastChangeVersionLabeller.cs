@@ -48,13 +48,14 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     /// <value>The separator.</value>
     [Description("String used to separate the sections of the label. default = '.'"),
-    Category("Optional"),DefaultValue(".")]
+    Category("Optional"),DefaultValue("."), ReflectorName("separator")]
     public string Separator { get { return this._separator; } set { this._separator = value; } }
     /// <summary>
     /// Gets or sets the major.
     /// </summary>
     /// <value>The major.</value>
-    [Description("The version Major version number."),Category("Required"),Editor(typeof(NumericUpDownUIEditor),typeof(UITypeEditor)),
+    [Description("The version Major version number."),Category("Required"),
+    Editor(typeof(NumericUpDownUIEditor),typeof(UITypeEditor)),ReflectorName("major"),
   MinimumValue ( 0 ), MaximumValue ( int.MaxValue ), DisplayName ( "(Major)" ), DefaultValue ( 0 )]
     public int Major { get { return this._major.Value; } set { this._major = Util.CheckRequired(this,"major",value); } }
     /// <summary>
@@ -62,14 +63,15 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     /// <value>The minor.</value>
     [Description ( "The version Minor version number." ), Category ( "Required" ), Editor ( typeof ( NumericUpDownUIEditor ), typeof ( UITypeEditor ) ),
-    MinimumValue ( 0 ), MaximumValue ( int.MaxValue ),DisplayName("(Minor)"),DefaultValue(0)]
+    MinimumValue ( 0 ), MaximumValue ( int.MaxValue ),DisplayName("(Minor)"),DefaultValue(0),
+    ReflectorName ( "minor" )]
     public int Minor { get { return this._minor.Value; } set { this._minor = Util.CheckRequired ( this, "minor", value ); } }
     /// <summary>
     /// Gets or sets the increment on failure.
     /// </summary>
     /// <value>The increment on failure.</value>
     [Description ( "If true, the label will be incremented even if the build fails. Otherwise it will only be incremented if the build succeeds." ),
-    Category("Optional"),
+    Category("Optional"),ReflectorName("incrementOnFailure"),
     Editor ( typeof ( DefaultableBooleanUIEditor ), typeof ( UITypeEditor ) ),
     TypeConverter ( typeof ( DefaultableBooleanTypeConverter ) ),
     DefaultValue(null)]
@@ -79,10 +81,9 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     /// <returns></returns>
     public override System.Xml.XmlElement Serialize ( ) {
-      XmlDocument doc = new XmlDocument ( );
+      return new CCNetConfig.Core.Serialization.Serializer<LastChangeVersionLabeller> ( ).Serialize ( this );
+      /*XmlDocument doc = new XmlDocument ( );
       XmlElement root = doc.CreateElement ( "labeller" );
-      //root.SetAttribute ("ccnetconfigType", string.Format ("{0}, {1}", this.GetType ().FullName, this.GetType ().Assembly.GetName ().Name));
-
       root.SetAttribute ( "type", this.TypeName );
       XmlElement ele = null;
       if ( !string.IsNullOrEmpty ( this.Separator ) ) {
@@ -104,7 +105,7 @@ namespace CCNetConfig.CCNet {
         ele.InnerText = this.IncrementOnFailure.Value.ToString ( );
         root.AppendChild ( ele );
       }
-      return root;
+      return root;*/
     }
 
     /// <summary>
@@ -146,7 +147,7 @@ namespace CCNetConfig.CCNet {
     /// Gets the documentation URI.
     /// </summary>
     /// <value>The documentation URI.</value>
-    [Browsable ( false )]
+    [Browsable ( false ), ReflectorIgnore]
     public Uri DocumentationUri {
       get { return new Uri ( "http://ccnetconfig.org" ); }
     }

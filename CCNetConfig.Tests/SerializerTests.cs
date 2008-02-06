@@ -35,19 +35,19 @@ namespace CCNetConfig.Tests {
       EmailPublisher ep = new EmailPublisher ( );
       ep.From = "no-email@to-spam.com";
       ep.MailHost = "fake.mail.host.com";
-      HiddenPassword hp = new HiddenPassword();
+      HiddenPassword hp = new HiddenPassword ( );
       hp.Password = "myPassW0rd";
       ep.MailHostPassword = hp;
       ep.MailHostUserName = "user";
-      User u = new User();
-      u.Address ="foo@bar.com";
-      u.Name= "foo bar";
+      User u = new User ( );
+      u.Address = "foo@bar.com";
+      u.Name = "foo bar";
       ep.Users.Add ( u );
 
       XmlElement ele = ser.Serialize ( ep );
       Assert.IsNotNull ( ele );
       Console.WriteLine ( ele.OuterXml );
-      
+
     }
     [Test]
     public void RssPublisherSerializerTest ( ) {
@@ -84,8 +84,94 @@ namespace CCNetConfig.Tests {
     public void DefaultLabellerSerializerTest ( ) {
       Serializer<DefaultLabeller> ser = new Serializer<DefaultLabeller> ( );
       DefaultLabeller dl = new DefaultLabeller ( );
-      dl.Prefix = "myApplication-";      
+      dl.Prefix = "myApplication-";
       XmlElement ele = ser.Serialize ( dl );
+      Assert.IsNotNull ( ele );
+      Console.WriteLine ( ele.OuterXml );
+    }
+
+    [Test]
+    public void FileLabellerSerializerTest ( ) {
+      Serializer<FileLabeller> ser = new Serializer<FileLabeller> ( );
+      FileLabeller fl = new FileLabeller ( );
+      fl.Prefix = "myApplication-";
+      fl.LabelFilePath = @"c:\ci\woot.txt";
+      XmlElement ele = ser.Serialize ( fl );
+      Assert.IsNotNull ( ele );
+      Console.WriteLine ( ele.OuterXml );
+    }
+
+    [Test]
+    public void IterationLabellerSerializerTest ( ) {
+      Serializer<IterationLabeller> ser = new Serializer<IterationLabeller> ( );
+      IterationLabeller il = new IterationLabeller ( );
+      il.Duration = 1;
+      il.Prefix = "1.0";
+      il.Separator = ".";
+      il.ReleaseStartDate = DateTime.Now.AddDays ( -25 );
+      XmlElement ele = ser.Serialize ( il );
+      Assert.IsNotNull ( ele );
+      Console.WriteLine ( ele.OuterXml );
+    }
+
+    [Test]
+    public void LastChangeLabellerSerializerTest ( ) {
+      Serializer<LastChangeLabeller> ser = new Serializer<LastChangeLabeller> ( );
+      LastChangeLabeller ll = new LastChangeLabeller ( );
+      ll.Prefix = "1.0";
+      XmlElement ele = ser.Serialize ( ll );
+      Assert.IsNotNull ( ele );
+      Console.WriteLine ( ele.OuterXml );
+    }
+
+    [Test]
+    public void LastChangeVersionLabellerSerializerTest ( ) {
+      Serializer<LastChangeVersionLabeller> ser = new Serializer<LastChangeVersionLabeller> ( );
+      LastChangeVersionLabeller ll = new LastChangeVersionLabeller ( );
+      ll.Major = 2;
+      ll.IncrementOnFailure = true;
+      XmlElement ele = ser.Serialize ( ll );
+      Assert.IsNotNull ( ele );
+      Console.WriteLine ( ele.OuterXml );
+    }
+
+    [Test]
+    public void MSProjectLabellerSerializerTest ( ) {
+      Serializer<MSProjectLabeller> ser = new Serializer<MSProjectLabeller> ( );
+      MSProjectLabeller ml = new MSProjectLabeller ( );
+
+      ml.Major = 2;
+      ml.Minor = 1;
+      ml.ReleaseDate = DateTime.Now.AddDays ( -25 );
+
+      XmlElement ele = ser.Serialize ( ml );
+      Assert.IsNotNull ( ele );
+      Console.WriteLine ( ele.OuterXml );
+    }
+
+
+    [Test]
+    public void RemoteProjectLabellerSerializerTest ( ) {
+      Serializer<RemoteProjectLabeller> ser = new Serializer<RemoteProjectLabeller> ( );
+      RemoteProjectLabeller rl = new RemoteProjectLabeller ( );
+
+      rl.Project = "foo";
+      rl.ServerUri = new Uri ( "http://foobar" );
+
+      XmlElement ele = ser.Serialize ( rl );
+      Assert.IsNotNull ( ele );
+      Console.WriteLine ( ele.OuterXml );
+    }
+
+
+    [Test]
+    public void StateFileLabellerSerializerTest ( ) {
+      Serializer<StateFileLabeller> ser = new Serializer<StateFileLabeller> ( );
+      StateFileLabeller sl = new StateFileLabeller ( );
+
+      sl.Project = "foo";
+
+      XmlElement ele = ser.Serialize ( sl );
       Assert.IsNotNull ( ele );
       Console.WriteLine ( ele.OuterXml );
     }

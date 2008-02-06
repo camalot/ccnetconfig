@@ -22,21 +22,44 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace CCNetConfig.Core.Components {
+  /// <summary>
+  /// Node type to create when serializing
+  /// </summary>
   public enum ReflectorNodeTypes {
+    /// <summary>
+    /// Create attribute
+    /// </summary>
     Attribute,
+    /// <summary>
+    /// Create an element
+    /// </summary>
     Element
   }
+  /// <summary>
+  /// Indicates what type of node should be used when serializing
+  /// </summary>
   [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
   public class ReflectorNodeTypeAttribute : Attribute {
     private ReflectorNodeTypes _type = ReflectorNodeTypes.Element;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ReflectorNodeTypeAttribute"/> class.
+    /// </summary>
+    /// <param name="type">The type.</param>
     public ReflectorNodeTypeAttribute ( ReflectorNodeTypes type) {
       this._type = type;
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ReflectorNodeTypeAttribute"/> class.
+    /// </summary>
     public ReflectorNodeTypeAttribute ( ) : this(ReflectorNodeTypes.Element) {
 
     }
 
+    /// <summary>
+    /// Gets or sets the type.
+    /// </summary>
+    /// <value>The type.</value>
     public ReflectorNodeTypes Type {
       get { return this._type; }
       set { this._type = value; } 

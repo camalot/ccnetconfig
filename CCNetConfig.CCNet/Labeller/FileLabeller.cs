@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, Ryan Conrad. All rights reserved.
+ * Copyright (c) 2006-2008, Ryan Conrad. All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
  * - Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
@@ -52,7 +52,7 @@ namespace CCNetConfig.CCNet {
     /// <value>The allow duplicate subsequent labels.</value>
     [Description ( "If true, a label which matches the immediately previous label will be generated " +
       "as is. Otherwise it will have a version number appended (e.g., prefixlabel-1, prefixlabel-2)." ),
-    Category("Optional"),DefaultValue(null)]
+    Category("Optional"),DefaultValue(null), ReflectorName("allowDuplicateSubsequentLabels")]
     public bool? AllowDuplicateSubsequentLabels {
       get { return _allowDuplicateSubsequentLabels; }
       set { _allowDuplicateSubsequentLabels = value; }
@@ -65,7 +65,8 @@ namespace CCNetConfig.CCNet {
     [Description("The pathname of the file to read. This can be the absolute " +
       "path or one relative to the project's working directory."), Category("Required"),
     DisplayName("(LabelFilePath)"),DefaultValue(null),Editor(typeof(OpenFileDialogUIEditor),typeof(UITypeEditor)),
-    OpenFileDialogTitle("Select file to read."), FileTypeFilter("All Files (*.*)|*.*")]
+    OpenFileDialogTitle("Select file to read."), FileTypeFilter("All Files (*.*)|*.*"), Required,
+    ReflectorName("labelFilePath")]
     public string LabelFilePath {
       get { return _labelFilePath; }
       set { _labelFilePath = Util.CheckRequired(this,"labelFilePath", value); }
@@ -75,7 +76,8 @@ namespace CCNetConfig.CCNet {
     /// Any string to be put in front of all labels
     /// </summary>
     /// <value>The prefix.</value>
-    [Description("Any string to be put in front of all labels"), Category("Optional"), DefaultValue(null)]
+    [Description("Any string to be put in front of all labels"), Category("Optional"), DefaultValue(null),
+    ReflectorName("prefix")]
     public string Prefix {
       get { return _prefix; }
       set { _prefix = value; }
@@ -86,7 +88,8 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     /// <returns></returns>
     public override System.Xml.XmlElement Serialize ( ) {
-      XmlDocument doc = new XmlDocument ( );
+      return new CCNetConfig.Core.Serialization.Serializer<FileLabeller> ( ).Serialize ( this );
+      /*XmlDocument doc = new XmlDocument ( );
       XmlElement root = doc.CreateElement ( "labeller" );
       //root.SetAttribute ("ccnetconfigType", string.Format ("{0}, {1}", this.GetType ().FullName, this.GetType ().Assembly.GetName ().Name));
 
@@ -109,7 +112,7 @@ namespace CCNetConfig.CCNet {
         ele.InnerText = this.AllowDuplicateSubsequentLabels.Value.ToString ( );
         root.AppendChild ( ele );
       }
-      return root;
+      return root;*/
     }
 
     /// <summary>
@@ -155,7 +158,7 @@ namespace CCNetConfig.CCNet {
     /// Gets the documentation URI.
     /// </summary>
     /// <value>The documentation URI.</value>
-    [Browsable(false),EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false),EditorBrowsable(EditorBrowsableState.Never), ReflectorIgnore]
     public Uri DocumentationUri {
       get { return new Uri ( "http://confluence.public.thoughtworks.org/display/CCNET/File+Labeller?decorator=printable" ); }
     }
