@@ -26,12 +26,13 @@ using System.ComponentModel;
 using CCNetConfig.Core;
 using CCNetConfig.Core.Components;
 using System.Drawing.Design;
+using CCNetConfig.Core.Serialization;
 
 namespace CCNetConfig.CCNet {
   /// <summary>
   /// The <see cref="CCNetConfig.CCNet.BuildPublisher">Build Publisher</see> lets you copy any arbitrary files on a successful build.
   /// </summary>
-  [ MinimumVersion( "1.0" ) ]
+  [MinimumVersion ( "1.0" ), ReflectorName("buildpublisher")]
   public class BuildPublisher : PublisherTask, ICCNetDocumentation {
     private string _sourceDir = string.Empty;
     private string _destDir = string.Empty;
@@ -39,32 +40,32 @@ namespace CCNetConfig.CCNet {
     /// <summary>
     /// Initializes a new instance of the <see cref="BuildPublisher"/> class.
     /// </summary>
-    public BuildPublisher () : base("buildpublisher") { }
+    public BuildPublisher ( ) : base ( "buildpublisher" ) { }
     /// <summary>
     /// The source Directory to copy from
     /// </summary>
-    [Description ( "The source Directory to copy from" ), DefaultValue ( null ), DisplayName ( "(SourceDirectory)" ),
-   Category ( "Required" ),
- Editor ( typeof ( BrowseForFolderUIEditor ), typeof ( UITypeEditor ) ),
-BrowseForFolderDescription ( "Select path to the source directory." )]
-    public string SourceDirectory { get { return this._sourceDir; } set { this._sourceDir = Util.CheckRequired ( this, "sourceDir", value ); } }
+    [Description ( "The source Directory to copy from" ), DefaultValue ( null ),
+    Category ( "Optional" ), ReflectorName ( "sourceDir" ),
+    Editor ( typeof ( BrowseForFolderUIEditor ), typeof ( UITypeEditor ) ),
+    BrowseForFolderDescription ( "Select path to the source directory." )]
+    public string SourceDirectory { get { return this._sourceDir; } set { this._sourceDir = value; } }
     /// <summary>
     /// The directory to copy to. A subdirectory called the current build's label will be created, and the contents of <see cref="CCNetConfig.CCNet.BuildPublisher.SourceDirectory">SourceDirectory</see> will be copied to it
     /// </summary>
-    [Description ("The directory to copy to. A subdirectory called the current build's label will be created, and the contents of SourceDirectory will " +
-     "be copied to it" ), DefaultValue ( null ), DisplayName ( "(PublishDirectory)" ),
-   Category ( "Required" ),
- Editor ( typeof ( BrowseForFolderUIEditor ), typeof ( UITypeEditor ) ),
-BrowseForFolderDescription ( "Select path to the publish directory." )]
-    public string PublishDirectory { get { return this._destDir; } set { this._destDir = Util.CheckRequired (this, "publishDir", value); } }
+    [Description ( "The directory to copy to. A subdirectory called the current build's label will be created, and the contents of SourceDirectory will " +
+     "be copied to it" ), DefaultValue ( null ),
+    Category ( "Optional" ), ReflectorName ( "publishDir" ),
+    Editor ( typeof ( BrowseForFolderUIEditor ), typeof ( UITypeEditor ) ),
+    BrowseForFolderDescription ( "Select path to the publish directory." )]
+    public string PublishDirectory { get { return this._destDir; } set { this._destDir = value; } }
     /// <summary>
     ///If set to true (the default value), files will be copied to subdirectory under the publishDir which will be named with the label for the current integration.
     /// </summary>
     /// <value>The use label sub directory.</value>
     [Description ( "If set to true (the default value), files will be copied to subdirectory under the publishDir which will be named with the label for the current integration." ),
-    Category("Optional"), Editor(typeof(DefaultableBooleanUIEditor),typeof(UITypeEditor)),
-    TypeConverter(typeof(DefaultableBooleanTypeConverter)),
-    MinimumVersion("1.2")]
+    Category ( "Optional" ), Editor ( typeof ( DefaultableBooleanUIEditor ), typeof ( UITypeEditor ) ),
+    TypeConverter ( typeof ( DefaultableBooleanTypeConverter ) ),
+    MinimumVersion ( "1.2" ), ReflectorName ( "useLabelSubDirectory" )]
     public bool? UseLabelSubDirectory {
       get { return this._useLabelSubDirectory; }
       set { this._useLabelSubDirectory = value; }
@@ -74,16 +75,17 @@ BrowseForFolderDescription ( "Select path to the publish directory." )]
     /// Creates a copy of this object.
     /// </summary>
     /// <returns></returns>
-    public override PublisherTask Clone () {
-      return this.MemberwiseClone () as BuildPublisher;
+    public override PublisherTask Clone ( ) {
+      return this.MemberwiseClone ( ) as BuildPublisher;
     }
 
     /// <summary>
     /// Serializes this instance.
     /// </summary>
     /// <returns></returns>
-    public override System.Xml.XmlElement Serialize () {
-      XmlDocument doc = new XmlDocument ();
+    public override System.Xml.XmlElement Serialize ( ) {
+      return new Serializer<BuildPublisher> ( ).Serialize ( this );
+      /*XmlDocument doc = new XmlDocument ();
       XmlElement root = doc.CreateElement ( this.TypeName );
       //root.SetAttribute ("ccnetconfigType", string.Format ("{0}, {1}", this.GetType ().FullName, this.GetType ().Assembly.GetName ().Name));
 
@@ -100,7 +102,7 @@ BrowseForFolderDescription ( "Select path to the publish directory." )]
         ele.InnerText = this.UseLabelSubDirectory.Value.ToString ( );
         root.AppendChild ( ele );
       }
-      return root;
+      return root;*/
     }
 
 
@@ -109,7 +111,7 @@ BrowseForFolderDescription ( "Select path to the publish directory." )]
     /// Gets the documentation URI.
     /// </summary>
     /// <value>The documentation URI.</value>
-    [Browsable(false)]
+    [Browsable ( false ), ReflectorIgnore]
     public Uri DocumentationUri {
       get { return new Uri ( "http://confluence.public.thoughtworks.org/display/CCNET/Build+Publisher?decorator=printable" ); }
     }
@@ -119,12 +121,12 @@ BrowseForFolderDescription ( "Select path to the publish directory." )]
     /// Deserializes the specified element.
     /// </summary>
     /// <param name="element">The element.</param>
-    public override void Deserialize( XmlElement element ) {
-      if ( string.Compare (element.Name, this.TypeName, false) != 0 )
-        throw new InvalidCastException (string.Format ("Unable to convert {0} to a {1}", element.Name, this.TypeName));
+    public override void Deserialize ( XmlElement element ) {
+      if ( string.Compare ( element.Name, this.TypeName, false ) != 0 )
+        throw new InvalidCastException ( string.Format ( "Unable to convert {0} to a {1}", element.Name, this.TypeName ) );
 
-      this.SourceDirectory = Util.GetElementOrAttributeValue ("sourceDir", element);
-      this.PublishDirectory = Util.GetElementOrAttributeValue ("publishDir", element);
+      this.SourceDirectory = Util.GetElementOrAttributeValue ( "sourceDir", element );
+      this.PublishDirectory = Util.GetElementOrAttributeValue ( "publishDir", element );
       string s = Util.GetElementOrAttributeValue ( "useLabelSubDirectory", element );
       if ( !string.IsNullOrEmpty ( s ) )
         this.UseLabelSubDirectory = string.Compare ( s, bool.TrueString, true ) == 0;

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,77 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ConfigFileNotFoundMessage" xml:space="preserve">
-    <value>ccnet.config file not found in {0}</value>
-    <comment>{0}= path</comment>
-  </data>
-  <data name="ConfigVersionStatusLabelFormat" xml:space="preserve">
-    <value>Configuration Version: {0}</value>
-    <comment>{0} = version string</comment>
-  </data>
-  <data name="ConfirmDeleteBackupsMessage" xml:space="preserve">
-    <value>Are you sure you want to delete all of your backup files?</value>
-  </data>
-  <data name="ConfirmDeleteBackupsTitle" xml:space="preserve">
-    <value>Confirm Delete</value>
-  </data>
-  <data name="ConfirmDeleteSelectedBackupsMessage" xml:space="preserve">
-    <value>Are you sure you want to delete the selected backup files?</value>
-  </data>
-  <data name="CopyOfProject" xml:space="preserve">
-    <value>Copy{1} of {0}</value>
-    <comment>{0} = project name
-{1} = count</comment>
-  </data>
-  <data name="CopyProjectAsMenuItem" xml:space="preserve">
-    <value>Copy {0} As...</value>
-    <comment>{0} = project name</comment>
-  </data>
-  <data name="CopyProjectMenuItem" xml:space="preserve">
-    <value>Copy {0}</value>
-    <comment>{0} = project name</comment>
-  </data>
-  <data name="ErrorLoadingConfigFileCommandButtons" xml:space="preserve">
-    <value>View errors in config file|Manually edit config file|Ignore Errors and continue load</value>
-  </data>
-  <data name="ErrorLoadingConfigFileMessage" xml:space="preserve">
-    <value>There was an error while loading the configuration file.</value>
-  </data>
-  <data name="ErrorLoadingConfigFileTitle" xml:space="preserve">
-    <value>Error Loading Configuration File</value>
-  </data>
-  <data name="FileNotFound" xml:space="preserve">
-    <value>File Not Found</value>
-  </data>
-  <data name="HtmlRegexPattern" xml:space="preserve">
-    <value>&lt;/?[^&gt;]*&gt;</value>
-    <comment>used to remove html from a string.</comment>
-  </data>
-  <data name="OpenSaveFilter" xml:space="preserve">
-    <value>CCNet Configuration|ccnet.config|Configuration Files|*.config|XML Files|*.xml|All Files|*.*</value>
-  </data>
-  <data name="ReadonlyFileCommandButtons" xml:space="preserve">
-    <value>Save As New File|Remove Readonly Flag and Save|Cancel Save</value>
-  </data>
-  <data name="ReadonlyFileMessage" xml:space="preserve">
-    <value>The currently opened configuration file you are trying to save is marked readonly. What would you like to do?</value>
-  </data>
-  <data name="ReadonlyFileTitle" xml:space="preserve">
-    <value>Configuration File is readonly</value>
-  </data>
-  <data name="UnableToSaveConfiguration" xml:space="preserve">
-    <value>Unable to save configuration.</value>
-  </data>
-  <data name="UnzipLicenseText" xml:space="preserve">
-    <value>View Info-ZIP License</value>
-  </data>
-  <data name="UpdatesAvailableMessage" xml:space="preserve">
-    <value>Updates are available for CCNetConfig. Click 'Update Now' below to update to version {0}.</value>
-  </data>
-  <data name="VersionNotSelected" xml:space="preserve">
-    <value>Version Not Selected.</value>
-  </data>
-  <data name="VersionNotSelectedMessage" xml:space="preserve">
-    <value>Please select a version before continuing.</value>
-  </data>
 </root>

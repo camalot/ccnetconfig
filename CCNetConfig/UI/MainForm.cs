@@ -41,6 +41,7 @@ using System.Threading;
 using CCNetConfig.Core.Exceptions;
 using CCNetConfig.Core.Enums;
 using CCNetConfig.Controls;
+using CCNetConfig.Exceptions;
 
 namespace CCNetConfig.UI {
   /// <summary>
@@ -1471,7 +1472,6 @@ namespace CCNetConfig.UI {
         this._backupControler.BackupFile ( file );
         loadedConfigFile = file;
         if ( file.IsReadOnly && file.Exists ) {
-          TaskDialog.ForceEmulationMode = true;
           TaskDialog.ShowTaskDialogBox ( Properties.Strings.ReadonlyFileTitle, Properties.Strings.ReadonlyFileTitle,
             Properties.Strings.ReadonlyFileMessage, string.Empty, string.Empty, string.Empty, string.Empty,
             Properties.Strings.ReadonlyFileCommandButtons, TaskDialogButtons.None, SysIcons.Warning, SysIcons.Information );
@@ -1719,10 +1719,24 @@ namespace CCNetConfig.UI {
           this.rootNode.CruiseControl.Deserialize ( file );
           // now we need to setup the tree
           AllAllProjectsToTree ( );
+        } catch ( RequiredAttributeException ) {
+          // there was an error loading the config. 
+          // a required attribute was missing. lets see how the user wants to handle this...
+          TaskDialog.ShowTaskDialogBox ( Properties.Strings.ErrorLoadingConfigFileTitle, Properties.Strings.ErrorLoadingConfigFileMessage,
+            string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, Properties.Strings.ErrorLoadingConfigFileCommandButtons,
+            TaskDialogButtons.Cancel, SysIcons.Error, SysIcons.Error );
+          switch ( ( ErrorLoadingConfigTaskDialogCommandButton ) TaskDialog.CommandButtonResult ) {
+            case ErrorLoadingConfigTaskDialogCommandButton.ViewErrors:
+            case ErrorLoadingConfigTaskDialogCommandButton.ManuallyEdit:
+            case ErrorLoadingConfigTaskDialogCommandButton.IgnoreErrors:
+              MessageBox.Show ( "Not Yet Implemented." );
+              break;
+            default:
+              break;
+          }
         } catch ( Exception ex ) {
+          Program.BugTracker.SubmitExceptionDialog ( this, ex, loadedConfigFile );
           loadedConfigFile = null;
-          XmlDocument tdoc = Program.CruiseControlToXmlDocument ( this.rootNode.CruiseControl );
-          Program.BugTracker.SubmitExceptionDialog ( this, ex, tdoc );
         }
       }
     }

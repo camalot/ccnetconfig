@@ -8,4 +8,10 @@ namespace CCNetConfig {
     RemoveReadOnly,
     Cancel
   }
+
+  enum ErrorLoadingConfigTaskDialogCommandButton {
+    ViewErrors = 0,
+    ManuallyEdit,
+    IgnoreErrors
+  }
 }

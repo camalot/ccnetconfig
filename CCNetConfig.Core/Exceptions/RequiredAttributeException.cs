@@ -23,7 +23,7 @@ using System.Text;
 using CCNetConfig.Core;
 
 namespace CCNetConfig.Exceptions {
-  class RequiredAttributeException : Exception {
+  public class RequiredAttributeException : Exception {
     /// <summary>
     /// Initializes a new instance of the <see cref="RequiredAttributeException"/> class.
     /// </summary>

@@ -133,6 +133,33 @@ namespace CCNetConfig.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View errors in config file|Manually edit config file|Ignore Errors and continue load.
+        /// </summary>
+        internal static string ErrorLoadingConfigFileCommandButtons {
+            get {
+                return ResourceManager.GetString("ErrorLoadingConfigFileCommandButtons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was an error while loading the configuration file..
+        /// </summary>
+        internal static string ErrorLoadingConfigFileMessage {
+            get {
+                return ResourceManager.GetString("ErrorLoadingConfigFileMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error Loading Configuration File.
+        /// </summary>
+        internal static string ErrorLoadingConfigFileTitle {
+            get {
+                return ResourceManager.GetString("ErrorLoadingConfigFileTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File Not Found.
         /// </summary>
         internal static string FileNotFound {
