@@ -608,15 +608,22 @@ namespace CCNetConfig.Core {
     /// <summary>
     /// Gets the type description provider version.
     /// </summary>
+    /// <remarks>Will attempt to fall back to a base type until object if it can not find the version
+    /// info from the passed type. Will default to the version info of the project object if all else fails.</remarks>
     /// <param name="type">The type.</param>
-    /// <returns>The version selected for the configuration or version 1.3 is unable to return a version.</returns>
+    /// <returns>The version selected for the configuration.</returns>
     public static Version GetTypeDescriptionProviderVersion ( Type type ) {
       TypeDescriptionProvider tdp = GetTypeDescriptionProvider ( type );
       if ( tdp.GetType ( ) == typeof ( VersionBasedTypeDescriptionProvider ) ) {
         VersionBasedTypeDescriptionProvider vtdp = tdp as VersionBasedTypeDescriptionProvider;
         return vtdp.Version;
-      } else
-        return new Version("1.3");
+      } else {
+        if ( type.BaseType != null ) {
+          return GetTypeDescriptionProviderVersion ( type.BaseType );
+        } else {
+          return GetTypeDescriptionProviderVersion ( typeof ( Project ) );
+        }
+      }
     }
 
     /// <summary>
@@ -874,11 +881,11 @@ namespace CCNetConfig.Core {
     /// <param name="type">The type.</param>
     /// <returns></returns>
     public static T GetCustomAttribute<T> ( Type type ) {
-      object[ ] attr = type.GetCustomAttributes ( typeof(T), true ) as Attribute[ ];
+      object[ ] attr = type.GetCustomAttributes ( typeof ( T ), true ) as Attribute[ ];
       if ( attr != null && attr.Length > 0 ) {
-        return (T)attr[ 0 ];
+        return ( T ) attr[ 0 ];
       } else
-        return default(T);
+        return default ( T );
     }
 
     /// <summary>
@@ -1317,7 +1324,7 @@ namespace CCNetConfig.Core {
       if ( string.IsNullOrEmpty ( val ) )
         return default ( T );
       else {
-        return ( T ) Enum.Parse ( typeof(T), val, true );
+        return ( T ) Enum.Parse ( typeof ( T ), val, true );
       }
     }
 
@@ -1329,7 +1336,7 @@ namespace CCNetConfig.Core {
     /// 	<c>true</c> if the specified t is nullable; otherwise, <c>false</c>.
     /// </returns>
     public static bool IsNullable ( Type t ) {
-      return ( t.IsGenericType && t.GetGenericTypeDefinition ( ).Equals( typeof ( Nullable<> ) ) );
+      return ( t.IsGenericType && t.GetGenericTypeDefinition ( ).Equals ( typeof ( Nullable<> ) ) );
     }
   }
 

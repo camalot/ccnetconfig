@@ -85,24 +85,6 @@ namespace CCNetConfig.CCNet {
     /// <returns></returns>
     public override System.Xml.XmlElement Serialize ( ) {
       return new Serializer<BuildPublisher> ( ).Serialize ( this );
-      /*XmlDocument doc = new XmlDocument ();
-      XmlElement root = doc.CreateElement ( this.TypeName );
-      //root.SetAttribute ("ccnetconfigType", string.Format ("{0}, {1}", this.GetType ().FullName, this.GetType ().Assembly.GetName ().Name));
-
-      XmlElement ele = doc.CreateElement ( "sourceDir" );
-      ele.InnerText = Util.CheckRequired ( this, ele.Name, this.SourceDirectory );
-      root.AppendChild ( ele );
-
-      ele = doc.CreateElement ( "publishDir" );
-      ele.InnerText = Util.CheckRequired (this, ele.Name, this.PublishDirectory);
-      root.AppendChild ( ele );
-
-      if ( this.UseLabelSubDirectory.HasValue ) {
-        ele = doc.CreateElement ( "useLabelSubDirectory" );
-        ele.InnerText = this.UseLabelSubDirectory.Value.ToString ( );
-        root.AppendChild ( ele );
-      }
-      return root;*/
     }
 
 

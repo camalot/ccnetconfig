@@ -1,4 +1,4 @@
-/* Copyright (c) 2006, Ryan Conrad. All rights reserved.
+/* Copyright (c) 2006 - 2008, Ryan Conrad. All rights reserved.
 * 
 * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 * - Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
@@ -122,11 +122,19 @@ namespace CCNetConfig.CCNet {
       root.SetAttribute ( "type", this.TypeName );
       XmlElement scele = this.SourceControlProvider.Serialize ( );
       XmlElement scpele = doc.CreateElement ( "sourceControlProvider" );
-      for ( int i = 0; i < scele.Attributes.Count; i++ )
-        scpele.Attributes.Append ( ( XmlAttribute ) doc.ImportNode ( scele.Attributes[ i ], true ) );
+      // workitem : 15267
+      // added check if the imported node is null before appending
+      for ( int i = 0; i < scele.Attributes.Count; i++ ) {
+        XmlAttribute attr = doc.ImportNode ( scele.Attributes[ i ], true ) as XmlAttribute;
+        if ( attr != null ) 
+          scpele.Attributes.Append ( attr );
+      }
 
-      foreach ( XmlElement subEle in scele.SelectNodes ( "./*" ) )
-        scpele.AppendChild ( ( XmlElement ) doc.ImportNode ( subEle, true ) );
+      foreach ( XmlElement subEle in scele.SelectNodes ( "./*" ) ) {
+        XmlElement ele = doc.ImportNode ( subEle, true ) as XmlElement;
+        if ( ele != null )
+          scpele.AppendChild ( ele );
+      }
 
       root.AppendChild ( scpele );
       XmlNode tnode = doc.ImportNode ( this.InclusionFilters.Serialize ( ), true );
@@ -134,7 +142,8 @@ namespace CCNetConfig.CCNet {
         root.AppendChild ( tnode );
 
       tnode = doc.ImportNode ( this.ExclusionFilters.Serialize ( ), true );
-      root.AppendChild ( tnode );
+      if ( tnode != null ) 
+        root.AppendChild ( tnode );
 
       return root;
     }
@@ -502,14 +511,14 @@ namespace CCNetConfig.CCNet {
             ( this.UserFilter == null || this.UserFilter.Names.Count == 0 ) &&
             ( this.ActionFilter == null || this.ActionFilter.Actions.Count == 0 ) )
           return null;
-        
+
         XmlNode tnode = this.ActionFilter.Serialize ( );
         if ( tnode != null )
-          root.AppendChild ( doc.ImportNode ( tnode, true) );
+          root.AppendChild ( doc.ImportNode ( tnode, true ) );
 
-        tnode =this.UserFilter.Serialize ( );
+        tnode = this.UserFilter.Serialize ( );
         if ( tnode != null )
-          root.AppendChild (  doc.ImportNode ( tnode, true ) );
+          root.AppendChild ( doc.ImportNode ( tnode, true ) );
         foreach ( PathFilter pfi in this.PathFilters ) {
           tnode = pfi.Serialize ( );
           if ( tnode != null )

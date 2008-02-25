@@ -33,7 +33,11 @@ namespace CCNetConfig.Core.Components {
     /// <summary>
     /// Create an element
     /// </summary>
-    Element
+    Element,
+    /// <summary>
+    /// The value of an element
+    /// </summary>
+    Value
   }
   /// <summary>
   /// Indicates what type of node should be used when serializing

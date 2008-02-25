@@ -20,63 +20,46 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Xml;
 using CCNetConfig.Core;
 using CCNetConfig.Core.Serialization;
-using System.ComponentModel;
 using CCNetConfig.Core.Components;
+using CCNetConfig.Core.Enums;
+
 namespace CCNetConfig.CCNet {
   /// <summary>
-  /// The Converters configuration specifies rules for transforming user names (from User elements) to email 
-  /// addresses in cases where the User element does not specify an address. The converters are 
-  /// ignored when the User element specifies an address.
+  /// 
   /// </summary>
-  [ReflectorName("regexConverter"), MinimumVersion("1.4")]
-  public class Converter : ISerialize, ICCNetObject, ICCNetDocumentation, ICloneable {
+  [ReflectorName("NotificationType"), MinimumVersion("1.4")]
+  public class EmailNotificationType : ICCNetObject, ISerialize, ICloneable{
+    // The reflector name attribute is needed to serialize this property, but since
+    // its a value type, it doesn't matter what is in the name.
     /// <summary>
-    /// Gets or sets the find.
+    /// The type of notification
     /// </summary>
-    /// <value>The find.</value>
-    [Description("The pattern to find"), ReflectorName("find"), DefaultValue(null),
-    MinimumVersion("1.4"), Required, DisplayName("(Find)"), Category("Required")]
-    public string Find { get; set; }
-    /// <summary>
-    /// Gets or sets the replace.
-    /// </summary>
-    /// <value>The replace.</value>
-    [Description(" The value to substitute with"), ReflectorName("replace"), DefaultValue(null),
-    MinimumVersion ( "1.4" ), Required, DisplayName ( "(Replace)" ), Category ( "Required" )]
-    public string Replace { get; set; }
+    [ReflectorNodeType(ReflectorNodeTypes.Value),ReflectorName("value")]
+    public NotificationType? Value { get; set; }
     #region ISerialize Members
 
     /// <summary>
     /// Serializes this instance.
     /// </summary>
     /// <returns></returns>
-    public XmlElement Serialize ( ) {
-      return new Serializer<Converter>().Serialize(this);
+    public System.Xml.XmlElement Serialize ( ) {
+      return new Serializer<EmailNotificationType> ( ).Serialize ( this );
     }
 
     /// <summary>
     /// Deserializes the specified element.
     /// </summary>
     /// <param name="element">The element.</param>
-    public void Deserialize ( XmlElement element ) {
-      this.Find = Util.GetElementOrAttributeValue ( "find", element );
-      this.Replace = Util.GetElementOrAttributeValue ( "replace", element );
-    }
-
-    #endregion
-
-    #region ICCNetDocumentation Members
-
-    /// <summary>
-    /// Gets the documentation URI.
-    /// </summary>
-    /// <value>The documentation URI.</value>
-    [Browsable(false),EditorBrowsable(EditorBrowsableState.Never),ReflectorIgnore]
-    public Uri DocumentationUri {
-      get { return new Uri ( "http://confluence.public.thoughtworks.org/display/CCNET/Email+Publisher?decorator=printable" ); }
+    public void Deserialize ( System.Xml.XmlElement element ) {
+      try {
+        string s = Util.GetElementOrAttributeValue ( ".", element );
+        if ( Enum.IsDefined ( typeof ( NotificationType ), s ) )
+          this.Value = ( NotificationType ) Enum.Parse ( typeof ( NotificationType ), s );
+      } catch {
+        throw;
+      }
     }
 
     #endregion
@@ -84,13 +67,14 @@ namespace CCNetConfig.CCNet {
     #region ICloneable Members
 
     /// <summary>
-    /// Clones this instance.
+    /// Creates a new object that is a copy of the current instance.
     /// </summary>
-    /// <returns></returns>
-    public Converter Clone ( ) {
-      return this.MemberwiseClone ( ) as Converter;
+    /// <returns>
+    /// A new object that is a copy of this instance.
+    /// </returns>
+    public EmailNotificationType Clone ( ) {
+      return this.MemberwiseClone ( ) as EmailNotificationType;
     }
-
     /// <summary>
     /// Creates a new object that is a copy of the current instance.
     /// </summary>
@@ -102,15 +86,5 @@ namespace CCNetConfig.CCNet {
     }
 
     #endregion
-
-    /// <summary>
-    /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-    /// </summary>
-    /// <returns>
-    /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-    /// </returns>
-    public override string ToString ( ) {
-      return string.IsNullOrEmpty ( this.Find ) ? this.GetType ( ).Name : this.Find;
-    }
   }
 }

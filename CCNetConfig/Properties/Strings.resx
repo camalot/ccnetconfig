@@ -148,7 +148,7 @@
     <comment>{0} = project name</comment>
   </data>
   <data name="ErrorLoadingConfigFileCommandButtons" xml:space="preserve">
-    <value>View errors in config file|Manually edit config file|Ignore Errors and continue load</value>
+    <value>&amp;View errors in config file|&amp;Manually edit config file|&amp;Ignore Errors and continue load</value>
   </data>
   <data name="ErrorLoadingConfigFileMessage" xml:space="preserve">
     <value>There was an error while loading the configuration file.</value>
@@ -166,8 +166,17 @@
   <data name="OpenSaveFilter" xml:space="preserve">
     <value>CCNet Configuration|ccnet.config|Configuration Files|*.config|XML Files|*.xml|All Files|*.*</value>
   </data>
+  <data name="ProjectNameExistsCommandButtons" xml:space="preserve">
+    <value>Choose a &amp;different name|&amp;Cancel new project</value>
+  </data>
+  <data name="ProjectNameExistsMessage" xml:space="preserve">
+    <value>A project with that name already exists, what would you like to do?</value>
+  </data>
+  <data name="ProjectNameExistsTitle" xml:space="preserve">
+    <value>Project Name Exists</value>
+  </data>
   <data name="ReadonlyFileCommandButtons" xml:space="preserve">
-    <value>Save As New File|Remove Readonly Flag and Save|Cancel Save</value>
+    <value>&amp;Save As New File|&amp;Remove Readonly Flag and Save|&amp;Cancel Save</value>
   </data>
   <data name="ReadonlyFileMessage" xml:space="preserve">
     <value>The currently opened configuration file you are trying to save is marked readonly. What would you like to do?</value>

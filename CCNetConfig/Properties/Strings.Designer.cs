@@ -133,7 +133,7 @@ namespace CCNetConfig.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View errors in config file|Manually edit config file|Ignore Errors and continue load.
+        ///   Looks up a localized string similar to &amp;View errors in config file|&amp;Manually edit config file|&amp;Ignore Errors and continue load.
         /// </summary>
         internal static string ErrorLoadingConfigFileCommandButtons {
             get {
@@ -187,7 +187,34 @@ namespace CCNetConfig.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save As New File|Remove Readonly Flag and Save|Cancel Save.
+        ///   Looks up a localized string similar to Choose a &amp;different name|&amp;Cancel new project.
+        /// </summary>
+        internal static string ProjectNameExistsCommandButtons {
+            get {
+                return ResourceManager.GetString("ProjectNameExistsCommandButtons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A project with that name already exists, what would you like to do?.
+        /// </summary>
+        internal static string ProjectNameExistsMessage {
+            get {
+                return ResourceManager.GetString("ProjectNameExistsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project Name Exists.
+        /// </summary>
+        internal static string ProjectNameExistsTitle {
+            get {
+                return ResourceManager.GetString("ProjectNameExistsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Save As New File|&amp;Remove Readonly Flag and Save|&amp;Cancel Save.
         /// </summary>
         internal static string ReadonlyFileCommandButtons {
             get {

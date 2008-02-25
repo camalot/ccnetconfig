@@ -29,7 +29,7 @@
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF ( 6F, 13F );
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size ( 472, 271 );
+      this.ClientSize = new System.Drawing.Size ( 527, 300 );
       this.Name = "LoadErrorInformationForm";
       this.Text = "LoadErrorInformationForm";
       this.ResumeLayout ( false );

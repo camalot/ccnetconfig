@@ -60,6 +60,7 @@
     <Compile Include="PublisherTask\CodePlexReleasePublisher.cs" />
     <Compile Include="PublisherTask\EmailConverter.cs" />
     <Compile Include="PublisherTask\EmailGroup.cs" />
+    <Compile Include="PublisherTask\EmailNotificationType.cs" />
     <Compile Include="PublisherTask\EmailUser.cs" />
     <Compile Include="PublisherTask\FinalBuilderTask.cs" />
     <Compile Include="PublisherTask\RssBuildsPublisher.cs" />

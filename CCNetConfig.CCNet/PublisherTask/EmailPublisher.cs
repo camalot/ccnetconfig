@@ -56,7 +56,8 @@ namespace CCNetConfig.CCNet {
       : base ( "email" ) {
       _users = new CloneableList<User> ( );
       _groups = new CloneableList<Group> ( );
-      _converters = new CloneableList<Converter> ( );
+      this.Converters = new CloneableList<Converter> ( );
+      this.ModifierNotificationTypes = new CloneableList<EmailNotificationType> ( );
     }
 
     /// <summary>
@@ -74,6 +75,15 @@ namespace CCNetConfig.CCNet {
     DefaultValue ( null ), Category ( "Optional" ), MinimumVersion ( "1.1.1" ), ReflectorName("mailhostUsername")]
     public string MailHostUserName { get { return this._mailHostUserName; } set { this._mailHostUserName = value; } }
 
+    /// <summary>
+    /// Gets or sets the mail port.
+    /// </summary>
+    /// <value>The mail port.</value>
+    /// <remarks>Added 2/23/2008: workitem : 15008</remarks>
+    [Description ( "The SMTP server port number" ),
+    DefaultValue(null), Category("Optional"), MinimumVersion("1.4"), 
+    ReflectorName("mailPort")]
+    public int? MailPort { get; set; }
 
     /// <summary>
     /// The password to provide to the SMTP server.
@@ -116,10 +126,22 @@ namespace CCNetConfig.CCNet {
     /// Gets or sets the converters.
     /// </summary>
     /// <value>The converters.</value>
-    [Description ( "Allows transformations to be performed on the names of the modifiers for making an email address." ), DefaultValue ( null ),
-    TypeConverter ( typeof ( IListTypeConverter ) ), Category ( "Optional" ), MinimumVersion("1.4"),
+    [Description ( "Allows transformations to be performed on the names of the modifiers for making an email address." ), 
+    DefaultValue ( null ),
+    TypeConverter ( typeof ( IListTypeConverter ) ), 
+    Category ( "Optional" ), MinimumVersion("1.4"),
     ReflectorName("converters")]
-    public CloneableList<Converter> Converters { get { return this._converters; } set { this._converters = value; } }
+    public CloneableList<Converter> Converters { get; set; }
+
+    /// <summary>
+    /// Gets or sets the modifier notification types.
+    /// </summary>
+    /// <value>The modifier notification types.</value>
+    [Description("A set of NotificationTypes, specifying build states for which CruiseControl.Net should send an email to the comitters of the build"),
+    ReflectorName("modifierNotificationTypes"), 
+    TypeConverter(typeof(IListTypeConverter)), 
+    Category("Optional"), MinimumVersion("1.4"),DefaultValue(null)]
+    public CloneableList<EmailNotificationType> ModifierNotificationTypes { get; set; }
     /// <summary>
     /// Creates a copy of this object
     /// </summary>
@@ -137,7 +159,9 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     /// <returns></returns>
     public override System.Xml.XmlElement Serialize ( ) {
-      Version versionInfo = Util.GetTypeDescriptionProviderVersion ( typeof ( PublisherTask ) );
+      return new Serializer<EmailPublisher> ( ).Serialize ( this );
+      
+      /*Version versionInfo = Util.GetTypeDescriptionProviderVersion ( typeof ( PublisherTask ) );
       XmlDocument doc = new XmlDocument ( );
       XmlElement root = doc.CreateElement ( this.TypeName );
       //root.SetAttribute ("ccnetconfigType", string.Format ("{0}, {1}", this.GetType ().FullName, this.GetType ().Assembly.GetName ().Name));
@@ -151,6 +175,16 @@ namespace CCNetConfig.CCNet {
           root.SetAttribute ( "mailhostPassword", this.MailHostPassword.GetPassword ( ) );
         if ( !string.IsNullOrEmpty ( this.MailHostUserName ) )
           root.SetAttribute ( "mailhostUsername", this.MailHostUserName );
+      }
+
+      minVersion = new Version ( "1.4" );
+      if ( Util.IsInVersionRange ( minVersion, null, versionInfo ) ) {
+        if ( this.MailPort.HasValue )
+          root.SetAttribute ( "mailPort", this.MailPort.Value.ToString() );
+
+        if ( this.Converters.Count > 0 ) {
+          
+        }
       }
 
       if ( this.IncludeDetails.HasValue )
@@ -169,7 +203,7 @@ namespace CCNetConfig.CCNet {
           groupsE.AppendChild ( doc.ImportNode ( g.Serialize ( ), true ) );
         root.AppendChild ( groupsE );
       }
-      return root;
+      return root;*/
     }
 
     /// <summary>
@@ -198,6 +232,31 @@ namespace CCNetConfig.CCNet {
       s = Util.GetElementOrAttributeValue ( "mailhostPassword", element );
       if ( !string.IsNullOrEmpty ( s ) )
         this.MailHostPassword.Password = s;
+
+      s = Util.GetElementOrAttributeValue ( "mailPort", element );
+      int port = 0;
+      if ( !string.IsNullOrEmpty(s) && int.TryParse ( s, out port ) ) {
+        this.MailPort = port;
+      }
+
+      XmlElement cele = element.SelectSingleNode ( "converters" ) as XmlElement;
+      if ( cele != null ) {
+        foreach ( XmlElement ce in cele.SelectNodes ( "./*" ) ) {
+          Converter conv = new Converter ( );
+          conv.Deserialize ( ce );
+          this.Converters.Add ( conv );
+        }
+      }
+
+      XmlElement mele = element.SelectSingleNode ( "modifierNotificationTypes" ) as XmlElement;
+      if ( mele != null ) {
+        foreach ( XmlElement me in mele.SelectNodes ( "./*" ) ) {
+          EmailNotificationType ent = new EmailNotificationType ( );
+          ent.Deserialize ( me );
+          if ( ent.Value.HasValue )
+            this.ModifierNotificationTypes.Add ( ent );
+        }
+      }
 
       s = Util.GetElementOrAttributeValue ( "includeDetails", element );
       if ( !string.IsNullOrEmpty ( s ) )

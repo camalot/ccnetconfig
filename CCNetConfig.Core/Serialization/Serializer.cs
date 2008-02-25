@@ -58,8 +58,10 @@ namespace CCNetConfig.Core.Serialization {
           Version minVer = Util.GetMinimumVersion ( pi );
           Version maxVer = Util.GetMaximumVersion ( pi );
           Version exactVer = Util.GetExactVersion ( pi );
-          if ( ignore || ( !Util.IsExactVersion ( exactVer, versionInfo ) && !Util.IsInVersionRange ( minVer, maxVer, versionInfo ) ) )
+          if ( ignore || ( !Util.IsExactVersion ( exactVer, versionInfo ) && !Util.IsInVersionRange ( minVer, maxVer, versionInfo ) ) ) {
+            Console.WriteLine ( "Ignoring : {0}", pi.Name );
             continue;
+          }
           // get node name
           string name = Util.GetReflectorNameAttributeValue ( pi );
           ReflectorNodeTypes nodeType = Util.GetReflectorNodeType ( pi );
@@ -121,10 +123,16 @@ namespace CCNetConfig.Core.Serialization {
               if ( ( Util.IsNullable ( pi.PropertyType ) && val != null ) || !Util.IsNullable ( pi.PropertyType ) && val != null && !string.IsNullOrEmpty ( val.ToString ( ) ) )
                 root.AppendChild ( node );
               break;
+            case ReflectorNodeTypes.Value :
+              root.AppendChild ( doc.CreateTextNode ( val.ToString ( ) ) );
+              break;
           }
         }
         return root;
-      } catch { throw; }
+      } catch ( Exception ex )  {
+        Console.WriteLine ( ex.ToString ( ) );
+        throw; 
+      }
     }
 
     /// <summary>

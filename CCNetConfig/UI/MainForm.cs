@@ -339,15 +339,15 @@ namespace CCNetConfig.UI {
       if ( this.pgProperties.SelectedObject.GetType ( ) == typeof ( Project ) ) {
         Project proj = ( Project ) this.pgProperties.SelectedObject;
         if ( string.Compare ( e.ChangedItem.Label, "(Name)", true ) == 0 ) {
-          if ( rootNode.CruiseControl.Projects.Contains ( e.ChangedItem.Value.ToString ( ) ) ) {
+          if ( rootNode.CruiseControl.Projects.GetCountByName ( e.ChangedItem.Value.ToString ( ) ) > 1 ) {
             MessageBox.Show ( this, Properties.Resources.ProjectExists, Properties.Resources.ProjectExistsTitle, MessageBoxButtons.OK, MessageBoxIcon.Error );
             proj.Name = e.OldValue.ToString ( );
             return;
           } else {
             foreach ( ProjectTreeNode ptn in rootNode.Nodes ) {
               if ( string.Compare ( e.OldValue.ToString ( ), ptn.Text, false ) == 0 ) {
-                rootNode.CruiseControl.Projects.Remove ( e.OldValue.ToString ( ) );
-                rootNode.CruiseControl.Projects.Add ( ptn.Project );
+                //rootNode.CruiseControl.Projects.Remove ( e.OldValue.ToString ( ) );
+                //rootNode.CruiseControl.Projects.Add ( ptn.Project );
                 ptn.Text = e.ChangedItem.Value.ToString ( );
               }
             }
@@ -924,7 +924,7 @@ namespace CCNetConfig.UI {
         copyItemsToolStripMenuItem.Visible = true;
         copyItemsToolStripMenuItem.Text = "Copy Configuration";
         //if ( _copyMenuItemEventHandler != null )
-          //_copyMenuItemEventHandler = _copyMenuItemEventHandler;
+        //_copyMenuItemEventHandler = _copyMenuItemEventHandler;
         _copyMenuItemEventHandler = delegate ( object sender, EventArgs evt ) {
           ClipboardManager.CopyToClipboard<CCNetConfig.Core.CruiseControl> ( this.CruiseControl );
         };
@@ -1172,7 +1172,7 @@ namespace CCNetConfig.UI {
           cutItemToolStripMenuItem.Text = "Cut Triggers";
           if ( _cutMenuItemEventHandler != null )
             cutItemToolStripMenuItem.Click -= _cutMenuItemEventHandler;
-          _cutMenuItemEventHandler= delegate ( object sender, EventArgs evt ) {
+          _cutMenuItemEventHandler = delegate ( object sender, EventArgs evt ) {
             ClipboardManager.CopyToClipboard<TriggersList> ( ptn.Project.Triggers );
             foreach ( TriggerItemTreeNode titn in e.Node.Nodes )
               titn.Remove ( );
@@ -1291,23 +1291,24 @@ namespace CCNetConfig.UI {
     /// <param name="visibleItem">The visible item.</param>
     void SetContextMenuItemsVisible ( ToolStripMenuItem visibleItem ) {
       ProjectTreeNode ptn = projectContextMenu.Tag as ProjectTreeNode;
-      if ( ptn != null ) {
-        bool isCCNode = visibleItem == null && ptn == null && this.CruiseControl != null;
-        // workitem : 14549
-        bool isProject = !isCCNode && ptn.Parent != null && ptn.Parent.GetType ( ) == typeof ( CruiseControlTreeNode ) && visibleItem == null;
+      // workitem : 15093 
+      //    removed the if block checking if ptn was null
+      //    This is what would disable menu items that should not be visible for the root node
+      bool isCCNode = visibleItem == null && ptn == null && this.CruiseControl != null;
+      // workitem : 14549
+      bool isProject = !isCCNode && ptn.Parent != null && ptn.Parent.GetType ( ) == typeof ( CruiseControlTreeNode ) && visibleItem == null;
 
-        addPublisherToolStripMenuItem.Visible = ( addPublisherToolStripMenuItem == visibleItem || visibleItem == null ) && ptn != null;
-        addTriggerToolStripMenuItem.Visible = ( addTriggerToolStripMenuItem == visibleItem || visibleItem == null ) && ptn != null;
-        addTaskToolStripMenuItem.Visible = ( addTaskToolStripMenuItem == visibleItem || visibleItem == null ) && ptn != null;
-        addPrebuildToolStripMenuItem.Visible = ( addPrebuildToolStripMenuItem == visibleItem || visibleItem == null ) && ptn != null;
+      addPublisherToolStripMenuItem.Visible = ( addPublisherToolStripMenuItem == visibleItem || visibleItem == null ) && ptn != null;
+      addTriggerToolStripMenuItem.Visible = ( addTriggerToolStripMenuItem == visibleItem || visibleItem == null ) && ptn != null;
+      addTaskToolStripMenuItem.Visible = ( addTaskToolStripMenuItem == visibleItem || visibleItem == null ) && ptn != null;
+      addPrebuildToolStripMenuItem.Visible = ( addPrebuildToolStripMenuItem == visibleItem || visibleItem == null ) && ptn != null;
 
-        copyProjectMenuItem.Visible = copyProjectAsMenuItem.Visible = isProject;
-        copySepMenuItem.Visible = isProject;
+      copyProjectMenuItem.Visible = copyProjectAsMenuItem.Visible = isProject;
+      copySepMenuItem.Visible = isProject;
 
-        addProjectToolStripMenuItem.Visible = isCCNode;
-        cutItemToolStripMenuItem.Visible = !isProject && !isCCNode;
-        pasteNewItemToolStripMenuItem.Visible = !isProject && !isCCNode;
-      }
+      addProjectToolStripMenuItem.Visible = isCCNode;
+      cutItemToolStripMenuItem.Visible = !isProject && !isCCNode;
+      pasteNewItemToolStripMenuItem.Visible = !isProject && !isCCNode;
     }
 
     /// <summary>
@@ -1343,11 +1344,21 @@ namespace CCNetConfig.UI {
     private void addProjectToolButton_Click ( object sender, EventArgs e ) {
       NewProjectForm npf = new NewProjectForm ( );
       if ( npf.ShowDialog ( this ) == DialogResult.OK ) {
-        if ( !rootNode.CruiseControl.Projects.Contains ( npf.ProjectName ) ) {
+        if ( rootNode.CruiseControl.Projects.GetCountByName ( npf.ProjectName ) == 0 ) {
           Project p = new Project ( );
           p.Name = npf.ProjectName;
           AddProjectTreeNode ( p );
           OnConfigurationModified ( new CancelEventArgs ( false ) );
+        } else {
+          int result = TaskDialog.ShowCommandBox ( Properties.Strings.ProjectNameExistsTitle, Properties.Strings.ProjectNameExistsMessage,
+            string.Empty, string.Empty, string.Empty, string.Empty, Properties.Strings.ProjectNameExistsCommandButtons, false, SysIcons.Question, SysIcons.Question );
+          switch ( ( ProjectNameExistsTaskDialogCommandButton ) result ) {
+            case ProjectNameExistsTaskDialogCommandButton.NewName:
+              addProjectToolButton.PerformClick ( );
+              break;
+            case ProjectNameExistsTaskDialogCommandButton.Cancel:
+              break;
+          }
         }
       }
     }
@@ -1475,7 +1486,7 @@ namespace CCNetConfig.UI {
           TaskDialog.ShowTaskDialogBox ( Properties.Strings.ReadonlyFileTitle, Properties.Strings.ReadonlyFileTitle,
             Properties.Strings.ReadonlyFileMessage, string.Empty, string.Empty, string.Empty, string.Empty,
             Properties.Strings.ReadonlyFileCommandButtons, TaskDialogButtons.None, SysIcons.Warning, SysIcons.Information );
-          switch ( (ReadOnlyTaskDialogCommandButton)TaskDialog.CommandButtonResult ) {
+          switch ( ( ReadOnlyTaskDialogCommandButton ) TaskDialog.CommandButtonResult ) {
             case ReadOnlyTaskDialogCommandButton.SaveAs:
               loadedConfigFile = SaveAs ( );
               return;
@@ -1485,7 +1496,7 @@ namespace CCNetConfig.UI {
             case ReadOnlyTaskDialogCommandButton.Cancel:
               return;
           }
-         
+
         }
         // changing FileMode to Create will solve any issues with "stray" characters from config if it was longer then new one.
         FileStream fs = new FileStream ( file.FullName, FileMode.Create, FileAccess.Write );
@@ -1690,7 +1701,7 @@ namespace CCNetConfig.UI {
       tvProjects.Nodes.Add ( rootNode );
       configVersionStatusLabel.Text = string.Format ( Properties.Strings.ConfigVersionStatusLabelFormat, version );
 
-      if ( version.CompareTo ( new Version("1.3") ) >= 0 ) {
+      if ( version.CompareTo ( new Version ( "1.3" ) ) >= 0 ) {
         queuesNode = new ProjectQueuesTreeNode ( );
         tvProjects.Nodes.Add ( queuesNode );
 

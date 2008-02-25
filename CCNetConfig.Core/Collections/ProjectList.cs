@@ -94,6 +94,20 @@ namespace CCNetConfig.Core.Collections {
     }
 
     /// <summary>
+    /// Gets the number of projects that have the specified name. 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    /// <remarks>Used to check if a duplicate project name was added.</remarks>
+    public int GetCountByName ( string name ) {
+      List<string> keys = new List<string> ( );
+      foreach ( Project proj in this )
+        if ( string.Compare(proj.Name,name,true) == 0 ) 
+          keys.Add ( proj.Name );
+      return keys.Count;
+    }
+
+    /// <summary>
     /// Compares <see cref="CCNetConfig.Core.Project"/> objects for sorting.
     /// </summary>
     public class ProjectComparer : IComparer<Project> {
