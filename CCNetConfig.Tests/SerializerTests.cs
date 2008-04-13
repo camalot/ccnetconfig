@@ -175,5 +175,18 @@ namespace CCNetConfig.Tests {
       Assert.IsNotNull ( ele );
       Console.WriteLine ( ele.OuterXml );
     }
+
+    [Test]
+    public void SubversionSourceControlSerializerTest ( ) {
+      Serializer<SubversionSourceControl> ser = new Serializer<SubversionSourceControl> ( );
+      SubversionSourceControl ssc = new SubversionSourceControl ( );
+
+      ssc.Executable = "svn.exe";
+      //ssc.TrunkUrl = new Uri ( "svn://foobar/trunk" );
+
+      XmlElement ele = ser.Serialize ( ssc );
+      Assert.IsNotNull ( ele );
+      Console.WriteLine ( ele.OuterXml );
+    }
   }
 }

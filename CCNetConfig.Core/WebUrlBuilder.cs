@@ -23,32 +23,34 @@ using System.Text;
 using CCNetConfig.Core.Serialization;
 using System.Xml;
 using System.ComponentModel;
+using CCNetConfig.Core.Components;
 
 namespace CCNetConfig.Core {
   /// <summary>
   /// Web Integration with ViewCVS and other CourceControl Types.
   /// </summary>
-  [ TypeConverter( typeof( ExpandableObjectConverter ) ) ]
+  [TypeConverter ( typeof ( ObjectOrNoneTypeConverter ) ), ReflectorName ( "webUrlBuilder" )]
   public class WebUrlBuilder : ISerialize, ICCNetObject, ICloneable {
-    private string _type = string.Empty;
-    private Uri _url = null;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="WebUrlBuilder"/> class.
     /// </summary>
-    public WebUrlBuilder () { }
+    public WebUrlBuilder ( ) { 
+      this.Type = string.Empty;
+    }
     /// <summary>
     /// Type of WebUrlBuilder to create.
     /// </summary>
     /// <value>The type.</value>
-    [Description ( "Type of WebUrlBuilder to create." ), DefaultValue ( null )]
-    public string Type { get { return this._type; } set { this._type = value; } }
+    [Description ( "Type of WebUrlBuilder to create." ), DefaultValue ( null ), Category ( "Optional" ),
+    ReflectorName ( "type" ), ReflectorNodeType ( ReflectorNodeTypes.Attribute )]
+    public string Type { get; set; }
     /// <summary>
     /// The url to link to.
     /// </summary>
     /// <value>The URL.</value>
-    [Description ( "The url to link to." ), DefaultValue ( null ), DisplayName ( "(Url)" )]
-    public Uri Url { get { return this._url; } set { this._url = Util.CheckRequired ( this, "url", value ); } }
+    [Description ( "The url to link to." ), DefaultValue ( null ), DisplayName ( "(Url)" ),
+    ReflectorName ( "url" ), Required, Category ( "Required" )]
+    public Uri Url { get; set; }
 
     #region ISerialize Members
 
@@ -56,7 +58,12 @@ namespace CCNetConfig.Core {
     /// Serializes this instance.
     /// </summary>
     /// <returns></returns>
-    public System.Xml.XmlElement Serialize () {
+    public System.Xml.XmlElement Serialize ( ) {
+      if ( this.Url != null && !string.IsNullOrEmpty ( this.Type ) )
+        return new Serializer<WebUrlBuilder> ( ).Serialize ( this );
+      else
+        return null;
+      /*
       XmlDocument doc = new XmlDocument ();
       XmlElement root = doc.CreateElement ( "webUrlBuilder" );
       if ( !string.IsNullOrEmpty ( this.Type ) )
@@ -71,7 +78,7 @@ namespace CCNetConfig.Core {
         return root;
       else
         return null;
-
+      */
     }
 
     /// <summary>
@@ -79,9 +86,15 @@ namespace CCNetConfig.Core {
     /// </summary>
     /// <param name="element">The element.</param>
     public void Deserialize ( System.Xml.XmlElement element ) {
-      this._url = null;
+      this.Url = null;
       this.Type = string.Empty;
 
+
+      string s = Util.UrlDecode ( Util.GetElementOrAttributeValue ( "url", element ) );
+      this.Url = new Uri ( s );
+      s = Util.GetElementOrAttributeValue ( "type", element );
+      if ( !string.IsNullOrEmpty ( s ) )
+        this.Type = s;
     }
 
     #endregion
@@ -91,8 +104,8 @@ namespace CCNetConfig.Core {
     /// <returns>
     /// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
     /// </returns>
-    public override string ToString () {
-      return this.GetType ().Name;
+    public override string ToString ( ) {
+      return this.GetType ( ).Name;
     }
 
     #region ICloneable Members
@@ -100,14 +113,14 @@ namespace CCNetConfig.Core {
     /// Creates a copy of this object
     /// </summary>
     /// <returns></returns>
-    public WebUrlBuilder Clone () {
-      WebUrlBuilder wb = new WebUrlBuilder ();
+    public WebUrlBuilder Clone ( ) {
+      WebUrlBuilder wb = new WebUrlBuilder ( );
       if ( wb.Url != null )
-        wb.Url = new Uri ( this.Url.ToString () );
+        wb.Url = new Uri ( this.Url.ToString ( ) );
       return wb;
     }
-    object ICloneable.Clone () {
-      return this.Clone ();
+    object ICloneable.Clone ( ) {
+      return this.Clone ( );
     }
 
     #endregion

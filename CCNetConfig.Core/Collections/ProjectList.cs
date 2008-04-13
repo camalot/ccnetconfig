@@ -20,17 +20,19 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using CCNetConfig.Core.Components;
 
 namespace CCNetConfig.Core.Collections {
   /// <summary>
   /// A collection of <see cref="CCNetConfig.Core.Project">Project</see> objects.
   /// </summary>
-  public class ProjectList : List<Project> {
+  public class ProjectList : CloneableList<Project> {
 
     /// <summary>
     /// Gets or sets the <see cref="CCNetConfig.Core.Project"/> with the specified name.
     /// </summary>
     /// <value></value>
+    [ReflectorIgnore]
     public Project this[ string name ] {
       get {
         if ( this.Contains ( name ) )
@@ -84,6 +86,7 @@ namespace CCNetConfig.Core.Collections {
     /// Gets the keys.
     /// </summary>
     /// <value>The keys.</value>
+    [ReflectorIgnore]
     public List<string> Keys {
       get {
         List<string> keys = new List<string> ( );

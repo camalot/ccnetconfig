@@ -1,4 +1,5 @@
-/* Copyright (c) 2006 - 2008, Ryan Conrad. All rights reserved.
+﻿/*
+ * Copyright (c) 2006 - 2008, Ryan Conrad. All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
  * - Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
@@ -26,19 +27,22 @@ using System.Windows.Forms;
 
 namespace CCNetConfig.Core.Components {
   /// <summary>
-  /// A drowdown that shows a default value plus all the possible values for the <see cref="System.Enum"/>.
+  /// Allows an property to either be an object or null.
   /// </summary>
-  public class DefaultableEnumUIEditor : UITypeEditor {
+  public class ObjectOrNoneUIEditor : UITypeEditor {
     /// <summary>
-    /// Default Text value for a null enum.
+    /// 
     /// </summary>
-    public static readonly NullValueEditorObject NULL_VALUE = new NullValueEditorObject ( "(Default)" );
+    public static readonly NullValueEditorObject NULL_VALUE = new NullValueEditorObject ( "(None)" );
+    /// <summary>
+    /// 
+    /// </summary>
     IWindowsFormsEditorService frmsvr = null;
     /// <summary>
-    /// Edits the specified object's value using the editor style indicated by the <see cref="M:System.Drawing.Design.UITypeEditor.GetEditStyle"></see> method.
+    /// Edits the specified object's value using the editor style indicated by the <see cref="M:System.Drawing.Design.UITypeEditor.GetEditStyle"/> method.
     /// </summary>
-    /// <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"></see> that can be used to gain additional context information.</param>
-    /// <param name="provider">An <see cref="T:System.IServiceProvider"></see> that this editor can use to obtain services.</param>
+    /// <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"/> that can be used to gain additional context information.</param>
+    /// <param name="provider">An <see cref="T:System.IServiceProvider"/> that this editor can use to obtain services.</param>
     /// <param name="value">The object to edit.</param>
     /// <returns>
     /// The new value of the object. If the value of the object has not changed, this should return the same object it was passed.
@@ -51,31 +55,25 @@ namespace CCNetConfig.Core.Components {
         lst.BorderStyle = BorderStyle.None;
         lst.SelectedIndexChanged += new EventHandler ( OnListBoxChanged );
         List<object> li = new List<object> ( );
-        li.Add ( DefaultableEnumUIEditor.NULL_VALUE );
-        Type enumType = typeof ( Nullable );
-        if ( Util.IsNullable ( context.PropertyDescriptor.PropertyType ) ) {
-          enumType = Nullable.GetUnderlyingType ( context.PropertyDescriptor.PropertyType );
-        } else
-          throw new NotSupportedException ( "Invalid Type for this Editor" );
+        li.Add ( ObjectOrNoneUIEditor.NULL_VALUE );
+        Type objectType = context.PropertyDescriptor.PropertyType;
 
-        foreach ( object dow in Enum.GetValues ( enumType ) ) {
-          System.Reflection.MemberInfo fld = enumType.GetField ( dow.ToString ( ) );
-          Version min = Util.GetMinimumVersion ( fld );
-          Version max = Util.GetMaximumVersion ( fld );
-          Version exact = Util.GetExactVersion ( fld );
-          if ( Util.IsExactVersion ( exact, versionInfo ) || Util.IsInVersionRange ( min, max, versionInfo ) )
-            li.Add ( dow );
-        }
+        Version min = Util.GetMinimumVersion ( objectType );
+        Version max = Util.GetMaximumVersion ( objectType );
+        Version exact = Util.GetExactVersion ( objectType );
+        if ( Util.IsExactVersion ( exact, versionInfo ) || Util.IsInVersionRange ( min, max, versionInfo ) )
+          li.Add ( objectType );
 
         lst.DataSource = li;
-        frmsvr.DropDownControl ( lst );
-        if ( lst.SelectedItem is NullValueEditorObject )
-          return DefaultableEnumUIEditor.NULL_VALUE.Value;
-        else
-          return lst.SelectedItem;
 
+        frmsvr.DropDownControl ( lst );
+        if ( lst.SelectedItem is Type )
+          return Util.CreateInstanceOfType (lst.SelectedItem as Type);
+        else
+          return ObjectOrNoneUIEditor.NULL_VALUE.Value;
       }
       return value;
+
     }
 
     /// <summary>
@@ -86,12 +84,13 @@ namespace CCNetConfig.Core.Components {
     private void OnListBoxChanged ( object sender, EventArgs e ) {
       frmsvr.CloseDropDown ( );
     }
+
     /// <summary>
-    /// Gets the editor style used by the <see cref="M:System.Drawing.Design.UITypeEditor.EditValue(System.IServiceProvider,System.Object)"></see> method.
+    /// Gets the editor style used by the <see cref="M:System.Drawing.Design.UITypeEditor.EditValue(System.IServiceProvider,System.Object)"/> method.
     /// </summary>
-    /// <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"></see> that can be used to gain additional context information.</param>
+    /// <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"/> that can be used to gain additional context information.</param>
     /// <returns>
-    /// A <see cref="T:System.Drawing.Design.UITypeEditorEditStyle"></see> value that indicates the style of editor used by the <see cref="M:System.Drawing.Design.UITypeEditor.EditValue(System.IServiceProvider,System.Object)"></see> method. If the <see cref="T:System.Drawing.Design.UITypeEditor"></see> does not support this method, then <see cref="M:System.Drawing.Design.UITypeEditor.GetEditStyle"></see> will return <see cref="F:System.Drawing.Design.UITypeEditorEditStyle.None"></see>.
+    /// A <see cref="T:System.Drawing.Design.UITypeEditorEditStyle"/> value that indicates the style of editor used by the <see cref="M:System.Drawing.Design.UITypeEditor.EditValue(System.IServiceProvider,System.Object)"/> method. If the <see cref="T:System.Drawing.Design.UITypeEditor"/> does not support this method, then <see cref="M:System.Drawing.Design.UITypeEditor.GetEditStyle"/> will return <see cref="F:System.Drawing.Design.UITypeEditorEditStyle.None"/>.
     /// </returns>
     public override UITypeEditorEditStyle GetEditStyle ( ITypeDescriptorContext context ) {
       return UITypeEditorEditStyle.DropDown;

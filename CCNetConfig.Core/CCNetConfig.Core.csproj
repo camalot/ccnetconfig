@@ -155,13 +155,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ccnet.xsd">
-      <SubType>Designer</SubType>
+      <SubType>
+      </SubType>
     </None>
     <None Include="ccnet.xsx">
       <DependentUpon>ccnet.xsd</DependentUpon>
     </None>
     <None Include="CCNetConfig.Core.cd" />
+    <Compile Include="Components\DefaultableBooleanTypeConverter.cs" />
+    <Compile Include="Components\DefaultableEnumTypeConverter.cs" />
     <Compile Include="Components\FormatProviderAttribute.cs" />
+    <Compile Include="Components\NullValueEditorObject.cs" />
+    <Compile Include="Components\ObjectOrNoneTypeConverter.cs" />
+    <Compile Include="Components\ObjectOrNoneUIEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="License.txt" />

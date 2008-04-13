@@ -44,7 +44,7 @@ namespace CCNetConfig.Core.Serialization {
         // no need to do anything if it doesn't event belong in here anyhow.
 
         // should limit to public, instance, read/write properties... 
-        PropertyInfo[ ] props = type.GetProperties ( BindingFlags.Public | BindingFlags.Instance | (BindingFlags.GetProperty & BindingFlags.SetProperty) | (BindingFlags.GetField & BindingFlags.SetField) );
+        PropertyInfo[ ] props = type.GetProperties ( BindingFlags.Public | BindingFlags.Instance | ( BindingFlags.GetProperty & BindingFlags.SetProperty ) | ( BindingFlags.GetField & BindingFlags.SetField ) );
 
         string rootTypeName = Util.GetReflectorNameAttributeValue ( type );
         Version versionInfo = Util.GetTypeDescriptionProviderVersion ( typeof ( T ) );
@@ -81,7 +81,7 @@ namespace CCNetConfig.Core.Serialization {
                 if ( val != null )
                   node.InnerText = val.ToString ( );
               }
-              if ( ( Util.IsNullable ( pi.PropertyType ) && val != null ) || !Util.IsNullable ( pi.PropertyType ) && !string.IsNullOrEmpty ( val.ToString ( ) ) )
+              if ( ( Util.IsNullable ( pi.PropertyType ) && val != null ) || ( val != null && !Util.IsNullable ( pi.PropertyType ) && !string.IsNullOrEmpty ( val.ToString ( ) ) ) )
                 root.Attributes.Append ( node as XmlAttribute );
               break;
             case ReflectorNodeTypes.Element:
@@ -102,10 +102,24 @@ namespace CCNetConfig.Core.Serialization {
                     // handle clonable lists
                     if ( valType.IsGenericType && valType.GetGenericTypeDefinition ( ).Equals ( typeof ( CloneableList<> ) ) ) {
                       foreach ( ICCNetObject o in ( System.Collections.IList ) val ) {
-                        node.AppendChild ( doc.ImportNode ( new Serializer<ICCNetObject> ( ).Serialize ( o as ICCNetObject ), true ) );
+                        //XmlNode n = doc.ImportNode ( new Serializer<ICCNetObject> ( ).Serialize ( o as ICCNetObject ), true );
+                        XmlNode tn = ( ( ICCNetObject ) val ).Serialize ( );
+                        if ( tn != null )
+                          node.AppendChild ( doc.ImportNode ( tn, true ) );
                       }
                     } else if ( valType.GetInterface ( typeof ( ICCNetObject ).FullName ) != null ) { // handle other ICCNetObjects
-                      node.AppendChild ( doc.ImportNode ( new Serializer<ICCNetObject> ( ).Serialize ( val as ICCNetObject ), true ) );
+                      //node = doc.ImportNode ( new Serializer<ICCNetObject> ( ).Serialize ( val as ICCNetObject ), true );
+                      XmlNode tn = ( ( ICCNetObject ) val ).Serialize ( );
+                      if ( tn != null ) {
+                        // ignore the node that the object creates, use the one the property creates.
+                        // then import all the attributes and child nodes
+                        foreach ( XmlAttribute attr in tn.Attributes ) {
+                          node.Attributes.Append ( doc.ImportNode ( attr, true ) as XmlAttribute );
+                        }
+                        foreach ( XmlElement ele in tn.SelectNodes ( "./*" ) ) {
+                          node.AppendChild ( doc.ImportNode ( ele, true ) );
+                        }
+                      }
                     } else if ( valType == typeof ( HiddenPassword ) ) { // handle the hidden password object
                       node.InnerText = ( ( HiddenPassword ) val ).GetPassword ( );
                     } else { // eveything else
@@ -120,18 +134,19 @@ namespace CCNetConfig.Core.Serialization {
                 }
               }
               // if it should be added, add it...
-              if ( ( Util.IsNullable ( pi.PropertyType ) && val != null ) || !Util.IsNullable ( pi.PropertyType ) && val != null && !string.IsNullOrEmpty ( val.ToString ( ) ) )
+              if ( node != null && ( ( Util.IsNullable ( pi.PropertyType ) && val != null ) || !Util.IsNullable ( pi.PropertyType ) && val != null && !string.IsNullOrEmpty ( val.ToString ( ) ) ) )
                 root.AppendChild ( node );
               break;
-            case ReflectorNodeTypes.Value :
-              root.AppendChild ( doc.CreateTextNode ( val.ToString ( ) ) );
+            case ReflectorNodeTypes.Value:
+              if ( val != null )
+                root.AppendChild ( doc.CreateTextNode ( val.ToString ( ) ) );
               break;
           }
         }
         return root;
-      } catch ( Exception ex )  {
+      } catch ( Exception ex ) {
         Console.WriteLine ( ex.ToString ( ) );
-        throw; 
+        throw;
       }
     }
 

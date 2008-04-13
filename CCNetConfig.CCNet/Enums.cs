@@ -1,5 +1,5 @@
-/*
- * Copyright (c) 2006, Ryan Conrad. All rights reserved.
+﻿/*
+ * Copyright (c) 2006 - 2008, Ryan Conrad. All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
  * - Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
@@ -20,22 +20,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.ComponentModel;
-using CCNetConfig.Core.Components;
 
-namespace CCNetConfig.Core {
-  /// <summary>
-  /// A <see cref="System.Uri"/> object that supports only the "Alienbrain" scheme
-  /// </summary>
-  [TypeConverter(typeof(AlienbrainUriTypeConverter))]
-  public class AlienbrainUri : Uri {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="AlienbrainUri"/> class.
-    /// </summary>
-    /// <param name="url">The URL.</param>
-    public AlienbrainUri(string url) : base(url) {
-      if ( string.Compare(this.Scheme,"ab",true) != 0 && string.Compare(this.Scheme,"alienbrain",true) != 0 )
-        throw new UriFormatException("Only \"ab\" and \"alienbrain\" schemes are allowed.");
-    }
+namespace CCNetConfig.CCNet {
+  public enum ArtifactCleanUpMethods {
+    KeepLastXBuilds,
+    DeleteBuildsOlderThanXDays
   }
 }

@@ -27,43 +27,38 @@ using CCNetConfig.Core.Serialization;
 using System.ComponentModel;
 using CCNetConfig.Core.Exceptions;
 using CCNetConfig.Core.Collections;
+using CCNetConfig.Core.Components;
 
 namespace CCNetConfig.Core {
   /// <summary>
   /// The Cruise Control object. All CCNet Config interaction starts with this object.
   /// </summary>
-  public class CruiseControl : ISerialize, ICCNetDocumentation {
-    private Version _configurationVersion = null;
-    //private Dictionary<string, Project> projects;
-    private ProjectList projects = null;
+  [ReflectorName ( "cruisecontrol" )]
+  public class CruiseControl : ICCNetObject, ICCNetDocumentation {
     /// <summary>
     /// Initializes a new instance of the <see cref="CruiseControl"/> class.
     /// </summary>
-    public CruiseControl ( )
-      : this ( new Version ( "1.2" ) ) {
-    }
+    public CruiseControl ( ) : this ( new Version ( "1.2" ) ) { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CruiseControl"/> class.
     /// </summary>
     /// <param name="version">The version.</param>
     public CruiseControl ( Version version ) {
-      //projects = new Dictionary<string, Project> ();
-      projects = new ProjectList ( );
-      _configurationVersion = version;
+      this.Projects = new ProjectList ( );
+      this.Version = version;
     }
 
     /// <summary>
     /// Gets the projects.
     /// </summary>
     /// <value>The projects.</value>
-    //public Dictionary<string, Project> Projects { get { return this.projects; } }
-    public ProjectList Projects { get { return this.projects; } }
+    public ProjectList Projects { get; private set; }
     /// <summary>
     /// Gets or sets the version.
     /// </summary>
     /// <value>The version.</value>
-    public Version Version { get { return this._configurationVersion; } set { this._configurationVersion = value; } }
+    public Version Version { get; set; }
     /// <summary>
     /// Saves the config.
     /// </summary>
@@ -111,7 +106,7 @@ namespace CCNetConfig.Core {
     /// <returns></returns>
     public XmlElement Serialize ( ) {
       XmlDocument doc = new XmlDocument ( );
-      XmlElement ele = doc.CreateElement ( "cruisecontrol" );
+      XmlElement ele = doc.CreateElement ( Util.GetReflectorNameAttributeValue ( this.GetType ( ) ) );
       doc.AppendChild ( ele );
       foreach ( Project proj in this.projects )
         ele.AppendChild ( doc.ImportNode ( proj.Serialize ( ), true ) );

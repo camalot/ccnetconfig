@@ -75,7 +75,7 @@ namespace CCNetConfig.UI {
       this.homeLink.Size = new System.Drawing.Size ( 188, 13 );
       this.homeLink.TabIndex = 1;
       this.homeLink.TabStop = true;
-      this.homeLink.Text = "Copyright © Ryan Conrad 2006 - 2007";
+      this.homeLink.Text = "Copyright © Ryan Conrad 2006 - 2008";
       this.homeLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler ( this.homeLink_LinkClicked );
       // 
       // nameLabel

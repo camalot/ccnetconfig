@@ -20,11 +20,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using CCNetConfig.Core.Serialization;
 
 namespace CCNetConfig.Core {
   /// <summary>
   /// Defines an object that is a CCNetObject.
   /// </summary>
-  public interface ICCNetObject {
+  public interface ICCNetObject : ISerialize {
   }
 }

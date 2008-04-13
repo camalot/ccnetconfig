@@ -51,18 +51,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums.cs" />
     <Compile Include="Labeller\BrekiLabeller.cs" />
     <Compile Include="Labeller\FileLabeller.cs" />
     <Compile Include="Labeller\LastChangeLabeller.cs" />
     <Compile Include="Labeller\LastChangeVersionLabeller.cs" />
     <Compile Include="Labeller\MSProjectLabeller.cs" />
     <Compile Include="Labeller\SubversionLabeller.cs" />
+    <Compile Include="PublisherTask\ArtifactCleanupTask.cs" />
     <Compile Include="PublisherTask\CodePlexReleasePublisher.cs" />
     <Compile Include="PublisherTask\EmailConverter.cs" />
     <Compile Include="PublisherTask\EmailGroup.cs" />
     <Compile Include="PublisherTask\EmailNotificationType.cs" />
     <Compile Include="PublisherTask\EmailUser.cs" />
     <Compile Include="PublisherTask\FinalBuilderTask.cs" />
+    <Compile Include="PublisherTask\ModificationHistoryPublisher.cs" />
     <Compile Include="PublisherTask\RssBuildsPublisher.cs" />
     <Compile Include="PublisherTask\RssPublisher.cs" />
     <Compile Include="PublisherTask\TeamBuildTask.cs" />
@@ -86,6 +89,7 @@
     <Compile Include="SourceControl\MksSourceIntegritySourceControl.cs" />
     <Compile Include="SourceControl\MultiSourceControl.cs" />
     <Compile Include="SourceControl\PerforceSourceControl.cs" />
+    <Compile Include="SourceControl\PlasticScmSourceControl.cs" />
     <Compile Include="SourceControl\PvcsSourceControl.cs" />
     <Compile Include="SourceControl\RationalClearCaseSourceControl.cs" />
     <Compile Include="SourceControl\SeapineSurroundSourceControl.cs" />

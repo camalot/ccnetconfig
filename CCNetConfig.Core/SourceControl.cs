@@ -29,25 +29,22 @@ namespace CCNetConfig.Core {
   /// <summary>
   /// A SourceControl Provider for the project.
   /// </summary>
-  [Editor(typeof(SourceControlUIEditor),typeof(UITypeEditor)), TypeConverter(typeof(ExpandableObjectConverter))]
-  public abstract class SourceControl : ISerialize, ICCNetObject, ICloneable {
-    private string _typeName;
-
+  [Editor(typeof(SourceControlUIEditor),typeof(UITypeEditor)), TypeConverter(typeof(ExpandableObjectConverter)),
+  ReflectorName("sourcecontrol")]
+  public abstract class SourceControl : ICCNetObject, ICloneable {
     /// <summary>
     /// Initializes a new instance of the <see cref="SourceControl"/> class.
     /// </summary>
     /// <param name="typeName">Name of the type.</param>
     protected SourceControl ( string typeName ) {
-      this._typeName = typeName;
+      this.TypeName = typeName;
     }
     /// <summary>
     /// Gets the name of the type.
     /// </summary>
     /// <value>The name of the type.</value>
-    [Browsable (false)]
-    public string TypeName {
-      get { return _typeName; }
-    }
+    [Browsable ( false ), ReflectorNodeType ( ReflectorNodeTypes.Attribute ), ReflectorName ( "type" )]
+    public string TypeName { get; internal set; }
 
     /// <summary>
     /// Serializes this instance.

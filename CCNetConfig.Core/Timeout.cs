@@ -31,8 +31,8 @@ namespace CCNetConfig.Core {
   /// <summary>
   /// Represents a measurement of time.
   /// </summary>
-  [TypeConverter ( typeof ( ExpandableObjectConverter ) )]
-  public class Timeout : ISerialize, ICCNetObject, ICCNetDocumentation, ICloneable {
+  [TypeConverter ( typeof ( ObjectOrNoneTypeConverter ) ), ReflectorName ( "timeout" )]
+  public class Timeout : ICCNetObject, ICCNetDocumentation, ICloneable {
     private TimeoutUnit? _unit = null;
     private int? _duration = null;
     /// <summary>
@@ -41,13 +41,15 @@ namespace CCNetConfig.Core {
     /// <value>The unit.</value>
     [Description ( "The unit how the duration is measured." ), DefaultValue(null),
     Editor(typeof(DefaultableEnumUIEditor),typeof(UITypeEditor)),
-    TypeConverter(typeof(DefaultableEnumTypeConverter))]
+    TypeConverter(typeof(DefaultableEnumTypeConverter)), ReflectorName("units"),
+    ReflectorNodeType(ReflectorNodeTypes.Attribute)]
     public TimeoutUnit? Unit { get { return this._unit; } set { this._unit = value; } }
     /// <summary>
     /// The number of units to wait for a timeout.
     /// </summary>
     /// <value>The duration.</value>
-    [Description ( "The number of units to wait for a timeout." ), DefaultValue(null)]
+    [Description ( "The number of units to wait for a timeout." ), DefaultValue(null),
+    ReflectorNodeType(ReflectorNodeTypes.Value),ReflectorName("duration")]
     public int? Duration {
       get { return this._duration; }
       set {
@@ -76,12 +78,13 @@ namespace CCNetConfig.Core {
     /// <returns></returns>
     public System.Xml.XmlElement Serialize () {
       if ( _duration.HasValue ) {
-        XmlDocument doc = new XmlDocument ();
+        return new Serializer<Timeout> ( ).Serialize ( this );
+        /*XmlDocument doc = new XmlDocument ();
         XmlElement root = doc.CreateElement ( "timeout" );
         if ( this.Unit.HasValue )
           root.SetAttribute ( "units", this.Unit.Value.ToString ().ToLower () );
         root.InnerText = _duration.Value.ToString ();
-        return root;
+        return root;*/
       } else
         return null;
     }
@@ -114,7 +117,7 @@ namespace CCNetConfig.Core {
     /// Gets the documentation URI.
     /// </summary>
     /// <value>The documentation URI.</value>
-    [Browsable ( false )]
+    [Browsable ( false ), ReflectorIgnore]
     public Uri DocumentationUri {
       get { return new Uri ( "http://ccnet.thoughtworks.net/display/CCNET/Timeout+Configuration?decorator=printable" ); }
     }

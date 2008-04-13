@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, Ryan Conrad. All rights reserved.
+ * Copyright (c) 2006 - 2008, Ryan Conrad. All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
  * - Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
@@ -64,7 +64,7 @@ namespace CCNetConfig.CCNet {
     /// <value>The use label sub directory.</value>
     [Description ( "If set to true (the default value), files will be copied to subdirectory under the publishDir which will be named with the label for the current integration." ),
     Category ( "Optional" ), Editor ( typeof ( DefaultableBooleanUIEditor ), typeof ( UITypeEditor ) ),
-    TypeConverter ( typeof ( DefaultableBooleanTypeConverter ) ),
+    TypeConverter ( typeof ( DefaultableBooleanTypeConverter ) ), DefaultValue(null),
     MinimumVersion ( "1.2" ), ReflectorName ( "useLabelSubDirectory" )]
     public bool? UseLabelSubDirectory {
       get { return this._useLabelSubDirectory; }
