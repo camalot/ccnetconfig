@@ -99,6 +99,9 @@ namespace CCNetConfig.BugTracking {
         }
       }
 
+      if ( string.IsNullOrEmpty ( this.detailsTextBox.Text ) || string.IsNullOrEmpty ( this.descriptionTextBox.Text ) )
+        return;
+
       string data = string.Format ( "Contact: {0}\n\nStack Trace:\n{1}\n\nConfig File:\n{2}", this.textemail.Text.Trim ( ), this.detailsTextBox.Text.Trim ( ), dataFile.ToString ( ).Trim ( ) );
       ToggleProgressBar ( true );
       try {

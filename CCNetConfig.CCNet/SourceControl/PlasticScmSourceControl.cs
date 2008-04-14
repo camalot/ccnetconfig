@@ -25,12 +25,13 @@ using CCNetConfig.Core.Components;
 using CCNetConfig.Core.Serialization;
 using System.ComponentModel;
 using System.Drawing.Design;
+using System.Xml;
 
 namespace CCNetConfig.CCNet {
   /// <summary>
   /// This supports Codice Software's Plastic SCM  source control system.
   /// </summary>
-  [MinimumVersion ( "1.3" )]
+  [MinimumVersion ( "1.4" )]
   public class PlasticScmSourceControl : SourceControl, ICCNetDocumentation {
     /// <summary>
     /// Initializes a new instance of the <see cref="PlasticScmSourceControl"/> class.
@@ -148,7 +149,38 @@ namespace CCNetConfig.CCNet {
     public override void Deserialize ( System.Xml.XmlElement element ) {
       this.WorkingDirectory = string.Empty;
       this.Branch = string.Empty;
+      this.Executable = string.Empty;
+      this.Forced = null;
+      this.LabelOnSuccess = null;
+      this.LabelPrefix = string.Empty;
+      this.Repository = string.Empty;
+      this.Timeout = new Timeout ( );
 
+      this.WorkingDirectory = Util.GetElementOrAttributeValue ( "workingDirectory",element );
+      this.Branch = Util.GetElementOrAttributeValue ( "branch",element );
+      string s = Util.GetElementOrAttributeValue ( "executable", element );
+      if ( !string.IsNullOrEmpty ( s ) )
+        this.Executable = s;
+
+      s = Util.GetElementOrAttributeValue ( "forced", element );
+      if ( !string.IsNullOrEmpty ( s ) )
+        this.Forced = string.Compare ( s, bool.TrueString, true ) == 0;
+
+      s = Util.GetElementOrAttributeValue ( "labelOnSuccess", element );
+      if ( !string.IsNullOrEmpty ( s ) )
+        this.LabelOnSuccess = string.Compare ( s, bool.TrueString, true ) == 0;
+
+      s = Util.GetElementOrAttributeValue ( "labelPrefix", element );
+      if ( !string.IsNullOrEmpty ( s ) )
+        this.LabelPrefix = s;
+
+      s = Util.GetElementOrAttributeValue ( "repository", element );
+      if ( !string.IsNullOrEmpty ( s ) )
+        this.Repository = s;
+
+      XmlElement ele = element.SelectSingleNode ( "timeout" ) as XmlElement;
+      if ( ele != null )
+        this.Timeout.Deserialize ( ele );
 
     }
 

@@ -136,7 +136,8 @@ namespace CCNetConfig.Core {
       "Visual Source Safe Source Control Block or CVS Source Control Block connection problems), it is possible to configure the " +
       "CCNet server to not publish the exception as a failed build. Set this value to true to publish exceptions to the build log, or false to just " +
       "send them to the server log file" ), DefaultValue ( null ), Editor ( typeof ( DefaultableBooleanUIEditor ), typeof ( UITypeEditor ) ),
-     TypeConverter ( typeof ( DefaultableBooleanTypeConverter ) ), Category ( "Optional" )]
+     TypeConverter ( typeof ( DefaultableBooleanTypeConverter ) ), Category ( "Optional" ),
+    MaximumVersion("1.2.1")]
     public bool? PublishExceptions { get { return this._publishExceptions; } set { this._publishExceptions = value; } }
     /// <summary>
     /// <para>The <see cref="CCNetConfig.Core.SourceControl">Source Control</see> used for this project</para>
@@ -277,10 +278,13 @@ namespace CCNetConfig.Core {
         root.AppendChild ( ele );
       }
 
-      if ( this.PublishExceptions.HasValue ) {
-        XmlElement ele = doc.CreateElement ( "publishExceptions" );
-        ele.InnerText = this.PublishExceptions.Value.ToString ();
-        root.AppendChild ( ele );
+      
+      if ( Util.IsInVersionRange ( null, new Version ( "1.2.1" ), versionInfo ) ) {
+        if ( this.PublishExceptions.HasValue ) {
+          XmlElement ele = doc.CreateElement ( "publishExceptions" );
+          ele.InnerText = this.PublishExceptions.Value.ToString ( );
+          root.AppendChild ( ele );
+        }
       }
 
       if ( SourceControl != null )
@@ -391,9 +395,11 @@ namespace CCNetConfig.Core {
           this.ModificationDelaySeconds = mds;
       }
 
-      s = Util.GetElementOrAttributeValue ( "publishExceptions", element );
-      if ( !string.IsNullOrEmpty ( s ) )
-        this.PublishExceptions = string.Compare ( s, bool.TrueString, true ) == 0;
+      if ( Util.IsInVersionRange ( null, new Version ( "1.2.1" ), versionInfo ) ) {
+        s = Util.GetElementOrAttributeValue ( "publishExceptions", element );
+        if ( !string.IsNullOrEmpty ( s ) )
+          this.PublishExceptions = string.Compare ( s, bool.TrueString, true ) == 0;
+      }
 
       XmlElement ele = element.SelectSingleNode ( "triggers" ) as XmlElement;
       if ( ele != null ) {

@@ -65,13 +65,13 @@ namespace CCNetConfig.UI {
       if ( ai.UpdatesAvailable ) {
         UpdateInformationForm uif = new UpdateInformationForm ( ai );
         if ( uif.ShowDialog ( _owner ) == DialogResult.OK ) {
-          string thisPath = this.GetType ().Assembly.Location;
+          string thisPath = this.GetType ( ).Assembly.Location;
           string attrString = string.Format ( CCNetConfig.Core.Util.UserSettings.UpdateSettings.LaunchArgumentsFormat, CCNetConfig.Core.Util.UserSettings.UpdateSettings.UpdateCheckType, thisPath, ai.UpdateInfoList.GetLatestVersion ( ) );
           Console.WriteLine ( attrString );
           Process.Start ( Path.Combine ( Application.StartupPath, CCNetConfig.Core.Util.UserSettings.UpdateSettings.UpdaterApplication ), attrString );
-          Application.Exit ();
+          Application.Exit ( );
         }
-      }
+      } 
     }
   }
 }
