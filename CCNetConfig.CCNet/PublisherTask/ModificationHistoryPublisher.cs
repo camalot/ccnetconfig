@@ -24,6 +24,7 @@ using CCNetConfig.Core.Components;
 using CCNetConfig.Core;
 using System.ComponentModel;
 using System.Drawing.Design;
+using CCNetConfig.Core.Serialization;
 
 namespace CCNetConfig.CCNet {
   /// <summary>
@@ -77,7 +78,7 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     /// <returns></returns>
     public override PublisherTask Clone ( ) {
-      return this.MemberwiseClone as ModificationHistoryPublisher;
+      return this.MemberwiseClone() as ModificationHistoryPublisher;
     }
 
     #region ICCNetDocumentation Members

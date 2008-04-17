@@ -83,6 +83,7 @@
     <Compile Include="PublisherTask\EmailPublisher.cs" />
     <Compile Include="PublisherTask\ExecutableTask.cs" />
     <Compile Include="PublisherTask\FileMergeTaskPublisher.cs" />
+    <Compile Include="SourceControl\ExternalSourceControl.cs" />
     <Compile Include="SourceControl\FileSystemSourceControl.cs" />
     <Compile Include="SourceControl\FilteredSourceControl.cs" />
     <Compile Include="SourceControl\JediVcsSourceControl.cs" />

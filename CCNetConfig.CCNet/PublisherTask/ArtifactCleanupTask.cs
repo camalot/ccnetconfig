@@ -23,6 +23,7 @@ using System.Text;
 using CCNetConfig.Core.Components;
 using CCNetConfig.Core;
 using System.ComponentModel;
+using CCNetConfig.Core.Serialization;
 
 namespace CCNetConfig.CCNet {
   [MinimumVersion ( "1.4" ), ReflectorName ( "artifactcleanup" )]
@@ -56,7 +57,7 @@ namespace CCNetConfig.CCNet {
       if ( string.Compare ( element.Name, this.TypeName, false ) != 0 )
         throw new InvalidCastException ( string.Format ( "Unable to convert {0} to a {1}", element.Name, this.TypeName ) );
 
-      this.Method = Enum.Parse ( typeof ( ArtifactCleanUpMethods ), Util.GetElementOrAttributeValue ( "cleanUpMethod", element ) );
+      this.Method = (ArtifactCleanUpMethods)Enum.Parse ( typeof ( ArtifactCleanUpMethods ), Util.GetElementOrAttributeValue ( "cleanUpMethod", element ) );
       int i = 0;
       int.TryParse ( Util.GetElementOrAttributeValue ( "cleanUpValue", element ), out i );
       this.Value = i;

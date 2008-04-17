@@ -108,7 +108,7 @@ namespace CCNetConfig.Core {
       XmlDocument doc = new XmlDocument ( );
       XmlElement ele = doc.CreateElement ( Util.GetReflectorNameAttributeValue ( this.GetType ( ) ) );
       doc.AppendChild ( ele );
-      foreach ( Project proj in this.projects )
+      foreach ( Project proj in this.Projects )
         ele.AppendChild ( doc.ImportNode ( proj.Serialize ( ), true ) );
 
       return ele;
@@ -162,7 +162,7 @@ namespace CCNetConfig.Core {
           }
         }
         if ( Util.UserSettings.SortProject )
-          this.projects.Sort ( new ProjectList.ProjectComparer ( ) );
+          this.Projects.Sort ( new ProjectList.ProjectComparer ( ) );
       } else
         throw new InvalidCastException ( string.Format ( "Can not convert {0} to a cruisecontrol", ccnetConfig.DocumentElement != null ? ccnetConfig.DocumentElement.Name : "UNKNOWN" ) );
     }

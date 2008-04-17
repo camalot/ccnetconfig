@@ -168,6 +168,7 @@
     <Compile Include="Components\NullValueEditorObject.cs" />
     <Compile Include="Components\ObjectOrNoneTypeConverter.cs" />
     <Compile Include="Components\ObjectOrNoneUIEditor.cs" />
+    <Compile Include="Components\ReflectorArrayAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="License.txt" />
