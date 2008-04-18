@@ -26,9 +26,6 @@ namespace CCNetConfig.Core {
   /// Represents an object that has a name and a value.
   /// </summary>
   public class NameValue : ICloneable {
-    private string _name = string.Empty;
-    private string _value = string.Empty;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="NameValue"/> class.
     /// </summary>
@@ -41,19 +38,19 @@ namespace CCNetConfig.Core {
     /// </summary>
     /// <param name="name">The name.</param>
     public NameValue (string name) {
-      this._name = name;
+      this.Name = name;
     }
 
     /// <summary>
     /// Gets or sets the name.
     /// </summary>
     /// <value>The name.</value>
-    public string Name { get { return this._name; } set { this._name = value; } }
+    public virtual string Name { get; set; }
     /// <summary>
     /// Gets or sets the value.
     /// </summary>
     /// <value>The value.</value>
-    public string Value { get { return this._value; } set { this._value = value; } }
+    public virtual string Value { get; set; }
 
     /// <summary>
     /// Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
@@ -61,7 +58,7 @@ namespace CCNetConfig.Core {
     /// <returns>
     /// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
     /// </returns>
-    public override string ToString () {
+    public virtual string ToString () {
       return string.IsNullOrEmpty( this.Name ) ? this.GetType(  ).Name : this.Name;
     }
     #region ICloneable Members

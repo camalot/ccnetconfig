@@ -28,6 +28,31 @@ namespace CCNetConfig.Tests {
   [TestFixture]
   public class SourceControlTests {
     [Test]
+    public void ExternalSourceControlTest ( ) {
+      ExternalSourceControl esc = new ExternalSourceControl ( );
+      EnvironmentVariable ev = new EnvironmentVariable ( );
+      ev.Name = "Foo";
+      ev.Value = "Blah";
+      esc.Environment.Add ( ev );
+      ev = new EnvironmentVariable ( );
+      ev.Name = "Bar";
+      ev.Value = "Water";
+      esc.Environment.Add ( ev );
+      esc.Arguments = "/f /b";
+      esc.Executable = "cmd.exe";
+      XmlElement node = esc.Serialize ( );
+      Assert.IsNotNull ( node, "Serialize failed for ExternalSourceControl" );
+      Assert.AreEqual ( node.SelectSingleNode ( "executable" ).InnerText, esc.Executable );
+      Assert.AreEqual ( node.SelectSingleNode ( "args" ).InnerText, esc.Arguments );
+
+      esc = new ExternalSourceControl ( );
+      esc.Deserialize ( node );
+
+      Assert.AreEqual ( node.SelectSingleNode ( "executable" ).InnerText, esc.Executable );
+      Assert.AreEqual ( node.SelectSingleNode ( "args" ).InnerText, esc.Arguments );
+    }
+
+    [Test]
     public void AccuRevSourceControlTest ( ) {
       AccuRevSourceControl arsc = new AccuRevSourceControl ( );
       arsc.AutoGetSource = true;

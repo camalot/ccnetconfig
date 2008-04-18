@@ -831,6 +831,34 @@ namespace CCNetConfig.Core {
     }
 
     /// <summary>
+    /// Gets the reflector array attribute value.
+    /// </summary>
+    /// <param name="type">The type.</param>
+    /// <returns></returns>
+    public static string GetReflectorArrayAttributeValue ( Type type ) {
+      ReflectorArrayAttribute raa = Util.GetCustomAttribute<ReflectorArrayAttribute> ( type );
+      if ( raa != null )
+        return raa.ItemName;
+      else {
+        throw new ArgumentException ( string.Format ( "Type ({0}) does not contain a ReflectorArray Attribute", type.Name ) );
+      }
+    }
+
+    /// <summary>
+    /// Gets the reflector array attribute value.
+    /// </summary>
+    /// <param name="mi">The mi.</param>
+    /// <returns></returns>
+    public static string GetReflectorArrayAttributeValue ( MemberInfo mi ) {
+      ReflectorArrayAttribute raa = Util.GetCustomAttribute<ReflectorArrayAttribute> ( mi );
+      if ( raa != null ) {
+        return raa.ItemName;
+      } else {
+        throw new ArgumentException ( string.Format ( "Member ({0}) does not contain a ReflectorArray Attribute", mi.Name ) );
+      }
+    }
+
+    /// <summary>
     /// Gets the reflector name attribute value.
     /// </summary>
     /// <param name="type">The type.</param>
@@ -844,7 +872,7 @@ namespace CCNetConfig.Core {
         if ( type.BaseType != typeof ( Object ) )
           return Util.GetReflectorNameAttributeValue ( type.BaseType );
         else
-          throw new ArgumentNullException ( string.Format ( "Type ({0}) does not contain a ReflectorName Attribute", type.Name ) );
+          throw new ArgumentException ( string.Format ( "Type ({0}) does not contain a ReflectorName Attribute", type.Name ) );
       }
     }
     /// <summary>
@@ -858,7 +886,7 @@ namespace CCNetConfig.Core {
       if ( rna != null )
         return rna.Name;
       else
-        throw new ArgumentNullException ( string.Format ( "Member ({0}) does not contain a ReflectorName Attribute", mi.Name ) );
+        throw new ArgumentException ( string.Format ( "Member ({0}) does not contain a ReflectorName Attribute", mi.Name ) );
     }
 
     /// <summary>

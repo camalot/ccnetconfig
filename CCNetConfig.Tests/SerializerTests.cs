@@ -188,5 +188,27 @@ namespace CCNetConfig.Tests {
       Assert.IsNotNull ( ele );
       Console.WriteLine ( ele.OuterXml );
     }
+
+    [Test]
+    public void ExternalSourceControlSerializerTest ( ) {
+      Serializer<ExternalSourceControl> ser = new Serializer<ExternalSourceControl> ( );
+      ExternalSourceControl esc = new ExternalSourceControl ( );
+
+      esc.Executable = "esc.exe";
+      EnvironmentVariable ev = new EnvironmentVariable ( );
+      ev.Name = "Foo";
+      ev.Value = "Blah";
+      esc.Environment.Add ( ev );
+      ev = new EnvironmentVariable ( );
+      ev.Name = "Bar";
+      ev.Value = "Water";
+      esc.Environment.Add ( ev );
+
+      esc.Arguments = "/f /b";
+
+      XmlElement ele = ser.Serialize ( esc );
+      Assert.IsNotNull ( ele );
+      Console.WriteLine ( ele.OuterXml );
+    }
   }
 }

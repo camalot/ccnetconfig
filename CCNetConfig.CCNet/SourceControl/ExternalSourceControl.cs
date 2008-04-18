@@ -25,52 +25,58 @@ using CCNetConfig.Core.Components;
 using System.ComponentModel;
 using System.Drawing.Design;
 using CCNetConfig.Core.Serialization;
+using System.Xml;
 
 namespace CCNetConfig.CCNet {
   /// <summary>
   /// 
   /// </summary>
-  [MinimumVersion ( "2.3.0.3053" )]
+  [MinimumVersion ( "1.3.0.3053" )]
   public class ExternalSourceControl : SourceControl, ICCNetDocumentation {
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ExternalSourceControl"/> class.
     /// </summary>
-    public ExternalSourceControl ( ) : base("external") {
-
+    public ExternalSourceControl ( )
+      : base ( "external" ) {
+      Environment = new CloneableList<EnvironmentVariable> ( );
     }
 
     /// <summary>
     /// Gets or sets the executable.
     /// </summary>
     /// <value>The executable.</value>
-    [ReflectorName("executable"), Required, DefaultValue(null),
-    Description ( "Specifies the path to the source control command." ), 
-    DisplayName("(Executable)"), Category("Required"),
-    Editor(typeof(OpenFileDialogUIEditor),typeof(UITypeEditor)),
-    OpenFileDialogTitle("Select the source control executable"),
-    FileTypeFilter("Executables|*.exe;*.cmd;*.bat|All Files|*.*")]
+    [ReflectorName ( "executable" ), Required, DefaultValue ( null ),
+    Description ( "Specifies the path to the source control command." ),
+    DisplayName ( "(Executable)" ), Category ( "Required" ),
+    Editor ( typeof ( OpenFileDialogUIEditor ), typeof ( UITypeEditor ) ),
+    OpenFileDialogTitle ( "Select the source control executable" ),
+    FileTypeFilter ( "Executables|*.exe;*.cmd;*.bat|All Files|*.*" )]
     public string Executable { get; set; }
 
     /// <summary>
     /// Gets or sets the arguments.
     /// </summary>
     /// <value>The arguments.</value>
-    [ReflectorName("args"),Description("Specifies the command line arguments to be passed to the source control command."),
-    DefaultValue(null),Category("Optional")]
+    [ReflectorName ( "args" ), Description ( "Specifies the command line arguments to be passed to the source control command." ),
+    DefaultValue ( null ), Category ( "Optional" )]
     public string Arguments { get; set; }
 
     /// <summary>
     /// Gets or sets the auto get source.
     /// </summary>
     /// <value>The auto get source.</value>
-    [ReflectorName ( "autoGetSource" ), 
+    [ReflectorName ( "autoGetSource" ),
     Description ( "Specifies whether the current version of the source should be retrieved from the source control system." ),
-    TypeConverter(typeof(DefaultableBooleanTypeConverter)),
-    Editor(typeof(DefaultableBooleanUIEditor),typeof(UITypeEditor)),
-    DefaultValue(null), Category("Optional")]
+    TypeConverter ( typeof ( DefaultableBooleanTypeConverter ) ),
+    Editor ( typeof ( DefaultableBooleanUIEditor ), typeof ( UITypeEditor ) ),
+    DefaultValue ( null ), Category ( "Optional" )]
     public bool? AutoGetSource { get; set; }
 
+    /// <summary>
+    /// Gets or sets the label on success.
+    /// </summary>
+    /// <value>The label on success.</value>
     [ReflectorName ( "labelOnSuccess" ),
     Description ( "Specifies whether or not CruiseControl.Net should ask the source control system to label the source when the build is successful." ),
     TypeConverter ( typeof ( DefaultableBooleanTypeConverter ) ),
@@ -81,16 +87,21 @@ namespace CCNetConfig.CCNet {
     /// Gets or sets the timeout.
     /// </summary>
     /// <value>The timeout.</value>
-    [ReflectorName("timeout"), Category("Optional"),
-    TypeConverter(typeof(ObjectOrNoneTypeConverter)),
-    Editor(typeof(ObjectOrNoneUIEditor),typeof(UITypeEditor)),
-    DefaultValue(null),Description("Sets the timeout period for the source control operation.")]
+    [ReflectorName ( "timeout" ), Category ( "Optional" ),
+    TypeConverter ( typeof ( ObjectOrNoneTypeConverter ) ),
+    Editor ( typeof ( ObjectOrNoneUIEditor ), typeof ( UITypeEditor ) ),
+    DefaultValue ( null ), Description ( "Sets the timeout period for the source control operation." )]
     public Timeout Timeout { get; set; }
 
-    [ReflectorArray("var"), ReflectorName("environment")]
-    public CloneableList<string> Environment { get; set; }
+    /// <summary>
+    /// Gets or sets the environment.
+    /// </summary>
+    /// <value>The environment.</value>
+    [ReflectorArray ( "var" ), ReflectorName ( "environment" ), Editor ( typeof ( CollectionEditor ), typeof ( UITypeEditor ) ),
+    TypeConverter ( typeof ( IListTypeConverter ) )]
+    public CloneableList<EnvironmentVariable> Environment { get; set; }
 
-    
+
     //public CloneableList<string> EnvironmentVariables { get; set; }
     /// <summary>
     /// Serializes this instance.
@@ -105,7 +116,42 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     /// <param name="element">The element.</param>
     public override void Deserialize ( System.Xml.XmlElement element ) {
-      //throw new NotImplementedException ( );
+      this.Arguments = string.Empty;
+      this.AutoGetSource = null;
+      this.Environment = new CloneableList<EnvironmentVariable> ( );
+      this.LabelOnSuccess = null;
+      this.Timeout = new Timeout ( );
+
+      if ( string.Compare ( element.GetAttribute ( "type" ), this.TypeName, false ) != 0 )
+        throw new InvalidCastException ( string.Format ( "Unable to convert {0} to a {1}", element.GetAttribute ( "type" ), this.TypeName ) );
+
+      this.Executable = Util.GetElementOrAttributeValue ( "executable", element );
+
+      string s = Util.GetElementOrAttributeValue ( "labelOnSuccess", element );
+      if ( !string.IsNullOrEmpty ( s ) )
+        this.LabelOnSuccess = string.Compare ( s, bool.TrueString, true ) == 0;
+
+      s = Util.GetElementOrAttributeValue ( "autoGetSource", element );
+      if ( !string.IsNullOrEmpty ( s ) )
+        this.AutoGetSource = string.Compare ( s, bool.TrueString, true ) == 0;
+
+      s = Util.GetElementOrAttributeValue ( "args", element );
+      if ( !string.IsNullOrEmpty ( s ) )
+        this.Arguments = s;
+
+      XmlElement ele = ( XmlElement ) element.SelectSingleNode ( "timeout" );
+      if ( ele != null )
+        this.Timeout.Deserialize ( ele );
+
+      ele = ( XmlElement ) element.SelectSingleNode ( "environment" );
+      if ( ele != null ) {
+        foreach ( XmlElement ele1 in ele.SelectNodes ( "./*" ) ) {
+          EnvironmentVariable ev = new EnvironmentVariable ( );
+          ev.Deserialize ( ele1 );
+          this.Environment.Add ( ev );
+        }
+      }
+
     }
 
     /// <summary>
@@ -113,7 +159,7 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     /// <returns></returns>
     public override SourceControl Clone ( ) {
-      ExternalSourceControl esc = this.MemberwiseClone() as ExternalSourceControl;
+      ExternalSourceControl esc = this.MemberwiseClone ( ) as ExternalSourceControl;
       esc.Timeout = this.Timeout.Clone ( );
 
       return esc;
@@ -124,7 +170,7 @@ namespace CCNetConfig.CCNet {
     /// Gets the documentation URI.
     /// </summary>
     /// <value>The documentation URI.</value>
-    [EditorBrowsable( EditorBrowsableState.Never ), Browsable(false), ReflectorIgnore ]
+    [EditorBrowsable ( EditorBrowsableState.Never ), Browsable ( false ), ReflectorIgnore]
     public Uri DocumentationUri {
       get { return new Uri ( "http://confluence.public.thoughtworks.org/display/CCNET/External+Source+Control?decorator=printable" ); }
     }

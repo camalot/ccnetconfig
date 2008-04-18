@@ -102,13 +102,23 @@ namespace CCNetConfig.Core.Serialization {
                     // handle clonable lists
                     if ( valType.IsGenericType && valType.GetGenericTypeDefinition ( ).Equals ( typeof ( CloneableList<> ) ) ) {
                       foreach ( ICCNetObject o in ( System.Collections.IList ) val ) {
-                        //XmlNode n = doc.ImportNode ( new Serializer<ICCNetObject> ( ).Serialize ( o as ICCNetObject ), true );
-                        XmlNode tn = ( ( ICCNetObject ) val ).Serialize ( );
-                        if ( tn != null )
-                          node.AppendChild ( doc.ImportNode ( tn, true ) );
+                        //if ( o.GetType ( ) is ICCNetObject ) {
+                          XmlNode tn = ( ( ICCNetObject ) o ).Serialize ( );
+                          if ( tn != null )
+                            node.AppendChild ( doc.ImportNode ( tn, true ) );
+                        /*} else {
+                          if ( o.GetType ( ).IsPrimitive ) {
+                            try {
+                            string arrayItemName = Util.GetReflectorArrayAttributeValue ( o.GetType ( ) );
+                            XmlElement tn = doc.CreateElement ( arrayItemName );
+                            tn.InnerText = o.ToString ( );
+                            if ( tn != null )
+                              node.AppendChild ( doc.ImportNode ( tn, true ) );
+                          } catch { }
+                          }
+                        }*/
                       }
                     } else if ( valType.GetInterface ( typeof ( ICCNetObject ).FullName ) != null ) { // handle other ICCNetObjects
-                      //node = doc.ImportNode ( new Serializer<ICCNetObject> ( ).Serialize ( val as ICCNetObject ), true );
                       XmlNode tn = ( ( ICCNetObject ) val ).Serialize ( );
                       if ( tn != null ) {
                         // ignore the node that the object creates, use the one the property creates.
