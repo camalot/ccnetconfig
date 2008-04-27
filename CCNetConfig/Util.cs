@@ -32,12 +32,18 @@ using CCNetConfig.Components;
 using System.Xml;
 using CCNetConfig.Core.Components;
 using System.ComponentModel;
+using System.Threading;
 
 namespace CCNetConfig {
   /// <summary>
   /// A Helper Static Class
   /// </summary>
   public static class Util {
+    private static CCNetConfig.UI.SplashForm _splash;
+    private delegate void GenericDelegate ( );
+    static Util ( ) {
+
+    }
 
     /// <summary>
     /// Finds the type of the node by.
@@ -47,17 +53,30 @@ namespace CCNetConfig {
     /// <returns></returns>
     public static TreeNode FindNodeByType ( TreeNode parenttn, Type t ) {
       foreach ( TreeNode tn in parenttn.Nodes ) {
-        if ( tn.GetType () == t )
+        if ( tn.GetType ( ) == t )
           return tn;
       }
       return null;
     }
 
-    /*public static void MessageBoxEx( Exception ex, string title, ExceptionMessageBoxButtons buttons, ExceptionMessageBoxSymbol symbol ) {
-      Microsoft.NetEnterpriseServers.ExceptionMessageBox emb = new Microsoft.NetEnterpriseServers.ExceptionMessageBox (ex, buttons, symbol, ExceptionMessageBoxDefaultButton.Button1, ExceptionMessageBoxOptions.None);
-      emb.Caption = title;
-      emb.Show (null);
-    }*/
+    internal static void ShowSpashScreen ( ) {
+      if ( _splash == null || _splash.IsDisposed )
+        _splash = new CCNetConfig.UI.SplashForm ( );
+      Thread t = new Thread ( new ThreadStart ( delegate ( ) { _splash.ShowDialog ( ); } ) );
+      t.Start ( );
+    }
+
+    internal static void HideSplashScreen ( ) {
+      if ( _splash == null || _splash.IsDisposed )
+        return;
+      if ( _splash.InvokeRequired ) {
+        _splash.Invoke ( new GenericDelegate( delegate ( ) {
+          _splash.Close ( );
+        } ));
+      } else
+        _splash.Close ( );
+      _splash = null;
+    }
 
     /// <summary>
     /// Creates an instance of a <see cref="System.Type"/>.
@@ -126,13 +145,13 @@ namespace CCNetConfig {
 
 
     /// <summary>
-    /// Gets the CC net versions.
+    /// Gets the CCNet versions.
     /// </summary>
     /// <returns></returns>
     internal static CloneableList<Version> GetCCNetVersions ( ) {
       CloneableList<Version> versions = new CloneableList<Version> ( );
-      XmlDocument doc = new XmlDocument ();
-      FileInfo file = new FileInfo ( System.IO.Path.Combine ( Application.StartupPath, Program.Configuration["CCNetVersions"].Path ) );
+      XmlDocument doc = new XmlDocument ( );
+      FileInfo file = new FileInfo ( System.IO.Path.Combine ( Application.StartupPath, Program.Configuration[ "CCNetVersions" ].Path ) );
       if ( file.Exists ) {
         doc.Load ( file.FullName );
         foreach ( XmlElement ele in doc.DocumentElement.SelectNodes ( "Version" ) )

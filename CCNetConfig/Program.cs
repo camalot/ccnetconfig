@@ -56,6 +56,7 @@ namespace CCNetConfig {
       AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler ( Program.OnUnhandledException );
 
       arguments = new CommandLineArguments ( args );
+      Util.ShowSpashScreen ( );
       MainForm form = new MainForm ();
       try {
         Application.Run ( form );

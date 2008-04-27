@@ -23,17 +23,27 @@ using System.Text;
 using System.ComponentModel;
 using CCNetConfig.Core.Components;
 
-namespace CCNetConfig.Core {
+namespace CCNetConfig.Core.Components {
   /// <summary>
   /// A <see cref="System.Uri"/> object that supports only the "Alienbrain" scheme
   /// </summary>
-  [TypeConverter(typeof(AlienbrainUriTypeConverter))]
+  [TypeConverter ( typeof ( AlienbrainUriTypeConverter ) )]
   public class AlienbrainUri : Uri {
+    public static string UriSchemeAlienbrainShort = "ab";
+    public static string UriSchemeAlienbrainLong = "alienbrain";
     /// <summary>
     /// Initializes a new instance of the <see cref="AlienbrainUri"/> class.
     /// </summary>
     /// <param name="url">The URL.</param>
     public AlienbrainUri(string url) : base(url) {
+      if ( !UriParser.IsKnownScheme ( AlienbrainUri.UriSchemeAlienbrainShort ) ) {
+        UriParser.Register ( new AlienbrainUriParser ( ), AlienbrainUri.UriSchemeAlienbrainShort, 8318 );
+      }
+
+      if ( !UriParser.IsKnownScheme ( AlienbrainUri.UriSchemeAlienbrainLong ) ) {
+        UriParser.Register ( new AlienbrainUriParser ( ), AlienbrainUri.UriSchemeAlienbrainLong, 8318 );
+      }
+
       if ( string.Compare(this.Scheme,"ab",true) != 0 && string.Compare(this.Scheme,"alienbrain",true) != 0 )
         throw new UriFormatException("Only \"ab\" and \"alienbrain\" schemes are allowed.");
     }

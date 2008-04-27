@@ -53,7 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlienbrainUri.cs" />
+    <Compile Include="Components\AlienbrainUri.cs" />
     <Compile Include="CloneableList.cs" />
     <Compile Include="Collections\ProjectList.cs" />
     <Compile Include="Components\AlienbrainUriTypeConverter.cs" />
@@ -162,6 +162,7 @@
       <DependentUpon>ccnet.xsd</DependentUpon>
     </None>
     <None Include="CCNetConfig.Core.cd" />
+    <Compile Include="Components\AlienbrainUriParser.cs" />
     <Compile Include="Components\DefaultableBooleanTypeConverter.cs" />
     <Compile Include="Components\DefaultableEnumTypeConverter.cs" />
     <Compile Include="Components\FormatProviderAttribute.cs" />
@@ -169,6 +170,9 @@
     <Compile Include="Components\ObjectOrNoneTypeConverter.cs" />
     <Compile Include="Components\ObjectOrNoneUIEditor.cs" />
     <Compile Include="Components\ReflectorArrayAttribute.cs" />
+    <Compile Include="Components\SvnUri.cs" />
+    <Compile Include="Components\SvnUriParser.cs" />
+    <Compile Include="Components\SvnUriTypeConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="License.txt" />

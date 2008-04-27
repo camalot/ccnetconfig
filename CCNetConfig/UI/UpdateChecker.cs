@@ -63,6 +63,8 @@ namespace CCNetConfig.UI {
     void applicationUpdater_UpdateAvailable ( object sender, UpdatesAvailableEventArgs e ) {
       ApplicationUpdater ai = (ApplicationUpdater)sender;
       if ( ai.UpdatesAvailable ) {
+        // hide the splash if its visible
+        Util.HideSplashScreen ( );
         UpdateInformationForm uif = new UpdateInformationForm ( ai );
         if ( uif.ShowDialog ( _owner ) == DialogResult.OK ) {
           string thisPath = this.GetType ( ).Assembly.Location;

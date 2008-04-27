@@ -302,12 +302,25 @@ namespace CCNetConfig.Core {
     /// <param name="val">The val.</param>
     /// <returns></returns>
     public static object CheckRequired ( ICCNetObject owner, string name, object val ) {
-      if ( val == null )
-        throw new RequiredAttributeException ( owner, name );
-      else
-        return val;
+      if ( val.GetType() == typeof( HiddenPassword ) ) {
+        return Util.CheckRequired ( owner, name, ( val as HiddenPassword ) ).GetPassword();
+      } else if ( val is IList ) {
+        return Util.CheckRequired ( owner, name, ( val as IList ) );
+      } else {
+        if ( val == null )
+          throw new RequiredAttributeException ( owner, name );
+        else
+          return val;
+      }
     }
 
+    /// <summary>
+    /// Checks the required.
+    /// </summary>
+    /// <param name="owner">The owner.</param>
+    /// <param name="name">The name.</param>
+    /// <param name="val">The val.</param>
+    /// <returns></returns>
     public static int CheckRequired ( ICCNetObject owner, string name, int? val ) {
       if ( !val.HasValue )
         throw new RequiredAttributeException ( owner, name );
@@ -506,10 +519,7 @@ namespace CCNetConfig.Core {
     /// <param name="val">The val.</param>
     /// <returns></returns>
     public static CloneableList<string> CheckRequired ( ICCNetObject owner, string name, CloneableList<string> val ) {
-      if ( val == null || val.Count == 0 )
-        throw new RequiredAttributeException ( owner, name );
-      else
-        return val;
+      return Util.CheckRequired<string> ( owner, name, val, 1 );
     }
 
     /// <summary>

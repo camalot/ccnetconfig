@@ -1262,9 +1262,10 @@ namespace CCNetConfig.UI {
     /// </summary>
     /// <param name="e">An <see cref="T:System.EventArgs"></see> that contains the event data.</param>
     protected override void OnLoad ( EventArgs e ) {
-      base.OnLoad ( e );
-      if ( CCNetConfig.Core.Util.UserSettings.UpdateSettings.CheckOnStartup )
+     base.OnLoad ( e );
+     if ( CCNetConfig.Core.Util.UserSettings.UpdateSettings.CheckOnStartup )
         this.checkForUpdatesToolStripMenuItem.PerformClick ( );
+     Util.HideSplashScreen ( );
     }
 
 

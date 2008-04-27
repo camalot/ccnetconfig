@@ -56,7 +56,7 @@ namespace CCNetConfig.CCNet {
     [Description ( "The url for your repository (eg. svn://svnserver/)" ),
     DefaultValue ( null ),
     ReflectorName ( "trunkUrl" ), Category ( "Optional" )]
-    public Uri TrunkUrl { get; set; }
+    public SvnUri TrunkUrl { get; set; }
     /// <summary>
     /// The directory containing the locally checked out workspace.
     /// </summary>
@@ -134,7 +134,7 @@ namespace CCNetConfig.CCNet {
       if ( this.Timeout != null )
         ssc.Timeout = this.Timeout.Clone ( );
       if ( this.TrunkUrl != null )
-        ssc.TrunkUrl = new Uri ( this.TrunkUrl.ToString ( ) );
+        ssc.TrunkUrl = new SvnUri ( this.TrunkUrl.ToString ( ) );
       if ( this.WebUrlBuilder != null )
         ssc.WebUrlBuilder = this.WebUrlBuilder.Clone ( );
       return ssc;
@@ -232,7 +232,7 @@ namespace CCNetConfig.CCNet {
         throw new InvalidCastException ( string.Format ( "Unable to convert {0} to a {1}", element.GetAttribute ( "type" ), this.TypeName ) );
       string s = Util.UrlDecode ( Util.GetElementOrAttributeValue ( "trunkUrl", element ) );
       if ( !string.IsNullOrEmpty ( s ) )
-        this.TrunkUrl = new Uri ( s );
+        this.TrunkUrl = new SvnUri ( s );
 
       s = Util.GetElementOrAttributeValue ( "autoGetSource", element );
       if ( !string.IsNullOrEmpty ( s ) )

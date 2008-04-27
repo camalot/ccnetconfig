@@ -102,22 +102,24 @@ namespace CCNetConfig.Core.Serialization {
                     // handle clonable lists
                     if ( valType.IsGenericType && valType.GetGenericTypeDefinition ( ).Equals ( typeof ( CloneableList<> ) ) ) {
                       foreach ( ICCNetObject o in ( System.Collections.IList ) val ) {
-                        //if ( o.GetType ( ) is ICCNetObject ) {
+                        if ( o.GetType ( ) is ICCNetObject ) {
                           XmlNode tn = ( ( ICCNetObject ) o ).Serialize ( );
                           if ( tn != null )
                             node.AppendChild ( doc.ImportNode ( tn, true ) );
-                        /*} else {
+                        } else {
                           if ( o.GetType ( ).IsPrimitive ) {
                             try {
-                            string arrayItemName = Util.GetReflectorArrayAttributeValue ( o.GetType ( ) );
-                            XmlElement tn = doc.CreateElement ( arrayItemName );
-                            tn.InnerText = o.ToString ( );
-                            if ( tn != null )
-                              node.AppendChild ( doc.ImportNode ( tn, true ) );
-                          } catch { }
+                              string arrayItemName = Util.GetReflectorArrayAttributeValue ( o.GetType ( ) );
+                              XmlElement tn = doc.CreateElement ( arrayItemName );
+                              tn.InnerText = o.ToString ( );
+                              if ( tn != null )
+                                node.AppendChild ( doc.ImportNode ( tn, true ) );
+                            } catch { }
                           }
-                        }*/
+                        }
                       }
+                    } else if ( val is HiddenPassword ) { // handle the hidden password object
+                      node.InnerText = ( val as HiddenPassword ).GetPassword ( );
                     } else if ( valType.GetInterface ( typeof ( ICCNetObject ).FullName ) != null ) { // handle other ICCNetObjects
                       XmlNode tn = ( ( ICCNetObject ) val ).Serialize ( );
                       if ( tn != null ) {
@@ -130,8 +132,6 @@ namespace CCNetConfig.Core.Serialization {
                           node.AppendChild ( doc.ImportNode ( ele, true ) );
                         }
                       }
-                    } else if ( valType == typeof ( HiddenPassword ) ) { // handle the hidden password object
-                      node.InnerText = ( ( HiddenPassword ) val ).GetPassword ( );
                     } else { // eveything else
                       string formatString = Util.GetFormatAttributeValue ( pi );
                       if ( valType.GetInterface ( typeof ( IFormattable ).FullName ) != null && !string.IsNullOrEmpty ( formatString ) ) {
