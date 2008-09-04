@@ -91,7 +91,8 @@ namespace CCNetConfig.Core {
 
 
       string s = Util.UrlDecode ( Util.GetElementOrAttributeValue ( "url", element ) );
-      this.Url = new Uri ( s );
+      if ( !string.IsNullOrEmpty ( s ) )
+        this.Url = new Uri ( s );
       s = Util.GetElementOrAttributeValue ( "type", element );
       if ( !string.IsNullOrEmpty ( s ) )
         this.Type = s;
