@@ -190,8 +190,12 @@ namespace CCNetConfig.CCNet {
         this.WorkingDirectory = s;
 
       XmlElement ele = element.SelectSingleNode ( "webUrlBuilder" ) as XmlElement;
-      if ( ele != null )
+      if ( ele != null && ( ele.HasAttributes || ele.HasChildNodes ) )
+      {
+        // this doesn't protect against malformed Uri's, but I haven't seen checks for those anywhere else
+        this.WebUrlBuilder = new WebUrlBuilder ();
         this.WebUrlBuilder.Deserialize ( ele );
+      }
     }
 
     /// <summary>

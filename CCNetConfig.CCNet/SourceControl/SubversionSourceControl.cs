@@ -263,12 +263,19 @@ namespace CCNetConfig.CCNet {
         this.WorkingDirectory = s;
 
       XmlElement ele = ( XmlElement ) element.SelectSingleNode ( "webUrlBuilder" );
-      if ( ele != null )
-        this.WebUrlBuilder.Deserialize ( ele );
+      if ( ele != null && (ele.HasAttributes || ele.HasChildNodes))
+      {
+        // this doesn't protect against malformed Uri's, but I haven't seen checks for those anywhere else
+        this.WebUrlBuilder = new WebUrlBuilder ();
+        this.WebUrlBuilder.Deserialize ( ele );        
+      }
 
       ele = ( XmlElement ) element.SelectSingleNode ( "timeout" );
-      if ( ele != null )
+      if ( ele != null && ( ele.HasAttributes || ele.HasChildNodes ) )
+      {
+        this.Timeout = new Timeout ();
         this.Timeout.Deserialize ( ele );
+      }
     }
     #endregion
 
