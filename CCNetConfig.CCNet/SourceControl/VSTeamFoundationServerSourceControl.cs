@@ -176,7 +176,7 @@ namespace CCNetConfig.CCNet {
 
       if ( this.AutoGetSource.HasValue ) {
         ele = doc.CreateElement ( "autoGetSource" );
-        ele.InnerText = this.ApplyLabel.Value.ToString ( );
+        ele.InnerText = this.AutoGetSource.Value.ToString();
         root.AppendChild ( ele );
       }
 
