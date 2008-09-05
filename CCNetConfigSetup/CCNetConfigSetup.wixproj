@@ -33,7 +33,9 @@
     <Content Include="License.txt" />
   </ItemGroup>
   <ItemGroup>
-    <WixExtension Include="E:\Program Files\Windows Installer XML v3\bin\WixUIExtension.dll" />
+    <WixExtension Include="WixUIExtension">
+      <HintPath>E:\Program Files\Windows Installer XML v3\bin\WixUIExtension.dll</HintPath>
+    </WixExtension>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WiX\v3.0\Wix.targets" />
 </Project>
