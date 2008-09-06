@@ -41,7 +41,7 @@
     <WixToolPath Condition=" '$(WixToolPath)' == '' ">C:\Program Files\Windows Installer XML v3\bin\</WixToolPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     
-    <DefineConstants>Configuration=$(Configuration);CCNetProject=$(CCNetProject);CCNetLabel=$(CCNetLabel);OutputPath=$(OutputPath)</DefineConstants>
+    <DefineConstants>CCNetProject=$(CCNetProject);CCNetLabel=$(CCNetLabel);OutputPath=$(OutputPath)</DefineConstants>
   </PropertyGroup>
   
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WiX\v3.0\Wix.targets" />
