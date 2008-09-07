@@ -1131,6 +1131,7 @@ namespace CCNetConfig.UI {
           return;
         PublisherTaskItemTreeNode ptitn = new PublisherTaskItemTreeNode ( pt, owner.ImageIndex );
         owner.Nodes.Add ( ptitn );
+        OnConfigurationModified ( new CancelEventArgs ( false ) );
       }
     }
 
@@ -1145,6 +1146,7 @@ namespace CCNetConfig.UI {
         ptn.Project.Triggers.Add ( trigger );
         TriggerItemTreeNode titn = new TriggerItemTreeNode ( trigger, owner.ImageIndex );
         owner.Nodes.Add ( titn );
+        OnConfigurationModified ( new CancelEventArgs ( false ) );
       }
     }
 
