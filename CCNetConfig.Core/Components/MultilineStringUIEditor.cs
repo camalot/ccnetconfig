@@ -54,7 +54,7 @@ namespace CCNetConfig.Core.Components {
       else
         mlsef = new MultilineStringEditorForm ( msla.MaximumLength );
 
-      string initValue = value.ToString ();
+      string initValue = value == null ? string.Empty : value.ToString ();
       mlsef.DataString = initValue;
 
       if ( mlsef.ShowDialog () == System.Windows.Forms.DialogResult.OK ) {
