@@ -753,7 +753,11 @@ namespace CCNetConfig.UI {
       if ( sender.GetType ( ) == typeof ( PublisherToolStripMenuItem ) ) {
         PublisherToolStripMenuItem ptsmi = ( PublisherToolStripMenuItem ) sender;
         if ( Util.ConfirmDelete ( this, ptsmi.PublisherTaskItemTreeNode.PublisherTask.GetType ( ) ) == DialogResult.Yes ) {
-          ptsmi.ProjectTreeNode.Project.Publishers.Remove ( ptsmi.PublisherTaskItemTreeNode.PublisherTask );
+          if ( ptsmi.PublisherTaskItemTreeNode.Parent.GetType () == typeof ( PrebuildTreeNode ) )
+            ptsmi.ProjectTreeNode.Project.PreBuild.Remove ( ptsmi.PublisherTaskItemTreeNode.PublisherTask );
+          else
+            ptsmi.ProjectTreeNode.Project.Publishers.Remove ( ptsmi.PublisherTaskItemTreeNode.PublisherTask );
+
           PropertyGridCheckRemovedItem ( ptsmi.PublisherTaskItemTreeNode.PublisherTask );
           ptsmi.PublisherTaskItemTreeNode.Remove ( );
           OnConfigurationModified ( new CancelEventArgs ( false ) );
