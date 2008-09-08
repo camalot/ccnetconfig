@@ -146,7 +146,7 @@ namespace CCNetConfig.CCNet {
 		/// <value>The documentation URI.</value>
 		[Browsable ( false ), EditorBrowsable ( EditorBrowsableState.Never ), ReflectorIgnore]
 		public Uri DocumentationUri {
-			get { return new Uri ( "http://gforge.com/gf/project/cruisecontrol/wiki/?pagename=CruiseControlDotNet" ); }
+			get { return new Uri ( "http://www.codeplex.com/ccnetconfig/Wiki/View.aspx?title=GFrogePublisher" ); }
 		}
 
 		#endregion
