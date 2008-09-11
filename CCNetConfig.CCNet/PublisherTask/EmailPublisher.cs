@@ -160,50 +160,6 @@ namespace CCNetConfig.CCNet {
     /// <returns></returns>
     public override System.Xml.XmlElement Serialize ( ) {
       return new Serializer<EmailPublisher> ( ).Serialize ( this );
-      
-      /*Version versionInfo = Util.GetTypeDescriptionProviderVersion ( typeof ( PublisherTask ) );
-      XmlDocument doc = new XmlDocument ( );
-      XmlElement root = doc.CreateElement ( this.TypeName );
-      //root.SetAttribute ("ccnetconfigType", string.Format ("{0}, {1}", this.GetType ().FullName, this.GetType ().Assembly.GetName ().Name));
-
-      root.SetAttribute ( "from", Util.CheckRequired ( this, "from", this.From ) );
-      root.SetAttribute ( "mailhost", Util.CheckRequired ( this, "mailhost", this.MailHost ) );
-
-      Version minVersion = new Version ( "1.1.1" );
-      if ( Util.IsInVersionRange ( minVersion, null, versionInfo ) ) {
-        if ( !string.IsNullOrEmpty ( this.MailHostPassword.Password ) )
-          root.SetAttribute ( "mailhostPassword", this.MailHostPassword.GetPassword ( ) );
-        if ( !string.IsNullOrEmpty ( this.MailHostUserName ) )
-          root.SetAttribute ( "mailhostUsername", this.MailHostUserName );
-      }
-
-      minVersion = new Version ( "1.4" );
-      if ( Util.IsInVersionRange ( minVersion, null, versionInfo ) ) {
-        if ( this.MailPort.HasValue )
-          root.SetAttribute ( "mailPort", this.MailPort.Value.ToString() );
-
-        if ( this.Converters.Count > 0 ) {
-          
-        }
-      }
-
-      if ( this.IncludeDetails.HasValue )
-        root.SetAttribute ( "includeDetails", this.IncludeDetails.Value.ToString ( ) );
-
-      XmlElement usersE = doc.CreateElement ( "users" );
-      if ( this.Users != null && this.Users.Count > 0 ) {
-        foreach ( User u in this.Users )
-          usersE.AppendChild ( ( XmlElement ) doc.ImportNode ( u.Serialize ( ), true ) );
-      }
-      root.AppendChild ( usersE );
-
-      if ( this.Groups != null && this.Groups.Count > 0 ) {
-        XmlElement groupsE = doc.CreateElement ( "groups" );
-        foreach ( Group g in this.Groups )
-          groupsE.AppendChild ( doc.ImportNode ( g.Serialize ( ), true ) );
-        root.AppendChild ( groupsE );
-      }
-      return root;*/
     }
 
     /// <summary>

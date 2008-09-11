@@ -1490,7 +1490,9 @@ namespace CCNetConfig.UI {
         this._backupControler.BackupFile ( file );
         loadedConfigFile = file;
         if ( file.IsReadOnly && file.Exists ) {
-          TaskDialog.ShowTaskDialogBox ( Properties.Strings.ReadonlyFileTitle, Properties.Strings.ReadonlyFileTitle,
+          TaskDialog.ShowTaskDialogBox ( 
+						Properties.Strings.ReadonlyFileTitle, 
+						Properties.Strings.ReadonlyFileTitle,
             Properties.Strings.ReadonlyFileMessage, string.Empty, string.Empty, string.Empty, string.Empty,
             Properties.Strings.ReadonlyFileCommandButtons, TaskDialogButtons.None, SysIcons.Warning, SysIcons.Information );
           switch ( ( ReadOnlyTaskDialogCommandButton ) TaskDialog.CommandButtonResult ) {
@@ -1509,6 +1511,28 @@ namespace CCNetConfig.UI {
         FileStream fs = new FileStream ( file.FullName, FileMode.Create, FileAccess.Write );
         rootNode.CruiseControl.SaveConfig ( fs );
         OnConfigurationModified ( new CancelEventArgs ( true ) );
+			} catch ( System.IO.IOException ioex ) {
+				TaskDialog.ShowTaskDialogBox ( Properties.Strings.ErrorSavingTitle,
+					Properties.Strings.ErrorSavingTitle,
+					string.Format(Properties.Strings.ErrorSavingMessage,ioex.Message), 
+					string.Empty, 
+					string.Empty, 
+					string.Empty, 
+					string.Empty,
+					Properties.Strings.ErrorSavingCommandButtons, 
+					TaskDialogButtons.None, 
+					SysIcons.Error, 
+					SysIcons.Information );
+				switch ( (CommonTaskDialogCommandButton)TaskDialog.CommandButtonResult ) {
+					case CommonTaskDialogCommandButton.Abort:
+						return;
+					case CommonTaskDialogCommandButton.Retry:
+						this.Save ( file );
+						break;
+					case CommonTaskDialogCommandButton.ReportAsBug:
+						Program.BugTracker.SubmitExceptionDialog ( this, ioex, file );
+						return;
+				}
       } catch ( Exception ex ) {
         Program.BugTracker.SubmitExceptionDialog ( this, ex, file );
       }
@@ -1735,6 +1759,38 @@ namespace CCNetConfig.UI {
           this.rootNode.CruiseControl.Deserialize ( file );
           // now we need to setup the tree
           AllAllProjectsToTree ( );
+				} catch ( XmlException xe ) {
+					// look specifically for xml errors. 
+					// give the user the option to manually edit the config file
+					// or report as an error.
+					TaskDialog.ShowTaskDialogBox ( 
+						Properties.Strings.ConfigXmlErrorsTitle,
+						string.Format(Properties.Strings.ConfigXmlErrorsMessage,xe.Message),
+						string.Empty,
+						string.Empty,
+						string.Empty,
+						string.Empty,
+						string.Empty,
+						Properties.Strings.ConfigXmlErrorsCommandButtons,
+						TaskDialogButtons.Cancel,
+						SysIcons.Error,
+						SysIcons.Error );
+					switch ( (ConfigXmlErrorsTaskDialogCommandButton)TaskDialog.CommandButtonResult ) {
+						case ConfigXmlErrorsTaskDialogCommandButton.ManuallyEdit:
+							// manually edit. Once edit complete (process ends) attempt to reload the file
+							Process proc = new Process ();
+							ProcessStartInfo psi = new ProcessStartInfo ( @"notepad.exe", file.FullName );
+							proc.StartInfo = psi;
+							proc.Start ();
+							proc.WaitForExit ();
+							LoadConfigurationFile ( file );
+							break;
+						case ConfigXmlErrorsTaskDialogCommandButton.ReportAsBug:
+							// user states that there is no xml error, its a bug in ccnetconfig
+							Program.BugTracker.SubmitExceptionDialog ( this, xe, loadedConfigFile );
+							loadedConfigFile = null;
+							break;
+					}
         } catch ( RequiredAttributeException ) {
           // there was an error loading the config. 
           // a required attribute was missing. lets see how the user wants to handle this...
@@ -1742,8 +1798,17 @@ namespace CCNetConfig.UI {
             string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, Properties.Strings.ErrorLoadingConfigFileCommandButtons,
             TaskDialogButtons.Cancel, SysIcons.Error, SysIcons.Error );
           switch ( ( ErrorLoadingConfigTaskDialogCommandButton ) TaskDialog.CommandButtonResult ) {
-            case ErrorLoadingConfigTaskDialogCommandButton.ViewErrors:
             case ErrorLoadingConfigTaskDialogCommandButton.ManuallyEdit:
+							// manually edit. Once edit complete (process ends) attempt to reload the file
+							Process proc = new Process ();
+							ProcessStartInfo psi = new ProcessStartInfo ( @"notepad.exe", file.FullName );
+							proc.StartInfo = psi;
+							proc.Start ();
+							proc.WaitForExit ();
+							LoadConfigurationFile ( file );
+							break;
+					  // TODO: view/ignore errors
+            case ErrorLoadingConfigTaskDialogCommandButton.ViewErrors:
             case ErrorLoadingConfigTaskDialogCommandButton.IgnoreErrors:
               MessageBox.Show ( "Not Yet Implemented." );
               break;

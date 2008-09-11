@@ -125,6 +125,16 @@
     <value>Configuration Version: {0}</value>
     <comment>{0} = version string</comment>
   </data>
+  <data name="ConfigXmlErrorsCommandButtons" xml:space="preserve">
+    <value>&amp;Manually edit config file|&amp;Report Errors as a Bug</value>
+  </data>
+  <data name="ConfigXmlErrorsMessage" xml:space="preserve">
+    <value>There was an error loading the XML configuration file. The following error occured: {0}</value>
+    <comment>{0} = Error</comment>
+  </data>
+  <data name="ConfigXmlErrorsTitle" xml:space="preserve">
+    <value>XMLConfiguration Erorrs</value>
+  </data>
   <data name="ConfirmDeleteBackupsMessage" xml:space="preserve">
     <value>Are you sure you want to delete all of your backup files?</value>
   </data>
@@ -155,6 +165,17 @@
   </data>
   <data name="ErrorLoadingConfigFileTitle" xml:space="preserve">
     <value>Error Loading Configuration File</value>
+  </data>
+  <data name="ErrorSavingCommandButtons" xml:space="preserve">
+    <value>&amp;Abort Save|Retry &amp;Saving the file|&amp;Report Error as a Bug</value>
+  </data>
+  <data name="ErrorSavingMessage" xml:space="preserve">
+    <value>There was an error while attempting to save the configuration file:
+{0}</value>
+    <comment>0 = error</comment>
+  </data>
+  <data name="ErrorSavingTitle" xml:space="preserve">
+    <value>Error Saving Configuration</value>
   </data>
   <data name="FileNotFound" xml:space="preserve">
     <value>File Not Found</value>

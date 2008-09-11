@@ -61,4 +61,15 @@ namespace CCNetConfig {
     NewName = 0,
     Cancel
   }
+
+	enum ConfigXmlErrorsTaskDialogCommandButton {
+		ManuallyEdit = 0,
+		ReportAsBug
+	}
+
+	enum CommonTaskDialogCommandButton {
+		Abort = 0,
+		Retry,
+		ReportAsBug
+	}
 }

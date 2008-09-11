@@ -38,7 +38,7 @@ namespace CCNetConfig.Core {
     /// <summary>
     /// Initializes a new instance of the <see cref="CruiseControl"/> class.
     /// </summary>
-    public CruiseControl ( ) : this ( new Version ( "1.2" ) ) { }
+    public CruiseControl ( ) : this ( new Version ( "1.3" ) ) { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CruiseControl"/> class.
@@ -157,6 +157,8 @@ namespace CCNetConfig.Core {
               throw new DuplicateProjectNameException ( p.Name );
           } catch ( DuplicateProjectNameException ) {
             throw;
+					} catch ( XmlException ) {
+						throw;
           } catch ( Exception ) {
             throw;
           }
