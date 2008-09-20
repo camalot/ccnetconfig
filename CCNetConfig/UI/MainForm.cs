@@ -1281,7 +1281,7 @@ namespace CCNetConfig.UI {
     /// <param name="e">A <see cref="T:System.ComponentModel.CancelEventArgs"></see> that contains the event data.</param>
     protected override void OnClosing ( CancelEventArgs e ) {
       if ( !e.Cancel && this.configModified ) {
-        DialogResult dr = MessageBox.Show ( this, Properties.Resources.SaveConfiguration, Properties.Resources.SaveConfigurationTitle, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question );
+        DialogResult dr = MessageBox.Show ( this, Properties.Resources.SaveConfigurationOnExit, Properties.Resources.SaveConfigurationTitle, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question );
         if ( dr == DialogResult.Yes ) {
           this.saveConfigurationToolButton.PerformClick ( );
           e.Cancel = configModified;
