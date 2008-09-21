@@ -1,5 +1,5 @@
-/*
- * Copyright (c) 2007-2008, Ryan Conrad. All rights reserved.
+﻿/*
+ * Copyright (c) 2006 - 2008, Ryan Conrad. All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
  * - Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
@@ -19,40 +19,27 @@
  */
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Text;
-using System.Windows.Forms;
-using CCNetConfig.Updater.Core;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
 
-namespace CCNetConfig.UI {
-  /// <summary>
-  /// Displays information about the update.
-  /// </summary>
-  public partial class UpdateInformationForm : Form {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="UpdateInformationForm"/> class.
-    /// </summary>
-    /// <param name="updater">The updater.</param>
-    public UpdateInformationForm (ApplicationUpdater updater ) {
-      InitializeComponent ();
-      UpdateInfo latest = updater.UpdateInfoList[ updater.UpdateInfoList.GetLatestVersion(  ) ];
-      this.infoLabel.Text = string.Format ( Properties.Strings.UpdatesAvailableMessage, latest.Version.ToString (), updater.UpdateName);
-      this.changeComments.Text = this.removeHtmlFromUpdateMessage ( latest.Comments );
-    }
+namespace CCNetConfig.Core.Components {
+	/// <summary>
+	/// Provides the application with a url of where to check for updates for plugins
+	/// </summary>
+	[AttributeUsage ( AttributeTargets.Assembly )]
+	public class UpdateFeedAttribute : Attribute {
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="UpdateFeedAttribute"/> class.
+		/// </summary>
+		/// <param name="url">The URL.</param>
+		public UpdateFeedAttribute ( string url ) {
+			this.Url = new Uri(url);
+		}
 
-    /// <summary>
-    /// Removes the HTML from update message.
-    /// </summary>
-    /// <param name="message">The message.</param>
-    /// <returns></returns>
-    private string removeHtmlFromUpdateMessage ( string message ) {
-      Regex regex = new Regex ( Properties.Strings.HtmlRegexPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace | RegexOptions.Multiline );
-      return regex.Replace ( message, string.Empty );
-    }
-  }
+		/// <summary>
+		/// Gets or sets the URL.
+		/// </summary>
+		/// <value>The URL.</value>
+		public Uri Url { get; set; }
+	}
 }

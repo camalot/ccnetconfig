@@ -3,7 +3,7 @@
     <Configuration Condition="'$(CCNetBuildCondition)' != 'ForceBuild'">Debug</Configuration>
     <Configuration Condition="'$(CCNetBuildCondition)' == 'ForceBuild'">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{1687DC58-3374-4D23-8820-1EBB162A32AE}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -173,6 +173,7 @@
     <Compile Include="Components\SvnUri.cs" />
     <Compile Include="Components\SvnUriParser.cs" />
     <Compile Include="Components\SvnUriTypeConverter.cs" />
+    <Compile Include="Components\UpdateFeedAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="License.txt" />

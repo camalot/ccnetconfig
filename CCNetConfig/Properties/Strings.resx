@@ -212,7 +212,7 @@
     <value>View Info-ZIP License</value>
   </data>
   <data name="UpdatesAvailableMessage" xml:space="preserve">
-    <value>Updates are available for CCNetConfig. Click 'Update Now' below to update to version {0}.</value>
+    <value>Updates are available for {1}. Click 'Update Now' below to update to version {0}.</value>
   </data>
   <data name="VersionNotSelected" xml:space="preserve">
     <value>Version Not Selected.</value>

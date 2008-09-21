@@ -314,7 +314,7 @@ namespace CCNetConfig.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Updates are available for CCNetConfig. Click &apos;Update Now&apos; below to update to version {0}..
+        ///   Looks up a localized string similar to Updates are available for {1}. Click &apos;Update Now&apos; below to update to version {0}..
         /// </summary>
         internal static string UpdatesAvailableMessage {
             get {

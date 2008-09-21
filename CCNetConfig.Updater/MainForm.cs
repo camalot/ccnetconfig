@@ -46,7 +46,7 @@ namespace CCNetConfig.Updater {
       this.progressBar1.Value = 0;
 
       au = new ApplicationUpdater ( );
-      au.Version = new Version ( Application.ProductVersion );
+			au.Version = Program.ProductVersion;
       if ( !string.IsNullOrEmpty ( Program.CallingApplication ) )
         au.OwnerApplication = new FileInfo ( Program.CallingApplication );
 
@@ -63,7 +63,11 @@ namespace CCNetConfig.Updater {
     /// <param name="e">An <see cref="T:System.EventArgs"></see> that contains the event data.</param>
     protected override void OnLoad ( EventArgs e ) {
       base.OnLoad ( e );
-      au.CheckForUpdate ( Program.UpdateCheckType );
+			if ( Program.UpdateUrl != null ) {
+				au.CheckForUpdatesByUrl ( Program.UpdateUrl );
+			} else {
+				au.CheckForUpdate ( Program.UpdateCheckType );
+			}
     }
 
     /// <summary>
@@ -92,10 +96,10 @@ namespace CCNetConfig.Updater {
       string fileName = e.UpdateFile.Location.ToString ( );
       fileName = fileName.Substring ( fileName.LastIndexOf ( "/" ) );
       if ( this.InvokeRequired ) {
-        this.Invoke ( new UpdateLabel ( this.UpdateStatusLabel ), new object[ ] { string.Format ( "Downloading {0} : {1}%", fileName, e.Percentage.ToString ( ) ) } );
+				this.Invoke ( new UpdateLabel ( this.UpdateStatusLabel ), new object[] { string.Format ( "Downloading {0} : {1}%", Program.GetUpdateVersion, e.Percentage.ToString () ) } );
         this.Invoke ( new UpdateProgressBar ( this.UpdateStatusProgressBar ), new object[ ] { e.Percentage } );
       } else {
-        this.UpdateStatusLabel ( string.Format ( "Downloading {0} : {1}%", fileName, e.Percentage.ToString ( ) ) );
+        this.UpdateStatusLabel ( string.Format ( "Downloading {0} : {1}%", Program.GetUpdateVersion, e.Percentage.ToString ( ) ) );
         this.UpdateStatusProgressBar ( e.Percentage );
       }
     }

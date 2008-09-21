@@ -59,8 +59,7 @@ namespace CCNetConfig.Updater.Core {
     private XmlSerializer _serializer = null;
     private List<FileInfo> _tempFiles = null;
 
-    private Version _version = null;
-    private FileInfo _ownerApplication = null;
+		private FileInfo _ownerApplication = null;
     private FileInfo _scriptFile = null;
 
     private bool _updatesAvailable = false;
@@ -78,6 +77,7 @@ namespace CCNetConfig.Updater.Core {
         doc.Load ( Path.Combine ( startUpPath, Properties.Strings.UpdaterConfigurationFile ) );
         UpdaterConfigurationSectionHandler ucsh = new UpdaterConfigurationSectionHandler ();
         _configuration = ucsh.Create ( null, null, doc.DocumentElement );
+				this.UpdateName = "CCNetConfig";
       } catch ( Exception ex ) {
         throw new ApplicationException ( Properties.Strings.UpdaterConfigLoadErrorMessage, ex );
       }
@@ -295,7 +295,7 @@ namespace CCNetConfig.Updater.Core {
     /// Checks for updates by URL.
     /// </summary>
     /// <param name="feed">The feed.</param>
-    private void CheckForUpdatesByUrl ( Uri feed ) {
+    public void CheckForUpdatesByUrl ( Uri feed ) {
       try {
         CheckUpdateViaRss ( feed );
       } catch ( Exception ex ) {
@@ -307,7 +307,7 @@ namespace CCNetConfig.Updater.Core {
     /// Gets or sets the version.
     /// </summary>
     /// <value>The version.</value>
-    public Version Version { get { return this._version; } set { this._version = value; } }
+		public Version Version { get; set; }
     /// <summary>
     /// Gets or sets the owner application.
     /// </summary>
@@ -324,6 +324,7 @@ namespace CCNetConfig.Updater.Core {
     /// <value>The script file.</value>
     public FileInfo ScriptFile { get { return this._scriptFile; } }
 
+		public string UpdateName { get; set; }
     /// <summary>
     /// Gets the update info list.
     /// </summary>
