@@ -3,7 +3,7 @@
     <Configuration Condition="'$(CCNetBuildCondition)' != 'ForceBuild'">Debug</Configuration>
     <Configuration Condition="'$(CCNetBuildCondition)' == 'ForceBuild'">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{7C9B731F-4C64-4D4D-887F-D340A2549432}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -84,6 +84,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="UpdateInfo.xsd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CCNetConfig.Core\CCNetConfig.Core.csproj">

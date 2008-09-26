@@ -25,194 +25,188 @@ using System.Collections;
 using CCNetConfig.Exceptions;
 
 namespace CCNetConfig.Core.Serialization {
-  /// <summary>
-  /// Provides serialization and deserialation of ICCNetObjects
-  /// </summary>
-  /// <typeparam name="T"></typeparam>
-  public class Serializer<T> where T : ICCNetObject {
-    #region ISerialize Members
+	/// <summary>
+	/// Provides serialization and deserialation of ICCNetObjects
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	public class Serializer<T> where T : ICCNetObject {
+		#region ISerialize Members
 
-    /// <summary>
-    /// Serializes the specified obj.
-    /// </summary>
-    /// <param name="obj">The obj.</param>
-    /// <returns></returns>
-    public System.Xml.XmlElement Serialize ( T obj ) {
-      Type type = obj.GetType ( );
-      try {
-        // should the version of the object be checked before any other stuff is done? 
-        // no need to do anything if it doesn't event belong in here anyhow.
+		/// <summary>
+		/// Serializes the specified obj.
+		/// </summary>
+		/// <param name="obj">The obj.</param>
+		/// <returns></returns>
+		public System.Xml.XmlElement Serialize ( T obj ) {
+			Type type = obj.GetType ();
+			try {
+				// should the version of the object be checked before any other stuff is done? 
+				// no need to do anything if it doesn't event belong in here anyhow.
 
-        // should limit to public, instance, read/write properties... 
-        PropertyInfo[ ] props = type.GetProperties ( BindingFlags.Public | BindingFlags.Instance | ( BindingFlags.GetProperty & BindingFlags.SetProperty ) | ( BindingFlags.GetField & BindingFlags.SetField ) );
+				// should limit to public, instance, read/write properties... 
+				PropertyInfo[ ] props = type.GetProperties ( BindingFlags.Public | BindingFlags.Instance | ( BindingFlags.GetProperty & BindingFlags.SetProperty ) | ( BindingFlags.GetField & BindingFlags.SetField ) );
 
-        string rootTypeName = Util.GetReflectorNameAttributeValue ( type );
-        Version versionInfo = Util.GetTypeDescriptionProviderVersion ( typeof ( T ) );
-        XmlDocument doc = new XmlDocument ( );
-        XmlElement root = doc.CreateElement ( rootTypeName );
+				string rootTypeName = Util.GetReflectorNameAttributeValue ( type );
+				Version versionInfo = Util.GetTypeDescriptionProviderVersion ( typeof ( T ) );
+				XmlDocument doc = new XmlDocument ();
+				XmlElement root = doc.CreateElement ( rootTypeName );
 
-        foreach ( PropertyInfo pi in props ) {
-          bool required = Util.GetCustomAttribute<RequiredAttribute> ( pi ) != null;
-          bool ignore = Util.GetCustomAttribute<ReflectorIgnoreAttribute> ( pi ) != null;
-          // get the version info for the property...
-          Version minVer = Util.GetMinimumVersion ( pi );
-          Version maxVer = Util.GetMaximumVersion ( pi );
-          Version exactVer = Util.GetExactVersion ( pi );
-          if ( ignore || ( !Util.IsExactVersion ( exactVer, versionInfo ) && !Util.IsInVersionRange ( minVer, maxVer, versionInfo ) ) ) {
-            Console.WriteLine ( "Ignoring : {0}", pi.Name );
-            continue;
-          }
-          // get node name
-          string name = Util.GetReflectorNameAttributeValue ( pi );
-          ReflectorNodeTypes nodeType = Util.GetReflectorNodeType ( pi );
-          XmlNode node = null;
-          object val = pi.GetValue ( obj, null );
-          switch ( nodeType ) {
-            case ReflectorNodeTypes.Attribute:
-              node = doc.CreateAttribute ( name );
-              if ( required ) {
-                // checks if null or empty...
-                // CheckRequired needs to be modified to account that the type is going to alway be
-                // an object. 
-                if ( val == null || val.ToString ( ) == string.Empty )
-                  throw new RequiredAttributeException ( obj, name );
-                node.InnerText = Util.CheckRequired ( obj, name, val ).ToString ( );
-              } else {
-                if ( val != null )
-                  node.InnerText = val.ToString ( );
-              }
-              if ( ( Util.IsNullable ( pi.PropertyType ) && val != null ) || ( val != null && !Util.IsNullable ( pi.PropertyType ) && !string.IsNullOrEmpty ( val.ToString ( ) ) ) )
-                root.Attributes.Append ( node as XmlAttribute );
-              break;
-            case ReflectorNodeTypes.Element:
-              node = doc.CreateElement ( name );
-              if ( required ) {
-                // checks if null or empty...
-                // CheckRequired needs to be modified to account that the type is going to alway be
-                // an object. 
-                if ( val == null || val.ToString ( ) == string.Empty )
-                  throw new RequiredAttributeException ( obj, name );
-                node.InnerText = Util.CheckRequired ( obj, name, val ).ToString ( );
-              } else {
-                if ( val != null ) {
-                  Type valType = val.GetType ( );
-                  if ( valType.IsPrimitive ) {
-                    node.InnerText = val.ToString ( );
-                  } else {
-                    // handle clonable lists
-                    if ( valType.IsGenericType && valType.GetGenericTypeDefinition ( ).Equals ( typeof ( CloneableList<> ) ) ) {
-                      foreach ( ICCNetObject o in ( System.Collections.IList ) val ) {
-                        if ( o is ICCNetObject ) {
-                          XmlNode tn = ( ( ICCNetObject ) o ).Serialize ( );
-                          if ( tn != null )
-                            node.AppendChild ( doc.ImportNode ( tn, true ) );
-                        } else {
-                          if ( o.GetType ( ).IsPrimitive ) {
-                            try {
-                              string arrayItemName = Util.GetReflectorArrayAttributeValue ( o.GetType ( ) );
-                              XmlElement tn = doc.CreateElement ( arrayItemName );
-                              tn.InnerText = o.ToString ( );
-                              if ( tn != null )
-                                node.AppendChild ( doc.ImportNode ( tn, true ) );
-                            } catch { }
-                          }
-                        }
-                      }
-                    } else if ( val is HiddenPassword ) { // handle the hidden password object
-                      node.InnerText = ( val as HiddenPassword ).GetPassword ( );
-                    } else if ( valType.GetInterface ( typeof ( ICCNetObject ).FullName ) != null ) { // handle other ICCNetObjects
-                      XmlNode tn = ( ( ICCNetObject ) val ).Serialize ( );
-                      if ( tn != null ) {
-                        // ignore the node that the object creates, use the one the property creates.
-                        // then import all the attributes and child nodes
-                        foreach ( XmlAttribute attr in tn.Attributes ) {
-                          node.Attributes.Append ( doc.ImportNode ( attr, true ) as XmlAttribute );
-                        }
-                        foreach ( XmlElement ele in tn.SelectNodes ( "./*" ) ) {
-                          node.AppendChild ( doc.ImportNode ( ele, true ) );
-                        }
-                      }
-                    } else { // eveything else
-                      string formatString = Util.GetFormatAttributeValue ( pi );
-                      if ( valType.GetInterface ( typeof ( IFormattable ).FullName ) != null && !string.IsNullOrEmpty ( formatString ) ) {
-                        node.InnerText = ( ( IFormattable ) val ).ToString ( formatString, null );
-                      } else {
-                        node.InnerText = val.ToString ( );
-                      }
-                    }
-                  }
-                }
-              }
-              // if it should be added, add it...
-              if ( node != null && ( ( Util.IsNullable ( pi.PropertyType ) && val != null ) || !Util.IsNullable ( pi.PropertyType ) && val != null && !string.IsNullOrEmpty ( val.ToString ( ) ) ) )
-                root.AppendChild ( node );
-              break;
-            case ReflectorNodeTypes.Value:
-              if ( val != null )
-                root.AppendChild ( doc.CreateTextNode ( val.ToString ( ) ) );
-              break;
-          }
-        }
-        return root;
-      } catch ( Exception ex ) {
-        Console.WriteLine ( ex.ToString ( ) );
-        throw;
-      }
-    }
+				foreach ( PropertyInfo pi in props ) {
+					bool required = Util.GetCustomAttribute<RequiredAttribute> ( pi ) != null;
+					bool ignore = Util.GetCustomAttribute<ReflectorIgnoreAttribute> ( pi ) != null;
+					// get the version info for the property...
+					Version minVer = Util.GetMinimumVersion ( pi );
+					Version maxVer = Util.GetMaximumVersion ( pi );
+					Version exactVer = Util.GetExactVersion ( pi );
+					if ( ignore || ( !Util.IsExactVersion ( exactVer, versionInfo ) && !Util.IsInVersionRange ( minVer, maxVer, versionInfo ) ) ) {
+						Console.WriteLine ( "Ignoring : {0}", pi.Name );
+						continue;
+					}
+					// get node name
+					string name = Util.GetReflectorNameAttributeValue ( pi );
+					ReflectorNodeTypes nodeType = Util.GetReflectorNodeType ( pi );
+					XmlNode node = null;
+					object val = pi.GetValue ( obj, null );
+					switch ( nodeType ) {
+						case ReflectorNodeTypes.Attribute:
+							node = doc.CreateAttribute ( name );
+							if ( required ) {
+								// checks if null or empty...
+								// CheckRequired needs to be modified to account that the type is going to alway be
+								// an object. 
+								if ( val == null || val.ToString () == string.Empty )
+									throw new RequiredAttributeException ( obj, name );
+								node.InnerText = Util.CheckRequired ( obj, name, val ).ToString ();
+							} else {
+								if ( val != null )
+									node.InnerText = val.ToString ();
+							}
+							if ( ( Util.IsNullable ( pi.PropertyType ) && val != null ) || ( val != null && !Util.IsNullable ( pi.PropertyType ) && !string.IsNullOrEmpty ( val.ToString () ) ) )
+								root.Attributes.Append ( node as XmlAttribute );
+							break;
+						case ReflectorNodeTypes.Element:
+							node = doc.CreateElement ( name );
+							if ( required ) {
+								// checks if null or empty...
+								// CheckRequired needs to be modified to account that the type is going to alway be
+								// an object. 
+								if ( val == null || val.ToString () == string.Empty )
+									throw new RequiredAttributeException ( obj, name );
+								node.InnerText = Util.CheckRequired ( obj, name, val ).ToString ();
+							} else {
+								if ( val != null ) {
+									Type valType = val.GetType ();
+									if ( valType.IsPrimitive ) {
+										node.InnerText = val.ToString ();
+									} else {
+										// handle clonable lists
+										if ( valType.IsGenericType && valType.GetGenericTypeDefinition ().Equals ( typeof ( CloneableList<> ) ) ) {
+											foreach ( ICCNetObject o in (System.Collections.IList)val ) {
+												if ( o.GetType () is ICCNetObject ) {
+													XmlNode tn = ( (ICCNetObject)o ).Serialize ();
+													if ( tn != null )
+														node.AppendChild ( doc.ImportNode ( tn, true ) );
+												} else {
+													if ( o.GetType ().IsPrimitive ) {
+														try {
+															string arrayItemName = Util.GetReflectorArrayAttributeValue ( o.GetType () );
+															XmlElement tn = doc.CreateElement ( arrayItemName );
+															tn.InnerText = o.ToString ();
+															if ( tn != null )
+																node.AppendChild ( doc.ImportNode ( tn, true ) );
+														} catch { }
+													}
+												}
+											}
+										} else if ( val is HiddenPassword ) { // handle the hidden password object
+											node.InnerText = ( val as HiddenPassword ).GetPassword ();
+										} else if ( valType.GetInterface ( typeof ( ICCNetObject ).FullName ) != null ) { // handle other ICCNetObjects
+											XmlNode tn = ( (ICCNetObject)val ).Serialize ();
+											if ( tn != null ) {
+												// ignore the node that the object creates, use the one the property creates.
+												// then import all the attributes and child nodes
+												foreach ( XmlAttribute attr in tn.Attributes ) {
+													node.Attributes.Append ( doc.ImportNode ( attr, true ) as XmlAttribute );
+												}
+												foreach ( XmlElement ele in tn.SelectNodes ( "./*" ) ) {
+													node.AppendChild ( doc.ImportNode ( ele, true ) );
+												}
+											}
+										} else { // eveything else
+											string formatString = Util.GetFormatAttributeValue ( pi );
+											if ( valType.GetInterface ( typeof ( IFormattable ).FullName ) != null && !string.IsNullOrEmpty ( formatString ) ) {
+												node.InnerText = ( (IFormattable)val ).ToString ( formatString, null );
+											} else {
+												node.InnerText = val.ToString ();
+											}
+										}
+									}
+								}
+							}
+							// if it should be added, add it...
+							if ( node != null && ( ( Util.IsNullable ( pi.PropertyType ) && val != null ) || !Util.IsNullable ( pi.PropertyType ) && val != null && !string.IsNullOrEmpty ( val.ToString () ) ) )
+								root.AppendChild ( node );
+							break;
+						case ReflectorNodeTypes.Value:
+							if ( val != null )
+								root.AppendChild ( doc.CreateTextNode ( val.ToString () ) );
+							break;
+					}
+				}
+				return root;
+			} catch ( Exception ex ) {
+				Console.WriteLine ( ex.ToString () );
+				throw;
+			}
+		}
 
-    /// <summary>
-    /// Deserializes the specified element.
-    /// </summary>
-    /// <param name="element">The element.</param>
-    /// <param name="baseObject">The base object.</param>
-    public void Deserialize ( System.Xml.XmlElement element, T baseObject ) {
-      Type type = baseObject.GetType ( );
-      // have to get the properties so we can enumerate through them and set the values.
-      PropertyInfo[ ] props = type.GetProperties ( BindingFlags.Public | BindingFlags.Instance );
-      string rootTypeName = Util.GetReflectorNameAttributeValue ( type );
-      Version versionInfo = Util.GetTypeDescriptionProviderVersion ( typeof ( T ) );
-      if ( string.Compare ( element.Name, rootTypeName, false ) != 0 )
-        throw new InvalidCastException ( string.Format ( "Unable to convert {0} to a {1}", element.Name, rootTypeName ) );
+		/// <summary>
+		/// Deserializes the specified element.
+		/// </summary>
+		/// <param name="element">The element.</param>
+		/// <param name="baseObject">The base object.</param>
+		public void Deserialize ( System.Xml.XmlElement element, T baseObject ) {
+			Util.ResetObjectProperties<T> ( baseObject );
+			Type type = baseObject.GetType ();
+			// have to get the properties so we can enumerate through them and set the values.
+			PropertyInfo[ ] props = type.GetProperties ( BindingFlags.Public | BindingFlags.Instance );
+			string rootTypeName = Util.GetReflectorNameAttributeValue ( type );
+			Version versionInfo = Util.GetTypeDescriptionProviderVersion ( typeof ( T ) );
+			if ( string.Compare ( element.Name, rootTypeName, false ) != 0 )
+				throw new InvalidCastException ( string.Format ( "Unable to convert {0} to a {1}", element.Name, rootTypeName ) );
 
-      foreach ( PropertyInfo pi in props ) {
-        bool required = Util.GetCustomAttribute<RequiredAttribute> ( pi ) != null;
-        bool ignore = Util.GetCustomAttribute<ReflectorIgnoreAttribute> ( pi ) != null;
-        if ( ignore )
-          continue;
-        string name = Util.GetReflectorNameAttributeValue ( pi );
-        /*
-        // may be easier for now to just reset the object in its method that calls this one...
-        if ( Util.IsNullable ( pi.PropertyType ) ) {
-          pi.SetValue ( baseObject, null, null );
-        }
-        */
+			foreach ( PropertyInfo pi in props ) {
+				bool required = Util.GetCustomAttribute<RequiredAttribute> ( pi ) != null;
+				bool ignore = Util.GetCustomAttribute<ReflectorIgnoreAttribute> ( pi ) != null;
+				if ( ignore )
+					continue;
+				string name = Util.GetReflectorNameAttributeValue ( pi );
+				Type propType = pi.PropertyType;
+				if ( propType.IsPrimitive ) {
 
-        Type propType = pi.PropertyType;
-        if ( propType.IsPrimitive ) {
-
-        } else {
-          if ( propType.IsGenericType && propType.GetGenericTypeDefinition ( ).Equals ( typeof ( CloneableList<> ) ) ) {
-            // hmmmm how to do clonablelists???
-            /*
+				} else {
+					if ( propType.IsGenericType && propType.GetGenericTypeDefinition ().Equals ( typeof ( CloneableList<> ) ) ) {
+						//string arrayItemName = Util.GetReflectorArrayAttributeValue ( pi );
             XmlNodeList nl = element.SelectNodes ( "*" );
             foreach ( XmlElement ele in nl ) {
               
             }
-            */
-          } else if ( propType.GetInterface ( typeof ( ICCNetObject ).FullName ) != null ) {
-            ICCNetObject obj = pi.GetValue ( baseObject, null ) as ICCNetObject;
-            new Serializer<ICCNetObject> ( ).Deserialize ( element.SelectSingleNode ( name ) as XmlElement, obj );
-            pi.SetValue ( baseObject, obj, null );
-          } else if ( propType == typeof ( HiddenPassword ) ) {
+					} else if ( propType.GetInterface ( typeof ( ICCNetObject ).FullName ) != null ) {
+						ICCNetObject obj = pi.GetValue ( baseObject, null ) as ICCNetObject;
+						new Serializer<ICCNetObject> ().Deserialize ( element.SelectSingleNode ( name ) as XmlElement, obj );
+						pi.SetValue ( baseObject, obj, null );
+					} else if ( propType == typeof ( HiddenPassword ) ) {
+						HiddenPassword hp = new HiddenPassword ();
+						hp.Password = Util.GetElementOrAttributeValue(name,element);
+						pi.SetValue ( baseObject, hp , null );
+					} else {
 
-          } else {
+					}
+				}
 
-          }
-        }
+			}
+		}
 
-      }
-    }
-
-    #endregion
-  }
+		#endregion
+	}
 }

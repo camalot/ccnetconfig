@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="UpdateInfo"
+    targetNamespace="http://ccnetconfig.org/2007/updates"
+    elementFormDefault="qualified"
+    xmlns="http://ccnetconfig.org/2007/updates"
+    xmlns:mstns="http://ccnetconfig.org/2007/updates"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <xs:element name="UpdateInfo" type="UpdateInfoType" />
+  
+  <xs:complexType name="UpdateInfoType">
+    <xs:choice maxOccurs="unbounded">
+      <xs:element name="Comments" type="xs:string" />
+      <xs:element name="Files" maxOccurs="1" minOccurs="0">
+        <xs:complexType>
+          <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element name="File" maxOccurs="unbounded" minOccurs="1">
+              <xs:complexType>
+                <xs:attribute name="FileSize" type="xs:long" use="required" />
+                <xs:attribute name="Location" type="xs:anyURI" use="required" />
+                <xs:attribute name="Restart" type="xs:boolean" use="optional" default="true" />
+                <xs:attribute name="Version" type="xs:string" use="required" />
+              </xs:complexType>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Commands" maxOccurs="1" minOccurs="0">
+        <xs:complexType>
+          <xs:choice>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="Command" type="xs:string" />
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+    
+    <xs:attribute name="UpdatedDate" use="required" type="xs:dateTime" />
+    <xs:attribute name="Version" use="required" type="xs:string" />
+    <xs:attribute name="Mode" use="required" type="ModeType" />
+        
+  </xs:complexType>
+
+  <xs:simpleType name="ModeType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Beta" />
+      <xs:enumeration value="Stable" />
+    </xs:restriction>
+  </xs:simpleType>
+  
+</xs:schema>

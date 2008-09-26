@@ -1,6 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<UpdateInfo>
+<UpdateInfo xmlns="http://ccnetconfig.org/2007/updates" Mode="Stable" UpdatedDate="2008-01-20T22:03:15.68400-06:00" Version="1.0.918.12481">
+  <Comments>
+    Latest Version
+  </Comments>
   <Files>
-    <File Size="" Location="http://ccnetconfig.org/updates/$(CCNetProject)$(CCNetLabel).zip" Restart="True" Version="$(CCNetLabel)" />
+    <File 
+      FileSize="12345" 
+      Location="http://ccnetconfig.org/updates/$(CCNetProject)$(CCNetLabel).zip" 
+      Restart="true" Version="$(CCNetLabel)" />
   </Files>
+  <Commands>
+    <Command>del .\ccnetplugins.config</Command>
+  </Commands>
 </UpdateInfo>

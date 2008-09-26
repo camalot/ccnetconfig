@@ -113,7 +113,7 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     [Description ( "The base url for tags in your repository." ), DefaultValue ( null ), Category ( "Optional" ),
     ReflectorName ( "tagBaseUrl" )]
-    public Uri TagBaseUrl { get; set; }
+    public string TagBaseUrl { get; set; }
     /// <summary>
     /// Sets the timeout period for the source control operation. See Timeout Configuration for details.
     /// </summary>
@@ -129,8 +129,6 @@ namespace CCNetConfig.CCNet {
     public override SourceControl Clone ( ) {
       SubversionSourceControl ssc = this.MemberwiseClone ( ) as SubversionSourceControl;
       ssc.Password = this.Password.Clone ( );
-      if ( this.TagBaseUrl != null )
-        ssc.TagBaseUrl = new Uri ( this.TagBaseUrl.ToString ( ) );
       if ( this.Timeout != null )
         ssc.Timeout = this.Timeout.Clone ( );
       if ( this.TrunkUrl != null )
@@ -146,70 +144,7 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     /// <returns></returns>
     public override System.Xml.XmlElement Serialize ( ) {
-      return new Serializer<SubversionSourceControl> ( ).Serialize ( this );
-
-      /*XmlDocument doc = new XmlDocument ();
-      XmlElement root = doc.CreateElement ( "sourcecontrol" );
-      root.SetAttribute ( "type", this.TypeName );
-
-      XmlElement ele = doc.CreateElement ( "trunkUrl" );
-      ele.InnerText = Util.UrlEncode(Util.CheckRequired ( this, ele.Name, this.TrunkUrl ).ToString(  ));
-      root.AppendChild ( ele );
-
-      if ( !string.IsNullOrEmpty ( this.WorkingDirectory ) ) {
-        ele = doc.CreateElement ( "workingDirectory" );
-        ele.InnerText = this.WorkingDirectory;
-        root.AppendChild ( ele );
-      }
-
-      if ( !string.IsNullOrEmpty ( this.Executable ) ) {
-        ele = doc.CreateElement ( "executable" );
-        ele.InnerText = this.Executable;
-        root.AppendChild ( ele );
-      }
-
-      if ( !string.IsNullOrEmpty ( this.Username ) ) {
-        ele = doc.CreateElement ( "username" );
-        ele.InnerText = this.Username;
-        root.AppendChild ( ele );
-      }
-
-      if ( this.Password != null && !string.IsNullOrEmpty ( this.Password.Password ) ) {
-        ele = doc.CreateElement ( "password" );
-        ele.InnerText = this.Password.GetPassword ();
-        root.AppendChild ( ele );
-      }
-
-      if ( this.AutoGetSource.HasValue ) {
-        ele = doc.CreateElement ( "autoGetSource" );
-        ele.InnerText = this.AutoGetSource.Value.ToString ();
-        root.AppendChild ( ele );
-      }
-
-      if ( this.WebUrlBuilder != null ) {
-        ele = this.WebUrlBuilder.Serialize ();
-        if ( ele != null )
-          root.AppendChild ( doc.ImportNode ( ele, true ) );
-      }
-
-      if ( this.TagOnSuccess.HasValue ) {
-        ele = doc.CreateElement ( "tagOnSuccess" );
-        ele.InnerText = this.TagOnSuccess.Value.ToString ();
-        root.AppendChild ( ele );
-      }
-
-      if ( this.TagBaseUrl != null ) {
-        ele = doc.CreateElement ( "tagBaseUrl" );
-        ele.InnerText = this.TagBaseUrl.ToString ();
-        root.AppendChild ( ele );
-      }
-
-      if ( this.Timeout != null ) {
-        ele = this.Timeout.Serialize ();
-        if ( ele != null )
-          root.AppendChild ( doc.ImportNode ( ele, true ) );
-      }
-      return root;*/
+			return new Serializer<SubversionSourceControl> ().Serialize ( this );
     }
 
     /// <summary>
@@ -231,8 +166,12 @@ namespace CCNetConfig.CCNet {
       if ( string.Compare ( element.GetAttribute ( "type" ), this.TypeName, false ) != 0 )
         throw new InvalidCastException ( string.Format ( "Unable to convert {0} to a {1}", element.GetAttribute ( "type" ), this.TypeName ) );
       string s = Util.UrlDecode ( Util.GetElementOrAttributeValue ( "trunkUrl", element ) );
-      if ( !string.IsNullOrEmpty ( s ) )
-        this.TrunkUrl = new SvnUri ( s );
+			if ( !string.IsNullOrEmpty ( s ) ) {
+				// issue with file:// uri's with quotes around them...
+				if ( s.StartsWith ( "\"" ) && s.EndsWith ( "\"" ) )
+					s = s.Substring ( 1, s.Length - 2 );
+				this.TrunkUrl = new SvnUri ( s );
+			}
 
       s = Util.GetElementOrAttributeValue ( "autoGetSource", element );
       if ( !string.IsNullOrEmpty ( s ) )
@@ -247,8 +186,12 @@ namespace CCNetConfig.CCNet {
         this.Password.Password = s;
 
       s = Util.GetElementOrAttributeValue ( "tagBaseUrl", element );
-      if ( !string.IsNullOrEmpty ( s ) )
-        this.TagBaseUrl = new Uri ( s );
+			if ( !string.IsNullOrEmpty ( s ) ) {
+				// a lot of people are reporting an invalid URI scheme here 
+				// this is because it can have just the path so its not a full uri.
+				this.TagBaseUrl = s;
+
+			}
 
       s = Util.GetElementOrAttributeValue ( "tagOnSuccess", element );
       if ( !string.IsNullOrEmpty ( s ) )
