@@ -102,7 +102,7 @@ namespace CCNetConfig.Core.Serialization {
 										// handle clonable lists
 										if ( valType.IsGenericType && valType.GetGenericTypeDefinition ().Equals ( typeof ( CloneableList<> ) ) ) {
 											foreach ( ICCNetObject o in (System.Collections.IList)val ) {
-												if ( o.GetType () is ICCNetObject ) {
+												if ( o is ICCNetObject ) {
 													XmlNode tn = ( (ICCNetObject)o ).Serialize ();
 													if ( tn != null )
 														node.AppendChild ( doc.ImportNode ( tn, true ) );
