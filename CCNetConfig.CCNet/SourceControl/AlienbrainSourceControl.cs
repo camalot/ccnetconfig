@@ -109,7 +109,7 @@ namespace CCNetConfig.CCNet {
     [Description ( "The password of the user you want to use to connect to the server project database." ),
     DisplayName ( "(Password)" ), DefaultValue ( null ), Category ( "Required" ),
     TypeConverter(typeof(PasswordTypeConverter))]
-    public HiddenPassword Password { get { return this._password; } set { this._password.Password = Util.CheckRequired (this, "password", value.Password); } }
+    public HiddenPassword Password { get { return this._password; } set { this._password.Password = Util.CheckRequired (this, "password", value.GetPassword()); } }
     /// <summary>
     /// This is the path of to monitor the file changes. Use alienbrain://Code or ab://Code project path format
     /// </summary>
