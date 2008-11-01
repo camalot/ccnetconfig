@@ -58,7 +58,7 @@ namespace CCNetConfig.Core {
     /// <returns>
     /// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
     /// </returns>
-    public virtual string ToString () {
+    public override string ToString () {
       return string.IsNullOrEmpty( this.Name ) ? this.GetType(  ).Name : this.Name;
     }
     #region ICloneable Members

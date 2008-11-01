@@ -97,12 +97,10 @@ namespace CCNetConfig.CCNet {
     /// Gets or sets the environment.
     /// </summary>
     /// <value>The environment.</value>
-    [ReflectorArray ( "var" ), ReflectorName ( "environment" ), Editor ( typeof ( CollectionEditor ), typeof ( UITypeEditor ) ),
+    [ReflectorArray ( "variable" ), ReflectorName ( "environment" ), Editor ( typeof ( CollectionEditor ), typeof ( UITypeEditor ) ),
     TypeConverter ( typeof ( IListTypeConverter ) )]
     public CloneableList<EnvironmentVariable> Environment { get; set; }
 
-
-    //public CloneableList<string> EnvironmentVariables { get; set; }
     /// <summary>
     /// Serializes this instance.
     /// </summary>

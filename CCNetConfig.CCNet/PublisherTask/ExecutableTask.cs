@@ -102,12 +102,15 @@ namespace CCNetConfig.CCNet {
     private string _exe = null;
     private string _baseDir = null;
     private string _args = string.Empty;
+    private string _successCodes = null;
     private int? _buildTimeoutSeconds = null;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ExecutableTask"/> class.
     /// </summary>
-    public ExecutableTask() : base ("exec") { }
+    public ExecutableTask() : base ("exec") {
+      Environment = new CloneableList<EnvironmentVariable>();
+    }
     /// <summary>
     /// The path of the program to run. 
     /// If this is relative, then must be relative to either 
@@ -119,7 +122,7 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     [Description ("The path of the program to run.\nIf this is relative, then must be relative to either\n\tthe base directory\n\tthe CCNet Server " +
     "application\n\tif the path doesn't contain any directory details then can be available in the system or application's 'path' environment variable."),
-   DefaultValue ( null ), DisplayName ( "(Executable)" ), Category ( "Required" ),
+    DefaultValue ( null ), DisplayName ( "(Executable)" ), Category ( "Required" ),
     Editor(typeof(OpenFileDialogUIEditor),typeof(UITypeEditor)),FileTypeFilter("Executables|*.exe;*.bat;*.com|All Files|*.*"),
     OpenFileDialogTitle("Select program to run.")]
     public string Executable { get { return this._exe; } set { this._exe = Util.CheckRequired (this, "executable", value); } }
@@ -127,9 +130,9 @@ namespace CCNetConfig.CCNet {
     /// The directory to run the process in. If relative, is a subdirectory of the <see cref="CCNetConfig.Core.Project.WorkingDirectory">Project Working Directory</see>
     /// </summary>
     [Description ( "The directory to run the process in. If relative, is a subdirectory of the Project Working Directory." ), DefaultValue ( null ),
-   Category ( "Optional" ),
- Editor ( typeof ( BrowseForFolderUIEditor ), typeof ( UITypeEditor ) ),
-BrowseForFolderDescription ( "Select path to the base directory." )]
+    Category ( "Optional" ),
+    Editor ( typeof ( BrowseForFolderUIEditor ), typeof ( UITypeEditor ) ),
+    BrowseForFolderDescription ( "Select path to the base directory." )]
     public string BaseDirectory { get { return this._baseDir; } set { this._baseDir = value; } }
     /// <summary>
     /// Any command line arguments to pass in
@@ -140,8 +143,21 @@ BrowseForFolderDescription ( "Select path to the base directory." )]
     /// Number of seconds to wait before assuming that the process has hung and should be killed.
     /// </summary>
     [Description ("Number of seconds to wait before assuming that the process has hung and should be killed."),
-   DefaultValue ( null ), Category ( "Optional" )]
+    DefaultValue ( null ), Category ( "Optional" )]
     public int? BuildTimeoutSeconds { get { return this._buildTimeoutSeconds; } set { this._buildTimeoutSeconds = value; } }
+    /// <summary>
+    /// List of error codes that should be considered succesful.
+    /// </summary>
+    [Description("A comma-separated list of exit codes that indicate success."), DefaultValue(null), Category("Optional"),
+    MinimumVersion("1.4")]
+    public string SuccessExitCodes { get { return this._successCodes; } set { this._successCodes = value; } }
+    /// <summary>
+    /// Gets or sets the environment.
+    /// </summary>
+    /// <value>The environment.</value>
+    [ReflectorArray("variable"), ReflectorName("environment"), Editor(typeof(CollectionEditor), typeof(UITypeEditor)),
+    TypeConverter(typeof(IListTypeConverter)), MinimumVersion("1.4")]
+    public CloneableList<EnvironmentVariable> Environment { get; set; }
 
     /// <summary>
     /// Creates a copy of this object.
@@ -180,6 +196,36 @@ BrowseForFolderDescription ( "Select path to the base directory." )]
         root.AppendChild (ele);
       }
 
+      PropertyDescriptor pd = Util.GetPropertyDescriptor ( this.GetType (), "SuccessExitCodes", true );
+      if (pd != null) {
+        Version minVersion = Util.GetMinimumVersion(pd);
+        Version maxVersion = Util.GetMaximumVersion(pd);
+        if (Util.IsInVersionRange(minVersion, maxVersion, Util.CurrentConfigurationVersion)) {
+          if (!string.IsNullOrEmpty(this.SuccessExitCodes)) {
+            ele = doc.CreateElement("successExitCodes");
+            ele.InnerText = this.SuccessExitCodes;
+          }
+          root.AppendChild(ele);
+        }
+      }
+
+      pd = Util.GetPropertyDescriptor ( this.GetType (), "Environment", true );
+      if (pd != null) {
+        Version minVersion = Util.GetMinimumVersion(pd);
+        Version maxVersion = Util.GetMaximumVersion(pd);
+        if (Util.IsInVersionRange(minVersion, maxVersion, Util.CurrentConfigurationVersion)) {
+          ele = doc.CreateElement("environment");
+          if (this.Environment != null) {
+            foreach (EnvironmentVariable variable in this.Environment) {
+              XmlElement ele_var = variable.Serialize( );
+              if (ele_var != null)
+                ele.AppendChild ( doc.ImportNode ( ele_var, true ) );
+            }
+          }
+          root.AppendChild(ele);
+        }
+      }
+
       return root;
     }
 
@@ -191,7 +237,9 @@ BrowseForFolderDescription ( "Select path to the base directory." )]
       this.BaseDirectory = string.Empty;
       this.BuildArguments = string.Empty;
       this.BuildTimeoutSeconds = null;
-      this._exe = string.Empty;
+      this.SuccessExitCodes = null;
+      this.Environment = new CloneableList<EnvironmentVariable>();
+      this._exe = string.Empty;      
 
       if ( string.Compare (element.Name, this.TypeName, false) != 0 )
         throw new InvalidCastException (string.Format ("Unable to convert {0} to a {1}", element.Name, this.TypeName));
@@ -211,6 +259,19 @@ BrowseForFolderDescription ( "Select path to the base directory." )]
         int i = 0;
         if ( int.TryParse (s, out i) )
           this.BuildTimeoutSeconds = i;
+      }
+
+      s = Util.GetElementOrAttributeValue("successExitCodes", element);
+      if (!string.IsNullOrEmpty(s))
+        this.SuccessExitCodes = s;
+            
+      XmlElement ele = (XmlElement)element.SelectSingleNode("environment");
+      if (ele != null) {
+        foreach (XmlElement ele1 in ele.SelectNodes("./*")) {
+          EnvironmentVariable ev = new EnvironmentVariable();
+          ev.Deserialize(ele1);
+          this.Environment.Add(ev);
+        }
       }
 
     }

@@ -30,38 +30,22 @@ namespace CCNetConfig.CCNet {
   /// <summary>
   /// Represents an environment variable used by the external source control.
   /// </summary>
-  [ReflectorName ( "var" )]
-  public class EnvironmentVariable : NameValue, ICCNetObject {
+  [ReflectorName ( "variable" )]
+  public class EnvironmentVariable : NameValue, ICCNetObject, ISerialize {
 
     /// <summary>
     /// Gets or sets the name.
     /// </summary>
     /// <value>The name.</value>
-    [ReflectorIgnore, DisplayName("(Name)"), Category("Required")]
+    [DisplayName("(Name)"), Category("Required"), ReflectorNodeType(ReflectorNodeTypes.Attribute), ReflectorName("name"), Required]
     public override string Name { get { return base.Name; } set { base.Name = value; } }
     /// <summary>
     /// Gets or sets the value.
     /// </summary>
-    /// <value>The value.</value>
-    [ReflectorIgnore]
+    /// <value>The value.</value>    
+    [ReflectorNodeType(ReflectorNodeTypes.Attribute), ReflectorName("value")]
     public override string Value { get { return base.Value; } set { base.Value = value; } }
 
-    /// <summary>
-    /// Gets or sets the output.
-    /// </summary>
-    /// <value>The output.</value>
-    [ReflectorNodeType(ReflectorNodeTypes.Value),ReflectorName("text"),
-    EditorBrowsable ( EditorBrowsableState.Never ), Browsable ( false ), Required]
-    public string Output {
-      get {
-        return string.Format ( "{0}={1}", this.Name, this.Value );
-      }
-      set {
-        if ( string.IsNullOrEmpty ( value ) )
-          throw new ArgumentNullException ( "value can not be null or empty" );
-        this.StringToProperties ( value );
-      }
-    }
 
     private void StringToProperties ( string value ) {
       string[ ] vals = value.Split ( new char[ ] { '=' }, 2, StringSplitOptions.RemoveEmptyEntries );
@@ -78,8 +62,6 @@ namespace CCNetConfig.CCNet {
     /// </summary>
     /// <returns></returns>
     public System.Xml.XmlElement Serialize ( ) {
-      if ( string.IsNullOrEmpty ( this.Name ) )
-        throw new ArgumentNullException ( "Name is required." );
       return new Serializer<EnvironmentVariable> ( ).Serialize ( this );
     }
 
@@ -91,10 +73,18 @@ namespace CCNetConfig.CCNet {
       this.Name = string.Empty;
       this.Value = string.Empty;
 
-      string s = element.InnerText;
-      if ( !string.IsNullOrEmpty ( s ) ) {
-        this.StringToProperties ( s );
+      if (element.Name == "variable") {
+        // this is the newer form:  <variable name="Name" value="Value" /> 
+        this.Name = Util.GetElementOrAttributeValue ( "name", element );
+        this.Value = Util.GetElementOrAttributeValue ( "value", element );
       }
+      else if (element.Name == "var") {
+        // this is an older form of the variable: <var>Name=Value</var>
+        // it's not clear what version of CCNet uses this format, though it's pre-1.4
+        string s = element.InnerText;
+        if ( !string.IsNullOrEmpty ( s ) )
+          this.StringToProperties ( s );
+      }      
     }
 
     #endregion
