@@ -158,7 +158,7 @@ namespace CCNetConfig.CCNet {
         root.AppendChild ( ele );
       }
 
-      if ( this.ShowBanner.HasValue ) {
+      if ( this.Version.HasValue ) {
         ele = doc.CreateElement ( "FBVersion" );
         ele.InnerText = this.Version.Value.ToString ();
         root.AppendChild ( ele );
