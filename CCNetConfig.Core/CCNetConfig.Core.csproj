@@ -170,6 +170,7 @@
     <Compile Include="Components\ObjectOrNoneTypeConverter.cs" />
     <Compile Include="Components\ObjectOrNoneUIEditor.cs" />
     <Compile Include="Components\ReflectorArrayAttribute.cs" />
+    <Compile Include="Components\StringSeparatorAttribute.cs" />
     <Compile Include="Components\SvnUri.cs" />
     <Compile Include="Components\SvnUriParser.cs" />
     <Compile Include="Components\SvnUriTypeConverter.cs" />

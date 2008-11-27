@@ -82,7 +82,7 @@ namespace CCNetConfig.CCNet {
     /// <remarks>Added 2/23/2008: workitem : 15008</remarks>
     [Description ( "The SMTP server port number" ),
     DefaultValue(null), Category("Optional"), MinimumVersion("1.4"), 
-    ReflectorName("mailPort")]
+    ReflectorName("mailport")]
     public int? MailPort { get; set; }
 
     /// <summary>
@@ -189,7 +189,7 @@ namespace CCNetConfig.CCNet {
       if ( !string.IsNullOrEmpty ( s ) )
         this.MailHostPassword.Password = s;
 
-      s = Util.GetElementOrAttributeValue ( "mailPort", element );
+      s = Util.GetElementOrAttributeValue ( "mailport", element );
       int port = 0;
       if ( !string.IsNullOrEmpty(s) && int.TryParse ( s, out port ) ) {
         this.MailPort = port;

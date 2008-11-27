@@ -946,6 +946,19 @@ namespace CCNetConfig.Core {
         return ReflectorNodeTypes.Element;
     }
 
+		/// <summary>
+		/// Gets the string separator.
+		/// </summary>
+		/// <param name="mi">The member info.</param>
+		/// <returns></returns>
+		public static string GetStringSeparatorAttributeValue ( MemberInfo mi ) {
+			StringSeparatorAttribute ssa = Util.GetCustomAttribute<StringSeparatorAttribute> ( mi );
+			if ( ssa != null )
+				return ssa.Separator;
+			else
+				return ";";
+		}
+
     /// <summary>
     /// Gets the attribute.
     /// </summary>

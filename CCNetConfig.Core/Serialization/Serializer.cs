@@ -101,20 +101,29 @@ namespace CCNetConfig.Core.Serialization {
 									} else {
 										// handle clonable lists
 										if ( valType.IsGenericType && valType.GetGenericTypeDefinition ().Equals ( typeof ( CloneableList<> ) ) ) {
-											foreach ( ICCNetObject o in (System.Collections.IList)val ) {
+											System.Collections.IList vlist = val as IList;
+											foreach ( object o in vlist ) {
 												if ( o is ICCNetObject ) {
 													XmlNode tn = ( (ICCNetObject)o ).Serialize ();
 													if ( tn != null )
 														node.AppendChild ( doc.ImportNode ( tn, true ) );
 												} else {
-													if ( o.GetType ().IsPrimitive ) {
+													Type o1 = o.GetType ();
+													if ( o1.IsSerializable && o1.IsClass ) {
 														try {
-															string arrayItemName = Util.GetReflectorArrayAttributeValue ( o.GetType () );
-															XmlElement tn = doc.CreateElement ( arrayItemName );
-															tn.InnerText = o.ToString ();
-															if ( tn != null )
-																node.AppendChild ( doc.ImportNode ( tn, true ) );
-														} catch { }
+																string arrayItemName = Util.GetReflectorArrayAttributeValue ( pi );
+
+																XmlElement tn = doc.CreateElement ( arrayItemName );
+																tn.InnerText = o.ToString ();
+																if ( tn != null )
+																	node.AppendChild ( doc.ImportNode ( tn, true ) );
+														} catch {
+															try {
+																string ss = Util.GetStringSeparatorAttributeValue ( pi );
+																XmlElement ele = node as XmlElement;
+																ele.InnerText += string.Format ( "{0}{1}", o.ToString (), ss );
+															} catch { }
+														}
 													}
 												}
 											}
