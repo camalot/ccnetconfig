@@ -1,25 +1,32 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <CCNetBuildCondition Condition="'$(CCNetBuildCondition)' == ''">IfModificationExists</CCNetBuildCondition>
+    <IsCCNetBuild Condition="'$(CCNetLabel)' != ''">True</IsCCNetBuild>
+    <CCNetProject Condition="'$(IsCCNetBuild)' == ''">$(MSBuildProjectName)</CCNetProject>
+    <CCNetArtifactDirectory Condition="'$(IsCCNetBuild)' == ''">$(MSBuildProjectDirectory)\bin</CCNetArtifactDirectory>
+    <CCNetLabel Condition="'$(IsCCNetBuild)' == ''">0.0.0.0</CCNetLabel>
+    <CCNetWorkingDirectory Condition="'$(IsCCNetBuild)' == ''">$(MSBuildProjectDirectory)</CCNetWorkingDirectory>
+    <OutputPath Condition="'$(OutputPath)' == ''">$(CCNetArtifactDirectory)\$(Configuration)\$(CCNetLabel)\</OutputPath>
+
+    <Configuration Condition="'$(CCNetBuildCondition)' == 'ForceBuild'">Release</Configuration>
+    <Configuration Condition="'$(CCNetBuildCondition)' == 'IfModificationExists'">Debug</Configuration>
+    <DefineConstants>CCNetProject=$(CCNetProject);CCNetLabel=$(CCNetLabel);OutputPath=$(OutputPath)</DefineConstants>
+    <OutputName>$(CCNetProject)$(CCNetLabel)</OutputName>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <Cultures>en-US</Cultures>
+
     <ProductVersion>3.0</ProductVersion>
     <ProjectGuid>{3d036348-8b1e-4ec3-aa20-d10bab9fecf6}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>CCNetConfigSetup</OutputName>
     <OutputType>Package</OutputType>
-    <WixToolPath>E:\Program Files\Windows Installer XML v3\bin\</WixToolPath>
+    <WixToolPath>C:\Program Files\Windows Installer XML v3\bin\</WixToolPath>
     <SccProjectName>SAK</SccProjectName>
     <SccProvider>SAK</SccProvider>
     <SccAuxPath>SAK</SccAuxPath>
     <SccLocalPath>SAK</SccLocalPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <OutputPath>bin\Debug\</OutputPath>
-    <IntermediateOutputPath>obj\Debug\</IntermediateOutputPath>
-    <DefineConstants>Debug</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>bin\Release\</OutputPath>
-    <IntermediateOutputPath>obj\Release\</IntermediateOutputPath>
+    <DefineConstants>$(DefineConstants);Debug</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CCNetConfigSetup.wxs" />
@@ -34,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixUIExtension">
-      <HintPath>E:\Program Files\Windows Installer XML v3\bin\WixUIExtension.dll</HintPath>
+      <HintPath>C:\Program Files\Windows Installer XML v3\bin\WixUIExtension.dll</HintPath>
     </WixExtension>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WiX\v3.0\Wix.targets" />

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, Ryan Conrad. All rights reserved.
+ * Copyright (c) 2006 - 2008, Ryan Conrad. All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
  * - Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
@@ -114,6 +114,9 @@ namespace CCNetConfig.Components {
       _versions.Add ( new Version ( "1.2" ) );
       _versions.Add ( new Version ( "1.2.1" ) );
       _versions.Add ( new Version ( "1.3" ) );
+      _versions.Add(new Version("1.3.1"));
+      _versions.Add(new Version("1.4"));
+      _versions.Add(new Version("1.4.1"));
     }
 
     /// <summary>
@@ -625,12 +628,13 @@ namespace CCNetConfig.Components {
     /// Handles the notify message.
     /// </summary>
     /// <param name="lParam">The l param.</param>
-    private IntPtr HandleNotifyMessage ( Int32 lParam ) {
+    private IntPtr HandleNotifyMessage ( Int64 lParam ) {
       //we need to intercept the CDN_FILEOK message
       //which is sent when the user selects a filename
       IntPtr ipNotify = new IntPtr ( lParam );
       OfNotify ofNot = (OfNotify)Marshal.PtrToStructure ( ipNotify, typeof ( OfNotify ) );
-      UInt16 code = ofNot.hdr.code;
+      int code = ofNot.hdr.code;
+      Console.WriteLine(ofNot.hdr.code.ToString());
       switch ( code ) {
         case CommonDlgNotification.FileOk:
           _selectedVersionIndex = (int)NativeMethods.SendMessage ( _comboHandle, NativeMethods.CB_GETCURSEL, 0, 0 );
