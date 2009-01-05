@@ -30,178 +30,184 @@ using CCNetConfig.Core.Collections;
 using CCNetConfig.Core.Components;
 
 namespace CCNetConfig.Core {
-  /// <summary>
-  /// The Cruise Control object. All CCNet Config interaction starts with this object.
-  /// </summary>
-  [ReflectorName ( "cruisecontrol" )]
-  public class CruiseControl : ICCNetObject, ICCNetDocumentation {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="CruiseControl"/> class.
-    /// </summary>
-    public CruiseControl ( ) : this ( new Version ( "1.3" ) ) { }
+	/// <summary>
+	/// The Cruise Control object. All CCNet Config interaction starts with this object.
+	/// </summary>
+	[ReflectorName ( "cruisecontrol" )]
+	public class CruiseControl : ICCNetObject, ICCNetDocumentation {
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CruiseControl"/> class.
+		/// </summary>
+		public CruiseControl () : this ( new Version ( "1.3" ) ) { }
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="CruiseControl"/> class.
-    /// </summary>
-    /// <param name="version">The version.</param>
-    public CruiseControl ( Version version ) {
-      this.Projects = new ProjectList ( );
-      this.Version = version;
-    }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CruiseControl"/> class.
+		/// </summary>
+		/// <param name="version">The version.</param>
+		public CruiseControl ( Version version ) {
+			this.Projects = new ProjectList ();
+			this.Version = version;
+		}
 
-    /// <summary>
-    /// Gets the projects.
-    /// </summary>
-    /// <value>The projects.</value>
-    public ProjectList Projects { get; private set; }
-    /// <summary>
-    /// Gets or sets the version.
-    /// </summary>
-    /// <value>The version.</value>
-    public Version Version { get; set; }
-    /// <summary>
-    /// Saves the config.
-    /// </summary>
-    /// <param name="stream">The stream.</param>
-    public void SaveConfig ( Stream stream ) {
-      XmlElement ccElement = this.Serialize ( );
-      XmlDocument doc = new XmlDocument ( );
+		public XmlNamedNodeMap Entities { get; set; }
 
-      XmlComment versionComment = doc.CreateComment ( Util.CreateProjectComments ( this ).OuterXml );
-      doc.AppendChild ( versionComment );
+		/// <summary>
+		/// Gets the projects.
+		/// </summary>
+		/// <value>The projects.</value>
+		public ProjectList Projects { get; private set; }
+		/// <summary>
+		/// Gets or sets the version.
+		/// </summary>
+		/// <value>The version.</value>
+		public Version Version { get; set; }
+		/// <summary>
+		/// Saves the config.
+		/// </summary>
+		/// <param name="stream">The stream.</param>
+		public void SaveConfig ( Stream stream ) {
+			XmlElement ccElement = this.Serialize ();
+			XmlDocument doc = new XmlDocument ();
 
-      doc.AppendChild ( doc.ImportNode ( ccElement, true ) );
-      using ( stream ) {
-        doc.Save ( stream );
-      }
-    }
+			XmlComment versionComment = doc.CreateComment ( Util.CreateProjectComments ( this ).OuterXml );
+			doc.AppendChild ( versionComment );
 
-    /// <summary>
-    /// Determines whether this is a valid configuration.
-    /// </summary>
-    /// <param name="ex">The ex.</param>
-    /// <returns>
-    /// 	<c>true</c> if this is a valid configuration; otherwise, <c>false</c>.
-    /// </returns>
-    public bool IsValidConfiguration ( out Exception ex ) {
-      try {
-        XmlElement ccElement = this.Serialize ( );
-        if ( ccElement != null ) {
-          ex = null;
-          return true;
-        } else {
-          ex = new Exception ( "Root node missing." );
-          return false;
-        }
-      } catch ( Exception oex ) {
-        ex = oex;
-        return false;
-      }
-    }
+			doc.AppendChild ( doc.ImportNode ( ccElement, true ) );
+			using ( stream ) {
+				doc.Save ( stream );
+			}
+		}
 
-    #region ISerialize Members
-    /// <summary>
-    /// Serializes this instance.
-    /// </summary>
-    /// <returns></returns>
-    public XmlElement Serialize ( ) {
-      XmlDocument doc = new XmlDocument ( );
-      XmlElement ele = doc.CreateElement ( Util.GetReflectorNameAttributeValue ( this.GetType ( ) ) );
-      doc.AppendChild ( ele );
-      foreach ( Project proj in this.Projects )
-        ele.AppendChild ( doc.ImportNode ( proj.Serialize ( ), true ) );
+		/// <summary>
+		/// Determines whether this is a valid configuration.
+		/// </summary>
+		/// <param name="ex">The ex.</param>
+		/// <returns>
+		/// 	<c>true</c> if this is a valid configuration; otherwise, <c>false</c>.
+		/// </returns>
+		public bool IsValidConfiguration ( out Exception ex ) {
+			try {
+				XmlElement ccElement = this.Serialize ();
+				if ( ccElement != null ) {
+					ex = null;
+					return true;
+				} else {
+					ex = new Exception ( "Root node missing." );
+					return false;
+				}
+			} catch ( Exception oex ) {
+				ex = oex;
+				return false;
+			}
+		}
 
-      return ele;
-    }
+		#region ISerialize Members
+		/// <summary>
+		/// Serializes this instance.
+		/// </summary>
+		/// <returns></returns>
+		public XmlElement Serialize () {
+			XmlDocument doc = new XmlDocument ();
+			XmlElement ele = doc.CreateElement ( Util.GetReflectorNameAttributeValue ( this.GetType () ) );
+			doc.AppendChild ( ele );
+			foreach ( Project proj in this.Projects )
+				ele.AppendChild ( doc.ImportNode ( proj.Serialize (), true ) );
 
-    /// <summary>
-    /// Deserializes the specified element.
-    /// </summary>
-    /// <param name="element">The element.</param>
-    void ISerialize.Deserialize ( XmlElement element ) {
-      this.Deserialize ( element.OwnerDocument );
-    }
+			return ele;
+		}
 
-    /// <summary>
-    /// Deserializes the specified <see cref="System.IO.Stream">Stream</see>.
-    /// </summary>
-    /// <param name="strm">The Stream.</param>
-    public void Deserialize ( Stream strm ) {
-      if ( strm != null ) {
-        XmlDocument doc = new XmlDocument ( );
-        using ( strm ) {
-          doc.Load ( strm );
-        }
-        this.Deserialize ( doc );
-      }
-    }
+		/// <summary>
+		/// Deserializes the specified element.
+		/// </summary>
+		/// <param name="element">The element.</param>
+		void ISerialize.Deserialize ( XmlElement element ) {
+			this.Deserialize ( element.OwnerDocument );
+		}
 
-    /// <summary>
-    /// Deserializes the specified <see cref="System.Xml.XmlDocument">XmlDocument</see>.
-    /// </summary>
-    /// <param name="ccnetConfig">The ccnet config.</param>
-    /// <exception cref="CCNetConfig.Core.Exceptions.DuplicateProjectNameException">DuplicateProjectNameException</exception>
-    public void Deserialize ( XmlDocument ccnetConfig ) {
-      this.Projects.Clear ( );
-      Version v = Util.GetConfigFileVersion ( ccnetConfig );
-      if ( v != null )
-        this.Version = v;
-      if ( ccnetConfig.DocumentElement != null && string.Compare ( ccnetConfig.DocumentElement.Name, "cruisecontrol", false ) == 0 ) {
-        foreach ( XmlElement proj in ccnetConfig.DocumentElement.SelectNodes ( "project" ) ) {
-          try {
-            Project p = new Project ( );
-            p.Deserialize ( proj );
-            if ( !this.Projects.Contains ( p.Name ) )
-              this.Projects.Add ( p );
-            else
-              throw new DuplicateProjectNameException ( p.Name );
-          } catch ( DuplicateProjectNameException ) {
-            throw;
+		/// <summary>
+		/// Deserializes the specified <see cref="System.IO.Stream">Stream</see>.
+		/// </summary>
+		/// <param name="strm">The Stream.</param>
+		public void Deserialize ( Stream strm ) {
+			if ( strm != null ) {
+				XmlDocument doc = new XmlDocument ();
+				using ( strm ) {
+					doc.Load ( strm );
+				}
+				this.Deserialize ( doc );
+			}
+		}
+
+		/// <summary>
+		/// Deserializes the specified <see cref="System.Xml.XmlDocument">XmlDocument</see>.
+		/// </summary>
+		/// <param name="ccnetConfig">The ccnet config.</param>
+		/// <exception cref="CCNetConfig.Core.Exceptions.DuplicateProjectNameException">DuplicateProjectNameException</exception>
+		public void Deserialize ( XmlDocument ccnetConfig ) {
+			this.Projects.Clear ();
+			Version v = Util.GetConfigFileVersion ( ccnetConfig );
+			if ( v != null )
+				this.Version = v;
+			if ( ccnetConfig.DocumentElement != null && string.Compare ( ccnetConfig.DocumentElement.Name, "cruisecontrol", false ) == 0 ) {
+				/*this.Entities = ccnetConfig.DocumentType.Entities;
+				foreach ( XmlEntity entity in this.Entities ) {
+					Console.WriteLine ( entity.ToString () );
+				}*/
+				foreach ( XmlElement proj in ccnetConfig.DocumentElement.SelectNodes ( "project" ) ) {
+					try {
+						Project p = new Project ();
+						p.Deserialize ( proj );
+						if ( !this.Projects.Contains ( p.Name ) )
+							this.Projects.Add ( p );
+						else
+							throw new DuplicateProjectNameException ( p.Name );
+					} catch ( DuplicateProjectNameException ) {
+						throw;
 					} catch ( XmlException ) {
 						throw;
-          } catch ( Exception ) {
-            throw;
-          }
-        }
-        if ( Util.UserSettings.SortProject )
-          this.Projects.Sort ( new ProjectList.ProjectComparer ( ) );
-      } else
-        throw new InvalidCastException ( string.Format ( "Can not convert {0} to a cruisecontrol", ccnetConfig.DocumentElement != null ? ccnetConfig.DocumentElement.Name : "UNKNOWN" ) );
-    }
+					} catch ( Exception ) {
+						throw;
+					}
+				}
+				if ( Util.UserSettings.SortProject )
+					this.Projects.Sort ( new ProjectList.ProjectComparer () );
+			} else
+				throw new InvalidCastException ( string.Format ( "Can not convert {0} to a cruisecontrol", ccnetConfig.DocumentElement != null ? ccnetConfig.DocumentElement.Name : "UNKNOWN" ) );
+		}
 
-    /// <summary>
-    /// Deserializes the specified <see cref="System.IO.FileInfo">file</see>.
-    /// </summary>
-    /// <param name="file">The file.</param>
-    public void Deserialize ( FileInfo file ) {
-      if ( file.Exists ) {
-        XmlDocument doc = new XmlDocument ( );
-        doc.Load ( file.FullName );
-        Deserialize ( doc );
-      } else
-        throw new FileNotFoundException ( string.Format ( "The file {0} was not found.", file.FullName ) );
-    }
+		/// <summary>
+		/// Deserializes the specified <see cref="System.IO.FileInfo">file</see>.
+		/// </summary>
+		/// <param name="file">The file.</param>
+		public void Deserialize ( FileInfo file ) {
+			if ( file.Exists ) {
+				XmlDocument doc = new XmlDocument ();
+				doc.Load ( file.FullName );
+				Deserialize ( doc );
+			} else
+				throw new FileNotFoundException ( string.Format ( "The file {0} was not found.", file.FullName ) );
+		}
 
-    /// <summary>
-    /// Deserializes the specified file.
-    /// </summary>
-    /// <param name="file">The file.</param>
-    public void Deserialize ( string file ) {
-      Deserialize ( new FileInfo ( file ) );
-    }
+		/// <summary>
+		/// Deserializes the specified file.
+		/// </summary>
+		/// <param name="file">The file.</param>
+		public void Deserialize ( string file ) {
+			Deserialize ( new FileInfo ( file ) );
+		}
 
-    #endregion
+		#endregion
 
-    #region ICCNetDocumentation Members
-    /// <summary>
-    /// Gets the documentation URI.
-    /// </summary>
-    /// <value>The documentation URI.</value>
-    [Browsable ( false )]
-    public Uri DocumentationUri {
-      get { return new Uri ( "http://confluence.public.thoughtworks.org/display/CCNET?decorator=printable" ); }
-    }
+		#region ICCNetDocumentation Members
+		/// <summary>
+		/// Gets the documentation URI.
+		/// </summary>
+		/// <value>The documentation URI.</value>
+		[Browsable ( false )]
+		public Uri DocumentationUri {
+			get { return new Uri ( "http://confluence.public.thoughtworks.org/display/CCNET?decorator=printable" ); }
+		}
 
-    #endregion
-  }
+		#endregion
+	}
 }
