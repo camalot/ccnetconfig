@@ -1,4 +1,4 @@
-/* Copyright (c) 2006, Ryan Conrad. All rights reserved.
+/* Copyright (c) 2006 - 2009, Ryan Conrad. All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
  * - Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
@@ -27,165 +27,170 @@ using System.Xml;
 using CCNetConfig.Core.Serialization;
 
 namespace CCNetConfig.CCNet {
-  /// <summary>
-  /// CruiseControl.NET provides basic support for Subversion repositories. Checking for changes, running builds 
-  /// (bootstrapped through NAnt), and tagging-by-copying are supported, but more advanced features such as using 
-  /// Subversion revision numbers are not yet supported. Subversion support is under active development and will 
-  /// improve over time.
-  /// </summary>
-  /// <remarks>
-  /// <strong>A Working Copy Must Already Exist</strong><br />
-  /// <para>The Subversion source control task requires that the working directory already contain a Subversion working copy. 
-  /// If your build policy requires checking out a clean copy, then create a second one inside your build task. CruiseControl.Net 
-  /// is not (yet) able to checkout a clean Subversion working copy from scratch.</para>
-  /// </remarks>
-  [MinimumVersion ( "1.0" )]
-  public class SubversionSourceControl : SourceControl, ICCNetDocumentation {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="SubversionSourceControl"/> class.
-    /// </summary>
-    public SubversionSourceControl ( )
-      : base ( "svn" ) {
-      this.WebUrlBuilder = null;
-      this.Timeout = null;
-    }
+	/// <summary>
+	/// CruiseControl.NET provides basic support for Subversion repositories. Checking for changes, running builds 
+	/// (bootstrapped through NAnt), and tagging-by-copying are supported, but more advanced features such as using 
+	/// Subversion revision numbers are not yet supported. Subversion support is under active development and will 
+	/// improve over time.
+	/// </summary>
+	/// <remarks>
+	/// <strong>A Working Copy Must Already Exist</strong><br />
+	/// <para>The Subversion source control task requires that the working directory already contain a Subversion working copy. 
+	/// If your build policy requires checking out a clean copy, then create a second one inside your build task. CruiseControl.Net 
+	/// is not (yet) able to checkout a clean Subversion working copy from scratch.</para>
+	/// </remarks>
+	[MinimumVersion ( "1.0" )]
+	public class SubversionSourceControl : SourceControl, ICCNetDocumentation {
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SubversionSourceControl"/> class.
+		/// </summary>
+		public SubversionSourceControl ()
+			: base ( "svn" ) {
+			SvnUriParser.RegisterParsers ();
+			this.WebUrlBuilder = null;
+			this.Timeout = null;
+		}
 
-    /// <summary>
-    /// The url for your repository (eg. svn://svnserver/)
-    /// </summary>
-    [Description ( "The url for your repository (eg. svn://svnserver/)" ),
-    DefaultValue ( null ),
-    ReflectorName ( "trunkUrl" ), Category ( "Optional" )]
-    public SvnUri TrunkUrl { get; set; }
-    /// <summary>
-    /// The directory containing the locally checked out workspace.
-    /// </summary>
-    [Description ( "The directory containing the locally checked out workspace." ), DefaultValue ( null ),
-    Category ( "Optional" ), ReflectorName ( "workingDirectory" ),
-    Editor ( typeof ( BrowseForFolderUIEditor ), typeof ( UITypeEditor ) ),
-    BrowseForFolderDescription ( "Select path to the working directory." )]
-    public string WorkingDirectory { get; set; }
-    /// <summary>
-    /// The location of the svn executable.
-    /// </summary>
-    [Description ( "The location of the svn executable." ), DefaultValue ( null ), Category ( "Optional" ),
-    Editor ( typeof ( OpenFileDialogUIEditor ), typeof ( UITypeEditor ) ), FileTypeFilter ( "SubVersion Client|*.exe" ),
-   OpenFileDialogTitle ( "Select SubVersion command-line client" ), ReflectorName ( "executable" )]
-    public string Executable { get; set; }
-    /// <summary>
-    /// The username to use for authentication when connecting to the repository.
-    /// </summary>
-    [Description ( "The username to use for authentication when connecting to the repository." ),
-    DefaultValue ( null ), Category ( "Optional" ), ReflectorName ( "username" )]
-    public string Username { get; set; }
-    /// <summary>
-    /// The password to use for authentication when connecting to the repository.
-    /// </summary>
-    [Description ( "The password to use for authentication when connecting to the repository." ),
-    DefaultValue ( null ), TypeConverter ( typeof ( PasswordTypeConverter ) ), Category ( "Optional" ),
-    ReflectorName ( "password" )]
-    public HiddenPassword Password { get; set; }
-    /// <summary>
-    /// Whether to retrieve the updates from Subversion for a particular build.
-    /// </summary>
-    [Description ( "Whether to retrieve the updates from Subversion for a particular build." ),
-    DefaultValue ( null ), Editor ( typeof ( DefaultableBooleanUIEditor ), typeof ( UITypeEditor ) ),
-    TypeConverter ( typeof ( DefaultableBooleanTypeConverter ) ), Category ( "Optional" ),
-    ReflectorName ( "autoGetSource" )]
-    public bool? AutoGetSource { get; set; }
-    /// <summary>
-    /// The root url for the WebSVN site
-    /// </summary>
-    [Description ( "The root url for the WebSVN site" ), DefaultValue ( null ), Category ( "Optional" ),
-    TypeConverter ( typeof ( ObjectOrNoneTypeConverter ) ), ReflectorName ( "webUrlBuilder" ),
-    Editor ( typeof ( ObjectOrNoneUIEditor ), typeof ( UITypeEditor ) )]
-    public WebUrlBuilder WebUrlBuilder { get; set; }
-    /// <summary>
-    /// Indicates that the repository should be tagged if the build succeeds.
-    /// </summary>
-    [Description ( "Indicates that the repository should be tagged if the build succeeds." ),
-    DefaultValue ( null ), Editor ( typeof ( DefaultableBooleanUIEditor ), typeof ( UITypeEditor ) ),
-    TypeConverter ( typeof ( DefaultableBooleanTypeConverter ) ), Category ( "Optional" ),
-    ReflectorName ( "tagOnSuccess" )]
-    public bool? TagOnSuccess { get; set; }
-    /// <summary>
-    /// The base url for tags in your repository.
-    /// </summary>
-    [Description ( "The base url for tags in your repository." ), DefaultValue ( null ), Category ( "Optional" ),
-    ReflectorName ( "tagBaseUrl" )]
-    public string TagBaseUrl { get; set; }
-    /// <summary>
-    /// Sets the timeout period for the source control operation. See Timeout Configuration for details.
-    /// </summary>
-    [DefaultValue ( null ), Description ( "Sets the timeout period for the source control operation. See Timeout Configuration for details." ),
-    TypeConverter ( typeof ( ObjectOrNoneTypeConverter ) ), Category ( "Optional" ),
-    ReflectorName ( "timeout" ), Editor ( typeof ( ObjectOrNoneUIEditor ), typeof ( UITypeEditor ) )]
-    public Timeout Timeout { get; set; }
+		/// <summary>
+		/// The url for your repository (eg. svn://svnserver/)
+		/// </summary>
+		[Description ( "The url for your repository (eg. svn://svnserver/)" ),
+		DefaultValue ( null ),
+		ReflectorName ( "trunkUrl" ), Category ( "Optional" )]
+		public SvnUri TrunkUrl { get; set; }
+		/// <summary>
+		/// The directory containing the locally checked out workspace.
+		/// </summary>
+		[Description ( "The directory containing the locally checked out workspace." ), DefaultValue ( null ),
+		Category ( "Optional" ), ReflectorName ( "workingDirectory" ),
+		Editor ( typeof ( BrowseForFolderUIEditor ), typeof ( UITypeEditor ) ),
+		BrowseForFolderDescription ( "Select path to the working directory." )]
+		public string WorkingDirectory { get; set; }
+		/// <summary>
+		/// The location of the svn executable.
+		/// </summary>
+		[Description ( "The location of the svn executable." ), DefaultValue ( null ), Category ( "Optional" ),
+		Editor ( typeof ( OpenFileDialogUIEditor ), typeof ( UITypeEditor ) ), FileTypeFilter ( "SubVersion Client|*.exe" ),
+	 OpenFileDialogTitle ( "Select SubVersion command-line client" ), ReflectorName ( "executable" )]
+		public string Executable { get; set; }
+		/// <summary>
+		/// The username to use for authentication when connecting to the repository.
+		/// </summary>
+		[Description ( "The username to use for authentication when connecting to the repository." ),
+		DefaultValue ( null ), Category ( "Optional" ), ReflectorName ( "username" )]
+		public string Username { get; set; }
+		/// <summary>
+		/// The password to use for authentication when connecting to the repository.
+		/// </summary>
+		[Description ( "The password to use for authentication when connecting to the repository." ),
+		DefaultValue ( null ), TypeConverter ( typeof ( PasswordTypeConverter ) ), Category ( "Optional" ),
+		ReflectorName ( "password" )]
+		public HiddenPassword Password { get; set; }
+		/// <summary>
+		/// Whether to retrieve the updates from Subversion for a particular build.
+		/// </summary>
+		[Description ( "Whether to retrieve the updates from Subversion for a particular build." ),
+		DefaultValue ( null ), Editor ( typeof ( DefaultableBooleanUIEditor ), typeof ( UITypeEditor ) ),
+		TypeConverter ( typeof ( DefaultableBooleanTypeConverter ) ), Category ( "Optional" ),
+		ReflectorName ( "autoGetSource" )]
+		public bool? AutoGetSource { get; set; }
+		/// <summary>
+		/// The root url for the WebSVN site
+		/// </summary>
+		[Description ( "The root url for the WebSVN site" ), DefaultValue ( null ), Category ( "Optional" ),
+		TypeConverter ( typeof ( ObjectOrNoneTypeConverter ) ), ReflectorName ( "webUrlBuilder" ),
+		Editor ( typeof ( ObjectOrNoneUIEditor ), typeof ( UITypeEditor ) )]
+		public WebUrlBuilder WebUrlBuilder { get; set; }
+		/// <summary>
+		/// Indicates that the repository should be tagged if the build succeeds.
+		/// </summary>
+		[Description ( "Indicates that the repository should be tagged if the build succeeds." ),
+		DefaultValue ( null ), Editor ( typeof ( DefaultableBooleanUIEditor ), typeof ( UITypeEditor ) ),
+		TypeConverter ( typeof ( DefaultableBooleanTypeConverter ) ), Category ( "Optional" ),
+		ReflectorName ( "tagOnSuccess" )]
+		public bool? TagOnSuccess { get; set; }
+		/// <summary>
+		/// The base url for tags in your repository.
+		/// </summary>
+		[Description ( "The base url for tags in your repository." ), DefaultValue ( null ), Category ( "Optional" ),
+		ReflectorName ( "tagBaseUrl" )]
+		public string TagBaseUrl { get; set; }
+		/// <summary>
+		/// Sets the timeout period for the source control operation. See Timeout Configuration for details.
+		/// </summary>
+		[DefaultValue ( null ), Description ( "Sets the timeout period for the source control operation. See Timeout Configuration for details." ),
+		TypeConverter ( typeof ( ObjectOrNoneTypeConverter ) ), Category ( "Optional" ),
+		ReflectorName ( "timeout" ), Editor ( typeof ( ObjectOrNoneUIEditor ), typeof ( UITypeEditor ) )]
+		public Timeout Timeout { get; set; }
 
-    /// <summary>
-    /// Creates a copy of this object.
-    /// </summary>
-    /// <returns></returns>
-    public override SourceControl Clone ( ) {
-      SubversionSourceControl ssc = this.MemberwiseClone ( ) as SubversionSourceControl;
-      ssc.Password = this.Password.Clone ( );
-      if ( this.Timeout != null )
-        ssc.Timeout = this.Timeout.Clone ( );
-      if ( this.TrunkUrl != null )
-        ssc.TrunkUrl = new SvnUri ( this.TrunkUrl.ToString ( ) );
-      if ( this.WebUrlBuilder != null )
-        ssc.WebUrlBuilder = this.WebUrlBuilder.Clone ( );
-      return ssc;
-    }
+		/// <summary>
+		/// Creates a copy of this object.
+		/// </summary>
+		/// <returns></returns>
+		public override SourceControl Clone () {
+			SubversionSourceControl ssc = this.MemberwiseClone () as SubversionSourceControl;
+			ssc.Password = this.Password.Clone ();
+			if ( this.Timeout != null )
+				ssc.Timeout = this.Timeout.Clone ();
+			if ( this.TrunkUrl != null )
+				ssc.TrunkUrl = new SvnUri ( this.TrunkUrl.ToString () );
+			if ( this.WebUrlBuilder != null )
+				ssc.WebUrlBuilder = this.WebUrlBuilder.Clone ();
+			return ssc;
+		}
 
-    #region Serialization
-    /// <summary>
-    /// Serializes the object.
-    /// </summary>
-    /// <returns></returns>
-    public override System.Xml.XmlElement Serialize ( ) {
+		#region Serialization
+		/// <summary>
+		/// Serializes the object.
+		/// </summary>
+		/// <returns></returns>
+		public override System.Xml.XmlElement Serialize () {
 			return new Serializer<SubversionSourceControl> ().Serialize ( this );
-    }
+		}
 
-    /// <summary>
-    /// Deserializes the specified element.
-    /// </summary>
-    /// <param name="element">The element.</param>
-    public override void Deserialize ( XmlElement element ) {
-      this.TrunkUrl = null;
-      this.AutoGetSource = null;
-      this.Executable = string.Empty;
-      this.Password = new HiddenPassword ( );
-      this.TagBaseUrl = null;
-      this.TagOnSuccess = null;
-      this.Timeout = null;
-      this.Username = string.Empty;
-      this.WebUrlBuilder = null;
-      this.WorkingDirectory = string.Empty;
+		/// <summary>
+		/// Deserializes the specified element.
+		/// </summary>
+		/// <param name="element">The element.</param>
+		public override void Deserialize ( XmlElement element ) {
+			this.TrunkUrl = null;
+			this.AutoGetSource = null;
+			this.Executable = string.Empty;
+			this.Password = new HiddenPassword ();
+			this.TagBaseUrl = null;
+			this.TagOnSuccess = null;
+			this.Timeout = null;
+			this.Username = string.Empty;
+			this.WebUrlBuilder = null;
+			this.WorkingDirectory = string.Empty;
 
-      if ( string.Compare ( element.GetAttribute ( "type" ), this.TypeName, false ) != 0 )
-        throw new InvalidCastException ( string.Format ( "Unable to convert {0} to a {1}", element.GetAttribute ( "type" ), this.TypeName ) );
-      string s = Util.UrlDecode ( Util.GetElementOrAttributeValue ( "trunkUrl", element ) );
+			if ( string.Compare ( element.GetAttribute ( "type" ), this.TypeName, false ) != 0 )
+				throw new InvalidCastException ( string.Format ( "Unable to convert {0} to a {1}", element.GetAttribute ( "type" ), this.TypeName ) );
+			string s = Util.UrlDecode ( Util.GetElementOrAttributeValue ( "trunkUrl", element ) );
 			if ( !string.IsNullOrEmpty ( s ) ) {
+				// if starts with svn+ssh we need to change the " " back to a "+"
+				if ( s.StartsWith ( Util.UrlDecode ( SvnUri.UriSchemeSvnSsh ) ) ) {
+					s = string.Format ( "{0}{1}", SvnUri.UriSchemeSvnSsh, s.Substring ( SvnUri.UriSchemeSvnSsh.Length ) );
+				}
 				// issue with file:// uri's with quotes around them...
 				if ( s.StartsWith ( "\"" ) && s.EndsWith ( "\"" ) )
 					s = s.Substring ( 1, s.Length - 2 );
 				this.TrunkUrl = new SvnUri ( s );
 			}
 
-      s = Util.GetElementOrAttributeValue ( "autoGetSource", element );
-      if ( !string.IsNullOrEmpty ( s ) )
-        this.AutoGetSource = string.Compare ( s, bool.TrueString, true ) == 0;
+			s = Util.GetElementOrAttributeValue ( "autoGetSource", element );
+			if ( !string.IsNullOrEmpty ( s ) )
+				this.AutoGetSource = string.Compare ( s, bool.TrueString, true ) == 0;
 
-      s = Util.GetElementOrAttributeValue ( "executable", element );
-      if ( !string.IsNullOrEmpty ( s ) )
-        this.Executable = s;
+			s = Util.GetElementOrAttributeValue ( "executable", element );
+			if ( !string.IsNullOrEmpty ( s ) )
+				this.Executable = s;
 
-      s = Util.GetElementOrAttributeValue ( "password", element );
-      if ( !string.IsNullOrEmpty ( s ) )
-        this.Password.Password = s;
+			s = Util.GetElementOrAttributeValue ( "password", element );
+			if ( !string.IsNullOrEmpty ( s ) )
+				this.Password.Password = s;
 
-      s = Util.GetElementOrAttributeValue ( "tagBaseUrl", element );
+			s = Util.GetElementOrAttributeValue ( "tagBaseUrl", element );
 			if ( !string.IsNullOrEmpty ( s ) ) {
 				// a lot of people are reporting an invalid URI scheme here 
 				// this is because it can have just the path so its not a full uri.
@@ -193,45 +198,43 @@ namespace CCNetConfig.CCNet {
 
 			}
 
-      s = Util.GetElementOrAttributeValue ( "tagOnSuccess", element );
-      if ( !string.IsNullOrEmpty ( s ) )
-        this.TagOnSuccess = string.Compare ( s, bool.TrueString, true ) == 0;
+			s = Util.GetElementOrAttributeValue ( "tagOnSuccess", element );
+			if ( !string.IsNullOrEmpty ( s ) )
+				this.TagOnSuccess = string.Compare ( s, bool.TrueString, true ) == 0;
 
-      s = Util.GetElementOrAttributeValue ( "username", element );
-      if ( !string.IsNullOrEmpty ( s ) )
-        this.Username = s;
+			s = Util.GetElementOrAttributeValue ( "username", element );
+			if ( !string.IsNullOrEmpty ( s ) )
+				this.Username = s;
 
-      s = Util.GetElementOrAttributeValue ( "workingDirectory", element );
-      if ( !string.IsNullOrEmpty ( s ) )
-        this.WorkingDirectory = s;
+			s = Util.GetElementOrAttributeValue ( "workingDirectory", element );
+			if ( !string.IsNullOrEmpty ( s ) )
+				this.WorkingDirectory = s;
 
-      XmlElement ele = ( XmlElement ) element.SelectSingleNode ( "webUrlBuilder" );
-      if ( ele != null && (ele.HasAttributes || ele.HasChildNodes))
-      {
-        // this doesn't protect against malformed Uri's, but I haven't seen checks for those anywhere else
-        this.WebUrlBuilder = new WebUrlBuilder ();
-        this.WebUrlBuilder.Deserialize ( ele );        
-      }
+			XmlElement ele = (XmlElement)element.SelectSingleNode ( "webUrlBuilder" );
+			if ( ele != null && ( ele.HasAttributes || ele.HasChildNodes ) ) {
+				// this doesn't protect against malformed Uri's, but I haven't seen checks for those anywhere else
+				this.WebUrlBuilder = new WebUrlBuilder ();
+				this.WebUrlBuilder.Deserialize ( ele );
+			}
 
-      ele = ( XmlElement ) element.SelectSingleNode ( "timeout" );
-      if ( ele != null && ( ele.HasAttributes || ele.HasChildNodes ) )
-      {
-        this.Timeout = new Timeout ();
-        this.Timeout.Deserialize ( ele );
-      }
-    }
-    #endregion
+			ele = (XmlElement)element.SelectSingleNode ( "timeout" );
+			if ( ele != null && ( ele.HasAttributes || ele.HasChildNodes ) ) {
+				this.Timeout = new Timeout ();
+				this.Timeout.Deserialize ( ele );
+			}
+		}
+		#endregion
 
-    #region ICCNetDocumentation Members
-    /// <summary>
-    /// Gets the documentation URI.
-    /// </summary>
-    /// <value>The documentation URI.</value>
-    [Browsable ( false ), ReflectorIgnore]
-    public Uri DocumentationUri {
-      get { return new Uri ( "http://confluence.public.thoughtworks.org/display/CCNET/Subversion+Source+Control+Block?decorator=printable" ); }
-    }
-    #endregion
+		#region ICCNetDocumentation Members
+		/// <summary>
+		/// Gets the documentation URI.
+		/// </summary>
+		/// <value>The documentation URI.</value>
+		[Browsable ( false ), ReflectorIgnore]
+		public Uri DocumentationUri {
+			get { return new Uri ( "http://confluence.public.thoughtworks.org/display/CCNET/Subversion+Source+Control+Block?decorator=printable" ); }
+		}
+		#endregion
 
-  }
+	}
 }

@@ -36,18 +36,14 @@ namespace CCNetConfig.Core.Components {
     /// 
     /// </summary>
     public static string UriSchemeSvnSsh = "svn+ssh";
+
     /// <summary>
     /// Initializes a new instance of the <see cref="SvnUri"/> class.
     /// </summary>
     /// <param name="url">The URL.</param>
     public SvnUri ( string url ) : base ( url ) {
-      if ( !UriParser.IsKnownScheme ( SvnUri.UriSchemeSvn ) ) {
-        UriParser.Register ( new SvnUriParser ( ), SvnUri.UriSchemeSvn, 3980 );
-      }
-
-      if ( !UriParser.IsKnownScheme ( SvnUri.UriSchemeSvnSsh ) ) {
-        UriParser.Register ( new SvnUriParser ( ), SvnUri.UriSchemeSvnSsh, 22 );
-      }
+      
     }
+
   }
 }

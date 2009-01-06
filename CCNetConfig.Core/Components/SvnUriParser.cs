@@ -25,16 +25,25 @@ namespace CCNetConfig.Core.Components {
   /// <summary>
   /// 
   /// </summary>
-  public class SvnUriParser : UriParser {
-    /// <summary>
-    /// Indicates whether a URI is well-formed.
-    /// </summary>
-    /// <param name="uri">The URI to check.</param>
-    /// <returns>
-    /// true if <paramref name="uri"/> is well-formed; otherwise, false.
-    /// </returns>
-    protected override bool IsWellFormedOriginalString ( Uri uri ) {
-      return base.IsWellFormedOriginalString ( uri );
-    }
+	public class SvnUriParser : GenericUriParser {
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SvnUriParser"/> class.
+		/// </summary>
+		public SvnUriParser () : base ( GenericUriParserOptions.Default ) {
+			
+		}
+
+		/// <summary>
+		/// Registers the parsers.
+		/// </summary>
+		public static void RegisterParsers () {
+			if ( !UriParser.IsKnownScheme ( SvnUri.UriSchemeSvn ) ) {
+				UriParser.Register ( new SvnUriParser (), SvnUri.UriSchemeSvn, 3980 );
+			}
+
+			if ( !UriParser.IsKnownScheme ( SvnUri.UriSchemeSvnSsh ) ) {
+				UriParser.Register ( new SvnUriParser (), SvnUri.UriSchemeSvnSsh, 22 );
+			}
+		}
   }
 }
