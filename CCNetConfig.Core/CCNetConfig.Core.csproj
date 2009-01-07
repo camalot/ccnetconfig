@@ -167,6 +167,7 @@
     <Compile Include="Components\DefaultableBooleanTypeConverter.cs" />
     <Compile Include="Components\DefaultableEnumTypeConverter.cs" />
     <Compile Include="Components\FormatProviderAttribute.cs" />
+    <Compile Include="Components\NullOrObjectAttribue.cs" />
     <Compile Include="Components\NullValueEditorObject.cs" />
     <Compile Include="Components\ObjectOrNoneTypeConverter.cs" />
     <Compile Include="Components\ObjectOrNoneUIEditor.cs" />

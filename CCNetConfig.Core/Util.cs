@@ -92,41 +92,6 @@ namespace CCNetConfig.Core {
     public static FileInfo UserSettingsFile {
       get { return new FileInfo ( Path.Combine ( Environment.GetFolderPath ( Environment.SpecialFolder.ApplicationData ), @"CCNetConfig\Settings.config" ) ); }
     }
-
-		/// <summary>
-		/// Resets an object based on the default value attribute. 
-		/// If it does not contain a default value attribute, null is set.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="obj"></param>
-		public static void ResetObjectProperties<T> ( T obj ) {
-			PropertyInfo[] props = obj.GetType ().GetProperties ( BindingFlags.Public | BindingFlags.Instance | BindingFlags.SetProperty | BindingFlags.GetProperty );
-			foreach ( PropertyInfo pi in props ) {
-				DefaultValueAttribute dva = Util.GetCustomAttribute<DefaultValueAttribute> ( pi );
-				// check if the object allows nulls
-				TypeConverterAttribute tca = Util.GetCustomAttribute<TypeConverterAttribute> ( pi );
-				bool allowsNull = string.Compare ( tca.ConverterTypeName, typeof ( ObjectOrNoneTypeConverter ).FullName ) == 0;
-
-				if ( dva != null ) {
-					if ( pi.PropertyType.IsClass && ( !pi.PropertyType.IsPrimitive || Util.IsNullable ( pi.PropertyType ) ) && !allowsNull ) {
-						Assembly a = pi.PropertyType.Assembly;
-						object tobj = a.CreateInstance ( pi.PropertyType.FullName );
-						pi.SetValue ( obj, tobj, null );
-					} else {
-						pi.SetValue ( obj, dva.Value, null );
-					}
-				} else {
-					if ( pi.PropertyType.IsClass && ( !pi.PropertyType.IsPrimitive || Util.IsNullable ( pi.PropertyType ) ) && !allowsNull ) {
-						Assembly a = pi.PropertyType.Assembly;
-						object tobj = a.CreateInstance ( pi.PropertyType.FullName );
-						pi.SetValue ( obj, tobj, null );
-					} else {
-						pi.SetValue ( obj, null, null );
-					}
-				}
-			}
-		}
-
     /// <summary>
     /// Gets the type description providers.
     /// </summary>
@@ -965,7 +930,7 @@ namespace CCNetConfig.Core {
     /// <typeparam name="T"></typeparam>
     /// <param name="type">The type.</param>
     /// <returns></returns>
-    public static T GetCustomAttribute<T> ( Type type ) {
+    public static T GetCustomAttribute<T> ( Type type ) where T : Attribute {
       object[ ] attr = type.GetCustomAttributes ( typeof ( T ), true ) as Attribute[ ];
       if ( attr != null && attr.Length > 0 ) {
         return ( T ) attr[ 0 ];
@@ -979,7 +944,11 @@ namespace CCNetConfig.Core {
     /// <typeparam name="T"></typeparam>
     /// <param name="mi">The mi.</param>
     /// <returns></returns>
-    public static T GetCustomAttribute<T> ( MemberInfo mi ) {
+    public static T GetCustomAttribute<T> ( MemberInfo mi ) where T : Attribute {
+			Attribute attrib = Attribute.GetCustomAttribute ( mi, typeof ( T ) );
+			if ( attrib != null ) {
+				return (T)attrib;
+			}
       object[ ] attr = mi.GetCustomAttributes ( typeof ( T ), true ) as Attribute[ ];
       if ( attr != null && attr.Length > 0 ) {
         return ( T ) attr[ 0 ];
@@ -1364,6 +1333,52 @@ namespace CCNetConfig.Core {
 
       return doc;
     }
+
+		/// <summary>
+		/// Resets the object properties automatically based on the type and custom attributes.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="obj">The obj.</param>
+		public static void ResetObjectProperties<T> ( T obj ) {
+			PropertyInfo[] props = obj.GetType ().GetProperties ( BindingFlags.Public | BindingFlags.Instance | BindingFlags.SetProperty | BindingFlags.GetProperty );
+			foreach ( PropertyInfo pi in props ) {
+				if ( !pi.CanWrite ) {
+					continue;
+				}
+				DefaultValueAttribute dva = Util.GetCustomAttribute<DefaultValueAttribute> ( pi );
+				// check if the object allows nulls
+				TypeConverterAttribute tca = Util.GetCustomAttribute<TypeConverterAttribute> ( pi );
+				// check the property for the nullorobject attribute
+				NullOrObjectAttribue nooa = Util.GetCustomAttribute<NullOrObjectAttribue> ( pi );
+				// check the property type for the nullorobject attribute
+				NullOrObjectAttribue nooat = Util.GetCustomAttribute<NullOrObjectAttribue> ( pi.PropertyType );
+				bool allowsNull = ( tca != null && string.Compare ( tca.ConverterTypeName, typeof ( ObjectOrNoneTypeConverter ).Name ) == 0 ) || nooa != null || nooat != null ;
+				ConstructorInfo constructorInfo = pi.PropertyType.GetConstructor ( new Type[] { } );
+				if ( dva != null ) {
+					if ( pi.PropertyType.IsClass && !Util.IsNullable ( pi.PropertyType ) && !allowsNull && constructorInfo != null ) {
+						try {
+							object tobj = constructorInfo.Invoke ( new object[] { } );
+							pi.SetValue ( obj, tobj, null );
+						} catch ( Exception ex ) {
+							throw;
+						}
+					} else {
+						pi.SetValue ( obj, dva.Value, null );
+					}
+				} else {
+					if ( pi.PropertyType.IsClass && !Util.IsNullable ( pi.PropertyType ) && !allowsNull && constructorInfo != null ) {
+						try {
+							object tobj = constructorInfo.Invoke ( new object[] { } );
+							pi.SetValue ( obj, tobj, null );
+						} catch ( Exception ex ) {
+							throw;
+						}
+					} else {
+						pi.SetValue ( obj, null, null );
+					}
+				}
+			}
+		}
 
     /// <summary>
     /// Decodes the specified value.

@@ -15,10 +15,15 @@ namespace CCNetConfig.BugTracking {
     /// </summary>
     /// <returns></returns>
     public static string GetOSInformation ( ) {
-      string format = "OS: {0} {1} SP: {2}{7}Processor Count: {3}{7}CLR Version: {4}{7}WorkingSet: {5}{7}System Directory: {6}";
-      return string.Format ( format, Environment.OSVersion.Platform.ToString ( ), Environment.OSVersion.VersionString,
+			string format = "OS: {0} {1} SP: {2}{7}Processor Count: {3}{7}Process Architecture: {8}{7}CLR Version: {4}{7}WorkingSet: {5}{7}System Directory: {6}";
+
+			Type t32 = Type.GetType ( "System.Int16" );
+			bool isX64 = t32 == null;
+			
+			return string.Format ( format, Environment.OSVersion.Platform.ToString ( ), Environment.OSVersion.VersionString,
         Environment.OSVersion.ServicePack, Environment.ProcessorCount, Environment.Version.ToString ( ),
-        Environment.WorkingSet, Environment.SystemDirectory, Environment.NewLine );
+        Environment.WorkingSet, Environment.SystemDirectory, Environment.NewLine,
+				isX64 ? "64bit" : "32bit" );
     }
 
     /// <summary>

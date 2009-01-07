@@ -61,7 +61,6 @@
     <Compile Include="Labeller\SubversionLabeller.cs" />
     <Compile Include="Labeller\SvnRevisionLabeller.cs" />
     <Compile Include="PublisherTask\ArtifactCleanupTask.cs" />
-    <Compile Include="PublisherTask\CodePlexReleasePublisher.cs" />
     <Compile Include="PublisherTask\EmailConverter.cs" />
     <Compile Include="PublisherTask\EmailGroup.cs" />
     <Compile Include="PublisherTask\EmailNotificationType.cs" />
