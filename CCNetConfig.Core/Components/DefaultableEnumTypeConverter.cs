@@ -22,42 +22,47 @@ using System.Text;
 using System.ComponentModel;
 
 namespace CCNetConfig.Core.Components {
-  /// <summary>
-  /// Converts the nullable <see cref="System.Enum"/> to a <see cref="System.String"/> and back.
-  /// </summary>
-  public class DefaultableEnumTypeConverter : TypeConverter {
-    /// <summary>
-    /// Returns whether this converter can convert the object to the specified type, using the specified context.
-    /// </summary>
-    /// <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"></see> that provides a format context.</param>
-    /// <param name="destinationType">A <see cref="T:System.Type"></see> that represents the type you want to convert to.</param>
-    /// <returns>
-    /// true if this converter can perform the conversion; otherwise, false.
-    /// </returns>
-    public override bool CanConvertTo ( ITypeDescriptorContext context, Type destinationType ) {
-      return base.CanConvertTo ( context, destinationType );
-    }
+	/// <summary>
+	/// Converts the nullable <see cref="System.Enum"/> to a <see cref="System.String"/> and back.
+	/// </summary>
+	public class DefaultableEnumTypeConverter : TypeConverter {
+		/// <summary>
+		/// Returns whether this converter can convert the object to the specified type, using the specified context.
+		/// </summary>
+		/// <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"></see> that provides a format context.</param>
+		/// <param name="destinationType">A <see cref="T:System.Type"></see> that represents the type you want to convert to.</param>
+		/// <returns>
+		/// true if this converter can perform the conversion; otherwise, false.
+		/// </returns>
+		public override bool CanConvertTo ( ITypeDescriptorContext context, Type destinationType ) {
+			return base.CanConvertTo ( context, destinationType );
+		}
 
-    /// <summary>
-    /// Converts the given value object to the specified type, using the specified context and culture information.
-    /// </summary>
-    /// <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"></see> that provides a format context.</param>
-    /// <param name="culture">A <see cref="T:System.Globalization.CultureInfo"></see>. If null is passed, the current culture is assumed.</param>
-    /// <param name="value">The <see cref="T:System.Object"></see> to convert.</param>
-    /// <param name="destinationType">The <see cref="T:System.Type"></see> to convert the value parameter to.</param>
-    /// <returns>
-    /// An <see cref="T:System.Object"></see> that represents the converted value.
-    /// </returns>
-    /// <exception cref="T:System.NotSupportedException">The conversion cannot be performed. </exception>
-    /// <exception cref="T:System.ArgumentNullException">The destinationType parameter is null. </exception>
-    public override object ConvertTo ( ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType ) {
-      if ( destinationType == typeof ( String ) ) {
-        if ( context.PropertyDescriptor.GetValue ( context.Instance ) == null )
-          return DefaultableEnumUIEditor.NULL_VALUE.Name;
-        else
-          return context.PropertyDescriptor.GetValue ( context.Instance ).ToString ( );
-      } else
-        throw new NotSupportedException ( string.Format ( "Unsupported type: {0}", destinationType.ToString ( ) ) );
-    }
-  }
+		/// <summary>
+		/// Converts the given value object to the specified type, using the specified context and culture information.
+		/// </summary>
+		/// <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"></see> that provides a format context.</param>
+		/// <param name="culture">A <see cref="T:System.Globalization.CultureInfo"></see>. If null is passed, the current culture is assumed.</param>
+		/// <param name="value">The <see cref="T:System.Object"></see> to convert.</param>
+		/// <param name="destinationType">The <see cref="T:System.Type"></see> to convert the value parameter to.</param>
+		/// <returns>
+		/// An <see cref="T:System.Object"></see> that represents the converted value.
+		/// </returns>
+		/// <exception cref="T:System.NotSupportedException">The conversion cannot be performed. </exception>
+		/// <exception cref="T:System.ArgumentNullException">The destinationType parameter is null. </exception>
+		public override object ConvertTo ( ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType ) {
+			if ( destinationType == typeof ( String ) ) {
+				if ( context.PropertyDescriptor.GetValue ( context.Instance ) == null )
+					return DefaultableEnumUIEditor.NULL_VALUE.Name;
+				else {
+					object o = context.PropertyDescriptor.GetValue ( context.Instance );
+					Type enumType = Nullable.GetUnderlyingType ( context.PropertyDescriptor.PropertyType );
+					System.Reflection.MemberInfo fld = enumType.GetField ( o.ToString () );
+					SerializerValueAttribute dna = Util.GetSerializerValue ( fld );
+					return dna != null ? dna.Value : o.ToString ();
+				}
+			} else
+				throw new NotSupportedException ( string.Format ( "Unsupported type: {0}", destinationType.ToString () ) );
+		}
+	}
 }

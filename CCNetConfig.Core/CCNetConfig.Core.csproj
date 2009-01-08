@@ -176,6 +176,7 @@
     <Compile Include="Components\SvnUri.cs" />
     <Compile Include="Components\SvnUriParser.cs" />
     <Compile Include="Components\SvnUriTypeConverter.cs" />
+    <Compile Include="Components\SerializerValueAttribute.cs" />
     <Compile Include="Components\UpdateFeedAttribute.cs" />
   </ItemGroup>
   <ItemGroup>

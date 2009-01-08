@@ -20,10 +20,63 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.ComponentModel;
+using CCNetConfig.Core.Components;
 
 namespace CCNetConfig.CCNet {
+	/// <summary>
+	/// 
+	/// </summary>
   public enum ArtifactCleanUpMethods {
+		/// <summary>
+		/// 
+		/// </summary>
     KeepLastXBuilds,
+		/// <summary>
+		/// 
+		/// </summary>
     DeleteBuildsOlderThanXDays
   }
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public enum VisualStudioTaskVersions {
+		/// <summary>
+		/// 
+		/// </summary>
+		VS2002,
+		/// <summary>
+		/// 
+		/// </summary>
+		VS2003,
+		/// <summary>
+		/// 
+		/// </summary>
+		VS2005,
+		/// <summary>
+		/// 
+		/// </summary>
+		VS2008,
+		/// <summary>
+		/// 
+		/// </summary>
+		[SerializerValue("7.0")]
+		VS7_0,
+		/// <summary>
+		/// 
+		/// </summary>
+		[SerializerValue ( "7.1" )]
+		VS7_1,
+		/// <summary>
+		/// 
+		/// </summary>
+		[SerializerValue ( "8.0" )]
+		VS8_0,
+		/// <summary>
+		/// 
+		/// </summary>
+		[SerializerValue ( "9.0" )]
+		VS9_0,
+	}
 }

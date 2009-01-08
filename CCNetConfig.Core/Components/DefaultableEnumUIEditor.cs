@@ -63,8 +63,9 @@ namespace CCNetConfig.Core.Components {
           Version min = Util.GetMinimumVersion ( fld );
           Version max = Util.GetMaximumVersion ( fld );
           Version exact = Util.GetExactVersion ( fld );
-          if ( Util.IsExactVersion ( exact, versionInfo ) || Util.IsInVersionRange ( min, max, versionInfo ) )
-            li.Add ( dow );
+					if ( Util.IsExactVersion ( exact, versionInfo ) || Util.IsInVersionRange ( min, max, versionInfo ) ) {
+						li.Add ( dow );
+					}
         }
 
         lst.DataSource = li;

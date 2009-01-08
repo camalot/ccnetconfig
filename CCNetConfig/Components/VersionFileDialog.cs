@@ -634,7 +634,6 @@ namespace CCNetConfig.Components {
       IntPtr ipNotify = new IntPtr ( lParam );
       OfNotify ofNot = (OfNotify)Marshal.PtrToStructure ( ipNotify, typeof ( OfNotify ) );
       int code = ofNot.hdr.code;
-      Console.WriteLine(ofNot.hdr.code.ToString());
       switch ( code ) {
         case CommonDlgNotification.FileOk:
           _selectedVersionIndex = (int)NativeMethods.SendMessage ( _comboHandle, NativeMethods.CB_GETCURSEL, 0, 0 );

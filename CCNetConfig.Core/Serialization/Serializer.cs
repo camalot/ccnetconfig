@@ -66,14 +66,26 @@ namespace CCNetConfig.Core.Serialization {
 					string name = Util.GetReflectorNameAttributeValue ( pi );
 					ReflectorNodeTypes nodeType = Util.GetReflectorNodeType ( pi );
 					XmlNode node = null;
-					object val = pi.GetValue ( obj, null );
+					object val = pi.GetValue ( obj, null ); ;
+
+					// check if it has a serializervalue attribute and get the value if it does.
+					if ( pi.PropertyType.IsEnum || ( Util.IsNullable ( pi.PropertyType ) && Nullable.GetUnderlyingType ( pi.PropertyType ).IsEnum ) && val != null ) {
+						Type enumType = pi.PropertyType;
+						if ( Util.IsNullable ( enumType ) ) {
+							enumType = Nullable.GetUnderlyingType ( enumType );
+						}
+						FieldInfo fi = enumType.GetField ( val.ToString () );
+						SerializerValueAttribute sv = Util.GetSerializerValue ( fi );
+						if ( sv != null ) {
+							val = sv.Value;
+						}
+					}
+
 					switch ( nodeType ) {
 						case ReflectorNodeTypes.Attribute:
 							node = doc.CreateAttribute ( name );
 							if ( required ) {
 								// checks if null or empty...
-								// CheckRequired needs to be modified to account that the type is going to alway be
-								// an object. 
 								if ( val == null || val.ToString () == string.Empty )
 									throw new RequiredAttributeException ( obj, name );
 								node.InnerText = Util.CheckRequired ( obj, name, val ).ToString ();
@@ -88,15 +100,13 @@ namespace CCNetConfig.Core.Serialization {
 							node = doc.CreateElement ( name );
 							if ( required ) {
 								// checks if null or empty...
-								// CheckRequired needs to be modified to account that the type is going to alway be
-								// an object. 
 								if ( val == null || val.ToString () == string.Empty )
 									throw new RequiredAttributeException ( obj, name );
 								node.InnerText = Util.CheckRequired ( obj, name, val ).ToString ();
 							} else {
 								if ( val != null ) {
 									Type valType = val.GetType ();
-									if ( valType.IsPrimitive ) {
+									if ( valType.IsPrimitive || valType == typeof ( string ) ) {
 										node.InnerText = val.ToString ();
 									} else {
 										// handle clonable lists
@@ -111,12 +121,12 @@ namespace CCNetConfig.Core.Serialization {
 													Type o1 = o.GetType ();
 													if ( o1.IsSerializable && o1.IsClass ) {
 														try {
-																string arrayItemName = Util.GetReflectorArrayAttributeValue ( pi );
+															string arrayItemName = Util.GetReflectorArrayAttributeValue ( pi );
 
-																XmlElement tn = doc.CreateElement ( arrayItemName );
-																tn.InnerText = o.ToString ();
-																if ( tn != null )
-																	node.AppendChild ( doc.ImportNode ( tn, true ) );
+															XmlElement tn = doc.CreateElement ( arrayItemName );
+															tn.InnerText = o.ToString ();
+															if ( tn != null )
+																node.AppendChild ( doc.ImportNode ( tn, true ) );
 														} catch {
 															try {
 																string ss = Util.GetStringSeparatorAttributeValue ( pi );
@@ -196,18 +206,18 @@ namespace CCNetConfig.Core.Serialization {
 				} else {
 					if ( propType.IsGenericType && propType.GetGenericTypeDefinition ().Equals ( typeof ( CloneableList<> ) ) ) {
 						//string arrayItemName = Util.GetReflectorArrayAttributeValue ( pi );
-            XmlNodeList nl = element.SelectNodes ( "*" );
-            foreach ( XmlElement ele in nl ) {
-              
-            }
+						XmlNodeList nl = element.SelectNodes ( "*" );
+						foreach ( XmlElement ele in nl ) {
+
+						}
 					} else if ( propType.GetInterface ( typeof ( ICCNetObject ).FullName ) != null ) {
 						ICCNetObject obj = pi.GetValue ( baseObject, null ) as ICCNetObject;
 						new Serializer<ICCNetObject> ().Deserialize ( element.SelectSingleNode ( name ) as XmlElement, obj );
 						pi.SetValue ( baseObject, obj, null );
 					} else if ( propType == typeof ( HiddenPassword ) ) {
 						HiddenPassword hp = new HiddenPassword ();
-						hp.Password = Util.GetElementOrAttributeValue(name,element);
-						pi.SetValue ( baseObject, hp , null );
+						hp.Password = Util.GetElementOrAttributeValue ( name, element );
+						pi.SetValue ( baseObject, hp, null );
 					} else {
 
 					}
