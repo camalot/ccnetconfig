@@ -107,6 +107,26 @@ namespace CCNetConfig.Core {
 		}
 
 		/// <summary>
+		/// Gets the name of the property info from the reflector name.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="name">The reflector name.</param>
+		/// <returns></returns>
+		public static PropertyInfo GetPropertyInfoFromReflectorName<T> ( string name ) {
+			Type t = typeof ( T );
+			PropertyInfo[] props = t.GetProperties ( BindingFlags.IgnoreCase | BindingFlags.Instance );
+			foreach ( PropertyInfo pi in props ) {
+				ReflectorNameAttribute rna = GetCustomAttribute<ReflectorNameAttribute> ( pi );
+				ReflectorIgnoreAttribute ria = GetCustomAttribute<ReflectorIgnoreAttribute> (pi );
+				if ( rna != null && ria == null ) {
+					if ( string.Compare ( name, rna.Name, false ) == 0 )
+						return pi;
+				}
+			}
+			throw new ArgumentException ( string.Format ( "Property not found for type of {0} with a name of {1}", typeof ( T ).Name, name ) );
+		}
+
+		/// <summary>
 		/// Refresh the user settings.
 		/// </summary>
 		public static void RefreshUserSettings () {
@@ -1370,7 +1390,8 @@ namespace CCNetConfig.Core {
 		public static void ResetObjectProperties<T> ( T obj ) {
 			PropertyInfo[] props = obj.GetType ().GetProperties ( BindingFlags.Public | BindingFlags.Instance | BindingFlags.SetProperty | BindingFlags.GetProperty );
 			foreach ( PropertyInfo pi in props ) {
-				if ( !pi.CanWrite ) {
+				MethodInfo setMI = pi.GetSetMethod ( true );
+				if ( !pi.CanWrite || ( setMI != null || setMI.IsPrivate ) ) {
 					continue;
 				}
 				DefaultValueAttribute dva = Util.GetCustomAttribute<DefaultValueAttribute> ( pi );
@@ -1387,7 +1408,7 @@ namespace CCNetConfig.Core {
 						try {
 							object tobj = constructorInfo.Invoke ( new object[] { } );
 							pi.SetValue ( obj, tobj, null );
-						} catch ( Exception ex ) {
+						} catch ( Exception ) {
 							throw;
 						}
 					} else {
@@ -1398,7 +1419,7 @@ namespace CCNetConfig.Core {
 						try {
 							object tobj = constructorInfo.Invoke ( new object[] { } );
 							pi.SetValue ( obj, tobj, null );
-						} catch ( Exception ex ) {
+						} catch ( Exception ) {
 							throw;
 						}
 					} else {

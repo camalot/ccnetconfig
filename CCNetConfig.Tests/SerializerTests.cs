@@ -69,7 +69,7 @@ namespace CCNetConfig.Tests {
     }
 
     [Test]
-    public void BrekiLabellerSerializerTest ( ) {
+		public void BrekiLabellerSerializerTest ( ) {
       Serializer<BrekiLabeller> ser = new Serializer<BrekiLabeller> ( );
       BrekiLabeller bl = new BrekiLabeller ( );
       bl.MajorNumber = 1;

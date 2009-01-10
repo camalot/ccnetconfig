@@ -113,7 +113,7 @@ namespace CCNetConfig.CCNet {
     /// <summary>
     /// Specifies if CCNet should apply the build label to the repository
     /// </summary>
-    [Description (""), DefaultValue (null), Editor (typeof (DefaultableBooleanUIEditor), typeof (UITypeEditor)),
+		[Description ( "Specifies if CCNet should apply the build label to the repository" ), DefaultValue ( null ), Editor ( typeof ( DefaultableBooleanUIEditor ), typeof ( UITypeEditor ) ),
    TypeConverter ( typeof ( DefaultableBooleanTypeConverter ) ), Category ( "Optional" )]
     public bool? ApplyLabel { get { return this._applyLabel; } set { this._applyLabel = value; } }
     /// <summary>

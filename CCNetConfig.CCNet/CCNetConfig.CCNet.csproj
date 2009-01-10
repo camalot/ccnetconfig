@@ -71,6 +71,7 @@
     <Compile Include="PublisherTask\RakeTask.cs" />
     <Compile Include="PublisherTask\RssBuildsPublisher.cs" />
     <Compile Include="PublisherTask\RssPublisher.cs" />
+    <Compile Include="PublisherTask\SourceGearFortressPublisher.cs" />
     <Compile Include="PublisherTask\TeamBuildTask.cs" />
     <Compile Include="PublisherTask\TwitterPublisher.cs" />
     <Compile Include="PublisherTask\TypeMockTask.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="SourceControl\PvcsSourceControl.cs" />
     <Compile Include="SourceControl\RationalClearCaseSourceControl.cs" />
     <Compile Include="SourceControl\SeapineSurroundSourceControl.cs" />
+    <Compile Include="SourceControl\SourceGearVaultPluginSourceControl.cs" />
     <Compile Include="SourceControl\SourceGearVaultSourceControl.cs" />
     <Compile Include="SourceControl\StarTeamSourceControl.cs" />
     <Compile Include="SourceControl\SubversionSourceControl.cs" />

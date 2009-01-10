@@ -178,6 +178,7 @@
     <Compile Include="Components\SvnUriTypeConverter.cs" />
     <Compile Include="Components\SerializerValueAttribute.cs" />
     <Compile Include="Components\UpdateFeedAttribute.cs" />
+    <Compile Include="Exceptions\UnsupportedPropertyForVersionException.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="License.txt" />

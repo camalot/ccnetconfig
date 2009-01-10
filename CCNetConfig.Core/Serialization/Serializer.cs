@@ -184,7 +184,23 @@ namespace CCNetConfig.Core.Serialization {
 		/// </summary>
 		/// <param name="element">The element.</param>
 		/// <param name="baseObject">The base object.</param>
-		public void Deserialize ( System.Xml.XmlElement element, T baseObject ) {
+
+		public void Deserialize ( XmlElement element, T baseObject ) {
+			Util.ResetObjectProperties<T> ( baseObject );
+			Type type = baseObject.GetType ();
+
+			string rootTypeName = Util.GetReflectorNameAttributeValue ( type );
+			Version versionInfo = Util.GetTypeDescriptionProviderVersion ( typeof ( T ) );
+
+			if ( string.Compare ( element.Name, rootTypeName, false ) != 0 )
+				throw new InvalidCastException ( string.Format ( "Unable to convert {0} to a {1}", element.Name, rootTypeName ) );
+
+			foreach ( XmlNode n in element.SelectNodes("*") ) {
+
+			}
+		}
+
+		/*public void Deserialize ( System.Xml.XmlElement element, T baseObject ) {
 			Util.ResetObjectProperties<T> ( baseObject );
 			Type type = baseObject.GetType ();
 			// have to get the properties so we can enumerate through them and set the values.
@@ -201,14 +217,18 @@ namespace CCNetConfig.Core.Serialization {
 					continue;
 				string name = Util.GetReflectorNameAttributeValue ( pi );
 				Type propType = pi.PropertyType;
-				if ( propType.IsPrimitive ) {
 
+
+				if ( propType.IsPrimitive || propType == typeof(string) ) {
+					string propValue = Util.GetElementOrAttributeValue ( name, element );
+					object convertedValue = Convert.ChangeType ( propValue, pi.PropertyType );
+					pi.SetValue ( baseObject, convertedValue, null );
 				} else {
 					if ( propType.IsGenericType && propType.GetGenericTypeDefinition ().Equals ( typeof ( CloneableList<> ) ) ) {
-						//string arrayItemName = Util.GetReflectorArrayAttributeValue ( pi );
+						string arrayItemName = Util.GetReflectorArrayAttributeValue ( pi );
 						XmlNodeList nl = element.SelectNodes ( "*" );
 						foreach ( XmlElement ele in nl ) {
-
+							
 						}
 					} else if ( propType.GetInterface ( typeof ( ICCNetObject ).FullName ) != null ) {
 						ICCNetObject obj = pi.GetValue ( baseObject, null ) as ICCNetObject;
@@ -224,7 +244,7 @@ namespace CCNetConfig.Core.Serialization {
 				}
 
 			}
-		}
+		}*/
 
 		#endregion
 	}

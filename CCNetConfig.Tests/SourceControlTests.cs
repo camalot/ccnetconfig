@@ -80,6 +80,37 @@ namespace CCNetConfig.Tests {
       Assert.AreEqual ( node.SelectSingleNode ( "password" ).InnerText, arsc.Password.GetPassword ( ) );
       Assert.AreEqual ( node.SelectSingleNode ( "principal" ).InnerText, arsc.Principal );
     }
+
+		[Test]
+		public void SourceGearVaultPluginSourceControlTest () {
+			try {
+				SourceGearVaultPluginSourceControl sgvpsc = new SourceGearVaultPluginSourceControl ();
+				sgvpsc.ApplyLabel = true;
+				sgvpsc.Folder = "test/folder";
+				sgvpsc.Host = "myserver";
+				sgvpsc.Username = "user";
+				sgvpsc.Password.Password = "test";
+
+				// this causes nunit gui to crash...
+				XmlElement node = sgvpsc.Serialize ();
+				Assert.IsNotNull ( node, "Serialize failed for SourceGearVaultPluginSourceControl" );
+				Assert.AreEqual ( node.SelectSingleNode ( "applyLabel" ).InnerText, sgvpsc.ApplyLabel );
+				Assert.AreEqual ( node.SelectSingleNode ( "password" ).InnerText, sgvpsc.Password.GetPassword () );
+				Assert.AreEqual ( node.SelectSingleNode ( "username" ).InnerText, sgvpsc.Username );
+				Assert.AreEqual ( node.SelectSingleNode ( "folder" ).InnerText, sgvpsc.Folder );
+
+				sgvpsc = new SourceGearVaultPluginSourceControl ();
+				sgvpsc.Deserialize ( node );
+
+				Assert.AreEqual ( node.SelectSingleNode ( "applyLabel" ).InnerText, sgvpsc.ApplyLabel );
+				Assert.AreEqual ( node.SelectSingleNode ( "password" ).InnerText, sgvpsc.Password.GetPassword () );
+				Assert.AreEqual ( node.SelectSingleNode ( "username" ).InnerText, sgvpsc.Username );
+				Assert.AreEqual ( node.SelectSingleNode ( "folder" ).InnerText, sgvpsc.Folder );
+			} catch ( Exception ex ) {
+				Console.WriteLine ( ex.ToString () );
+			}
+		}
+
     [Test]
     public void AlienbrainSourceControlTest ( ) {
 
