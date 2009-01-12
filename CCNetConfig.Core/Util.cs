@@ -1004,6 +1004,25 @@ namespace CCNetConfig.Core {
 				return default ( T );
 		}
 
+        /// <summary>
+        /// Gets the attribute.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="mi">The mi.</param>
+        /// <returns></returns>
+        public static T[] GetCustomAttributes<T>(MemberInfo mi) where T : Attribute
+        {
+            object[] attr = mi.GetCustomAttributes(typeof(T), true) as Attribute[];
+            if (attr != null)
+            {
+                return (T[])attr;
+            }
+            else
+            {
+                return new T[0];
+            }
+        }
+
 		/// <summary>
 		/// Gets all publisher tasks.
 		/// </summary>

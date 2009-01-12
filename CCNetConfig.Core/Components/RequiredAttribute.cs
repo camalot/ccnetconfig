@@ -27,11 +27,37 @@ namespace CCNetConfig.Core.Components {
   /// </summary>
   [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property )]
   public class RequiredAttribute : Attribute {
+
+      private string minVersion = "0.0.0";
+      private string maxVersion = "9999.99.99";
+
     /// <summary>
     /// Initializes a new instance of the <see cref="RequiredAttribute"/> class.
     /// </summary>
     public RequiredAttribute ( ) {
 
     }
+
+    #region MinimumVersion
+    /// <summary>
+    /// The minimum version that the property is required for.
+    /// </summary>
+    public string MinimumVersion
+    {
+        get { return minVersion; }
+        set { minVersion = value; }
+    }
+    #endregion
+
+    #region MaximumVersion
+    /// <summary>
+    /// The maximum version that the property is required for.
+    /// </summary>
+    public string MaximumVersion
+    {
+        get { return maxVersion; }
+        set { maxVersion = value; }
+    }
+    #endregion
   }
 }

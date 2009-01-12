@@ -462,6 +462,27 @@ namespace CCNetConfig.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap queueadd_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("queueadd_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap queuedelete_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("queuedelete_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap queueprojectlink_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("queueprojectlink_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap rec_16x16 {
             get {
                 object obj = ResourceManager.GetObject("rec_16x16", resourceCulture);

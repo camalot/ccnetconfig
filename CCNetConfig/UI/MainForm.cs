@@ -42,6 +42,7 @@ using CCNetConfig.Core.Exceptions;
 using CCNetConfig.Core.Enums;
 using CCNetConfig.Controls;
 using CCNetConfig.Exceptions;
+using CCNetConfig.Components.Nodes;
 
 namespace CCNetConfig.UI {
   /// <summary>
@@ -57,6 +58,8 @@ namespace CCNetConfig.UI {
     private FileInfo loadedConfigFile = null;
     private CloneableList<Version> _ccnetVersions = null;
     private BackupControler _backupControler = null;
+    private QueueImageKeys queueImageKeys;
+    private ValidationForm validation;
 
     private EventHandler _pasteMenuItemEventHandler = null;
     private EventHandler _copyMenuItemEventHandler = null;
@@ -65,13 +68,20 @@ namespace CCNetConfig.UI {
     /// <summary>
     /// Initializes a new instance of the <see cref="MainForm"/> class.
     /// </summary>
-    public MainForm ( ) {
-      genericContextMenu = new ContextMenuStrip ( );
-      _ccnetVersions = Util.GetCCNetVersions ( );
-      _backupControler = new BackupControler ( );
-      InitializeComponent ( );
-      this.AllowDrop = true;
-      Initialize ( );
+    public MainForm()
+    {
+        genericContextMenu = new ContextMenuStrip();
+        _ccnetVersions = Util.GetCCNetVersions();
+        _backupControler = new BackupControler();
+        InitializeComponent();
+        this.AllowDrop = true;
+        Initialize();
+
+        queueImageKeys = new QueueImageKeys(
+            treeImages.Images.IndexOfKey("queue"),
+            treeImages.Images.IndexOfKey("queueConfig"),
+            treeImages.Images.IndexOfKey("project"));
+        validation = new ValidationForm(this);
     }
 
     /// <summary>
@@ -243,34 +253,45 @@ namespace CCNetConfig.UI {
     /// <param name="sender">The source of the event.</param>
     /// <param name="e">The <see cref="System.Windows.Forms.TreeNodeMouseClickEventArgs"/> instance containing the event data.</param>
     void tvProjects_NodeMouseClick ( object sender, TreeNodeMouseClickEventArgs e ) {
-      Type t = e.Node.GetType ( );
       this.copyProjectToolStripButton.Enabled = false;
 
-      if ( t == typeof ( ProjectTreeNode ) )
-        OnProjectTreeNodeMouseClick ( e );
-      else if ( t == typeof ( CruiseControlTreeNode ) )
-        OnCruiseControlTreeNodeMouseClick ( e );
-      else if ( t == typeof ( TasksTreeNode ) )
-        OnTasksTreeNodeMouseClick ( e );
-      else if ( t == typeof ( PublishersTreeNode ) )
-        OnPublishersTreeNodeMouseClick ( e );
-      else if ( t == typeof ( TriggersTreeNode ) )
-        OnTriggersTreeNodeMouseClick ( e );
-      else if ( t == typeof ( TriggerItemTreeNode ) )
-        OnTriggerItemTreeNodeMouseClick ( e );
-      else if ( t == typeof ( PrebuildTreeNode ) )
-        OnPrebuildTreeNodeMouseClick ( e );
-      else if ( t == typeof ( PublisherTaskItemTreeNode ) ) {
-        if ( e.Node.Parent.GetType ( ) == typeof ( PublishersTreeNode ) )
-          OnPublisherItemTreeNodeMouseClick ( e );
-        else if ( e.Node.Parent.GetType ( ) == typeof ( TasksTreeNode ) )
-          OnTaskItemTreeNodeMouseClick ( e );
-        else if ( e.Node.Parent.GetType ( ) == typeof ( PrebuildTreeNode ) )
-          OnPublisherItemTreeNodeMouseClick ( e );
-      } else if ( t == typeof ( ExtensionItemTreeNode ) )
-        OnExtensionItemTreeNodeMouseClick ( e );
-      else if ( t == typeof ( ExtensionTreeNode ) )
-        OnExtensionTreeNodeMouseClick ( e );
+      if (e.Node is IInteractiveTreeNode)
+      {
+          // Changed to use an interface so the node functionality can be encapsulated
+          (e.Node as IInteractiveTreeNode).HandleMouseClick(this, e);
+      }
+      else
+      {
+          // Old-style of checking for each type
+          Type t = e.Node.GetType();
+          if (t == typeof(ProjectTreeNode))
+              OnProjectTreeNodeMouseClick(e);
+          else if (t == typeof(CruiseControlTreeNode))
+              OnCruiseControlTreeNodeMouseClick(e);
+          else if (t == typeof(TasksTreeNode))
+              OnTasksTreeNodeMouseClick(e);
+          else if (t == typeof(PublishersTreeNode))
+              OnPublishersTreeNodeMouseClick(e);
+          else if (t == typeof(TriggersTreeNode))
+              OnTriggersTreeNodeMouseClick(e);
+          else if (t == typeof(TriggerItemTreeNode))
+              OnTriggerItemTreeNodeMouseClick(e);
+          else if (t == typeof(PrebuildTreeNode))
+              OnPrebuildTreeNodeMouseClick(e);
+          else if (t == typeof(PublisherTaskItemTreeNode))
+          {
+              if (e.Node.Parent.GetType() == typeof(PublishersTreeNode))
+                  OnPublisherItemTreeNodeMouseClick(e);
+              else if (e.Node.Parent.GetType() == typeof(TasksTreeNode))
+                  OnTaskItemTreeNodeMouseClick(e);
+              else if (e.Node.Parent.GetType() == typeof(PrebuildTreeNode))
+                  OnPublisherItemTreeNodeMouseClick(e);
+          }
+          else if (t == typeof(ExtensionItemTreeNode))
+              OnExtensionItemTreeNodeMouseClick(e);
+          else if (t == typeof(ExtensionTreeNode))
+              OnExtensionTreeNodeMouseClick(e);
+      }
 
     }
     #endregion
@@ -1238,8 +1259,7 @@ namespace CCNetConfig.UI {
       ProjectTreeNode ptn = e.Node.Parent.Parent as ProjectTreeNode;
       if ( e.Button == MouseButtons.Left ) {
         pgProperties.SelectedObject = ptitn.PublisherTask;
-        if ( ptitn.PublisherTask.GetType ( ).GetInterface ( typeof ( ICCNetDocumentation ).FullName ) != null )
-          this.DocumentationNavigate ( ( ( ICCNetDocumentation ) ptitn.PublisherTask ).DocumentationUri );
+        DisplayDocumentation(ptitn.PublisherTask);
       } else if ( e.Button == MouseButtons.Right ) {
         CreateRemoveTaskMenuItem ( ptn, ptitn );
         tvProjects.ContextMenuStrip = genericContextMenu;
@@ -1254,13 +1274,62 @@ namespace CCNetConfig.UI {
       ExtensionItemTreeNode eitn = e.Node as ExtensionItemTreeNode;
       ProjectTreeNode ptn = e.Node.Parent.Parent as ProjectTreeNode;
       if ( e.Button == MouseButtons.Left ) {
-        pgProperties.SelectedObject = eitn.ProjectExtension;
-        if ( eitn.ProjectExtension.GetType ( ).GetInterface ( typeof ( ICCNetDocumentation ).FullName ) != null )
-          this.DocumentationNavigate ( ( ( ICCNetDocumentation ) eitn.ProjectExtension ).DocumentationUri );
+          DisplayItem(eitn.ProjectExtension);
       } else if ( e.Button == MouseButtons.Right ) {
-        tvProjects.ContextMenuStrip = null;
+          ChangeContextMenu(null);
       }
     }
+
+    #region ChangeContextMenu()
+      /// <summary>
+      /// Changes the context menu for the treeview.
+      /// </summary>
+      /// <param name="menu">The new menu.</param>
+    public virtual void ChangeContextMenu(ContextMenuStrip menu)
+    {
+        tvProjects.ContextMenuStrip = menu;
+    }
+    #endregion
+
+    #region DisplayItem()
+    /// <summary>
+    /// Displays an item.
+    /// </summary>
+    /// <param name="value">The item to display.</param>
+    /// <remarks>
+    /// This will update both the property grid and the documentation link.
+    /// </remarks>
+    public virtual void DisplayItem(object value)
+    {
+        DisplayProperties(value);
+        DisplayDocumentation(value);
+    }
+    #endregion
+
+    #region DisplayProperties()
+    /// <summary>
+      /// Displays the properties in the property grid.
+      /// </summary>
+      /// <param name="source">The source of the properties.</param>
+    public virtual void DisplayProperties(object source)
+    {
+        pgProperties.SelectedObject = source;
+    }
+    #endregion
+
+    #region DisplayDocumentation()
+    /// <summary>
+    /// Displays any associated documentation.
+    /// </summary>
+    /// <param name="source">The object to retrieve the documentation for.</param>
+    public virtual void DisplayDocumentation(object source)
+    {
+        if (source is ICCNetDocumentation)
+        {
+            DocumentationNavigate(((ICCNetDocumentation)source).DocumentationUri);
+        }
+    }
+    #endregion
 
     #region form event overrides
     /// <summary>
@@ -1718,24 +1787,26 @@ namespace CCNetConfig.UI {
       }
     }
 
-    private void CreateConfigurationNode ( Version version ) {
-      Core.Util.CurrentConfigurationVersion = version;
+    private void CreateConfigurationNode(Version version)
+    {
+        Core.Util.CurrentConfigurationVersion = version;
 
-      // create the menus
-      PopulatePublishers ( );
-      PopulateTasks ( );
-      PopulateTriggers ( );
-      PopulatePrebuild ( );
+        // create the menus
+        PopulatePublishers();
+        PopulateTasks();
+        PopulateTriggers();
+        PopulatePrebuild();
 
-      rootNode = new CruiseControlTreeNode ( version );
-      // add to the tree
-      tvProjects.Nodes.Add ( rootNode );
-      configVersionStatusLabel.Text = string.Format ( Properties.Strings.ConfigVersionStatusLabelFormat, version );
+        rootNode = new CruiseControlTreeNode(version);
+        // add to the tree
+        tvProjects.Nodes.Add(rootNode);
+        configVersionStatusLabel.Text = string.Format(Properties.Strings.ConfigVersionStatusLabelFormat, version);
 
-      if ( version.CompareTo ( new Version ( "1.3" ) ) >= 0 ) {
-        queuesNode = new ProjectQueuesTreeNode ( );
-        tvProjects.Nodes.Add ( queuesNode );
-      }
+        if (version.CompareTo(new Version("1.3")) >= 0)
+        {
+            queuesNode = new ProjectQueuesTreeNode(rootNode.CruiseControl, queueImageKeys);
+            tvProjects.Nodes.Add(queuesNode);
+        }
     }
 
     /// <summary>
@@ -1757,8 +1828,11 @@ namespace CCNetConfig.UI {
         try {
           loadedConfigFile = file;
           this.rootNode.CruiseControl.Deserialize ( file );
+          queuesNode.Configuration = rootNode.CruiseControl;
           // now we need to setup the tree
-          AllAllProjectsToTree ( );
+          rootNode.Nodes.Clear();
+          AddAllProjectsToTree();
+          AddAllQueuesToTree();
 				} catch ( XmlException xe ) {
 					// look specifically for xml errors. 
 					// give the user the option to manually edit the config file
@@ -1823,13 +1897,37 @@ namespace CCNetConfig.UI {
     }
 
     /// <summary>
-    /// Alls all projects to tree.
+    /// Adds all projects to tree.
     /// </summary>
-    private void AllAllProjectsToTree ( ) {
-      rootNode.Nodes.Clear ( );
+    private void AddAllProjectsToTree ( ) {
       foreach ( Project proj in rootNode.CruiseControl.Projects )
         AddProjectTreeNode ( proj );
     }
+
+      #region AddAllQueuesToTree()
+      /// <summary>
+      /// Adds all projects to tree.
+      /// </summary>
+      private void AddAllQueuesToTree()
+      {
+          foreach (Queue queue in rootNode.CruiseControl.Queues)
+          {
+              AddQueueTreeNode(queue);
+          }
+      }
+      #endregion
+
+      #region AddQueueTreeNode()
+      /// <summary>
+      /// Adds a queue node to the tree.
+      /// </summary>
+      /// <param name="value"></param>
+      private void AddQueueTreeNode(Queue value)
+      {
+          IntegrationQueueTreeNode newNode = new IntegrationQueueTreeNode(value, queueImageKeys);
+          queuesNode.Nodes.Add(newNode);
+      }
+      #endregion
 
     /// <summary>
     /// Adds the project tree node.
@@ -2070,6 +2168,63 @@ namespace CCNetConfig.UI {
     /// <value>The cruise control.</value>
     public CCNetConfig.Core.CruiseControl CruiseControl { get { return this.rootNode != null ? this.rootNode.CruiseControl : null; } }
 
+      /// <summary>
+      /// Handle the user navigating through the tree via the keyboard.
+      /// </summary>
+      /// <param name="sender"></param>
+      /// <param name="e"></param>
+    private void tvProjects_AfterSelect(object sender, TreeViewEventArgs e)
+    {
+        tvProjects_NodeMouseClick(sender,
+            new TreeNodeMouseClickEventArgs(e.Node, MouseButtons.Left, 1, 0, 0));
+    }
 
+    private void validateToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        DisplayValidationResults();
+        validation.Validate(tvProjects);
+    }
+
+    private void validateToolStripButton_Click(object sender, EventArgs e)
+    {
+        validateToolStripMenuItem.PerformClick();
+    }
+
+      /// <summary>
+      /// Queues a node for validation.
+      /// </summary>
+      /// <param name="node"></param>
+    public void QueueValidation(TreeNode node)
+    {
+        validation.QueueNode(node);
+    }
+
+      /// <summary>
+      /// Validates a single node.
+      /// </summary>
+    public void StartValidation()
+    {
+        DisplayValidationResults();
+        validation.StartValidation();
+    }
+
+      /// <summary>
+      /// Displays the validation results window.
+      /// </summary>
+    private void DisplayValidationResults()
+    {
+        if (!validation.Visible)
+        {
+            validation.Top = this.Top;
+            validation.Left = this.Right;
+            validation.Height = this.Height;
+            validation.Show();
+        }
+        else
+        {
+            validation.BringToFront();
+        }
+        validation.Select();
+    }
   }
 }

@@ -163,6 +163,7 @@
       <DependentUpon>ccnet.xsd</DependentUpon>
     </None>
     <None Include="CCNetConfig.Core.cd" />
+    <Compile Include="Collections\QueueList.cs" />
     <Compile Include="Components\AlienbrainUriParser.cs" />
     <Compile Include="Components\DefaultableBooleanTypeConverter.cs" />
     <Compile Include="Components\DefaultableEnumTypeConverter.cs" />
@@ -179,6 +180,15 @@
     <Compile Include="Components\SvnUriTypeConverter.cs" />
     <Compile Include="Components\SerializerValueAttribute.cs" />
     <Compile Include="Components\UpdateFeedAttribute.cs" />
+    <Compile Include="Queue.cs" />
+    <Compile Include="QueueDuplicateHandlingMode.cs" />
+    <Compile Include="Serialization\IItemSerialiser.cs" />
+    <Compile Include="Serialization\ItemSerialiserFactory.cs" />
+    <Compile Include="Serialization\ProjectSerialiser.cs" />
+    <Compile Include="Serialization\QueueSerialiser.cs" />
+    <Compile Include="Serialization\SerialiserTypeAttribute.cs" />
+    <Compile Include="ValidationException.cs" />
+    <Compile Include="Validator.cs" />
     <Compile Include="Exceptions\UnsupportedPropertyForVersionException.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -46,6 +46,7 @@ namespace CCNetConfig.Core {
 		/// <param name="version">The version.</param>
 		public CruiseControl ( Version version ) {
 			this.Projects = new ProjectList ();
+            Queues = new QueueList();
 			this.Version = version;
 		}
 
@@ -56,7 +57,13 @@ namespace CCNetConfig.Core {
 		/// </summary>
 		/// <value>The projects.</value>
 		public ProjectList Projects { get; private set; }
-		/// <summary>
+
+        /// <summary>
+        /// Gets the queues.
+        /// </summary>
+        /// <value>The queues.</value>
+        public QueueList Queues { get; private set; }
+        /// <summary>
 		/// Gets or sets the version.
 		/// </summary>
 		/// <value>The version.</value>
@@ -112,6 +119,10 @@ namespace CCNetConfig.Core {
 			doc.AppendChild ( ele );
 			foreach ( Project proj in this.Projects )
 				ele.AppendChild ( doc.ImportNode ( proj.Serialize (), true ) );
+            foreach (Queue queue in Queues)
+            {
+                if (queue.HasConfig) ele.AppendChild(doc.ImportNode(queue.Serialize(), true));
+            }
 
 			return ele;
 		}
@@ -145,6 +156,7 @@ namespace CCNetConfig.Core {
 		/// <exception cref="CCNetConfig.Core.Exceptions.DuplicateProjectNameException">DuplicateProjectNameException</exception>
 		public void Deserialize ( XmlDocument ccnetConfig ) {
 			this.Projects.Clear ();
+            Queues.Clear();
 			Version v = Util.GetConfigFileVersion ( ccnetConfig );
 			if ( v != null )
 				this.Version = v;
@@ -153,24 +165,70 @@ namespace CCNetConfig.Core {
 				foreach ( XmlEntity entity in this.Entities ) {
 					Console.WriteLine ( entity.ToString () );
 				}*/
-				foreach ( XmlElement proj in ccnetConfig.DocumentElement.SelectNodes ( "project" ) ) {
-					try {
-						Project p = new Project ();
-						p.Deserialize ( proj );
-						if ( !this.Projects.Contains ( p.Name ) )
-							this.Projects.Add ( p );
-						else
-							throw new DuplicateProjectNameException ( p.Name );
-					} catch ( DuplicateProjectNameException ) {
-						throw;
-					} catch ( XmlException ) {
-						throw;
-					} catch ( Exception ) {
-						throw;
-					}
-				}
+
+                ItemSerialiserFactory factory = new ItemSerialiserFactory();
+
+                // Attempt to deserialise each item in the configuration
+                foreach (XmlElement item in ccnetConfig.DocumentElement.SelectNodes("*"))
+                {
+                    IItemSerialiser serialiser = factory.Retrieve(item.Name);
+                    if (serialiser != null)
+                    {
+                        // The serialiser factory knows the item type, so it can be deserialised and
+                        // added to the correct collection
+                        object output = serialiser.Deserialize(item);
+                        if (output is Project)
+                        {
+                            Project p = output as Project;
+                            if (!this.Projects.Contains(p.Name))
+                            {
+                                this.Projects.Add(p);
+                            }
+                            else
+                            {
+                                throw new DuplicateProjectNameException(p.Name);
+                            }
+                        }
+                        else if (output is Queue)
+                        {
+                            Queue q = output as Queue;
+                            if (!Queues.Contains(q.Name))
+                            {
+                                Queues.Add(q);
+                            }
+                            else
+                            {
+                                throw new Exception(string.Format("Duplicate queue definition: '{0}'", q.Name));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Currently throwing an exception if an unhandled item is found
+                        // This should be changed to something a bit nicer
+                        throw new Exception(
+                            string.Format("Unhandled item found: '{0}'",
+                            item.Name));
+                    }
+                }
+
 				if ( Util.UserSettings.SortProject )
 					this.Projects.Sort ( new ProjectList.ProjectComparer () );
+
+                // Check all the projects and add any explicit queues that don't have their own configuration
+                foreach (Project p in Projects)
+                {
+                    if (!string.IsNullOrEmpty(p.Queue))
+                    {
+                        if (!Queues.Contains(p.Queue))
+                        {
+                            Queue queue = new Queue();
+                            queue.Name = p.Queue;
+                            Queues.Add(queue);
+                        }
+                        Queues[p.Queue].Projects.Add(p);
+                    }
+                }
 			} else
 				throw new InvalidCastException ( string.Format ( "Can not convert {0} to a cruisecontrol", ccnetConfig.DocumentElement != null ? ccnetConfig.DocumentElement.Name : "UNKNOWN" ) );
 		}

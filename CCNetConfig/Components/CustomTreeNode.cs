@@ -188,43 +188,4 @@ namespace CCNetConfig.Components {
     /// <value>The trigger.</value>
     public Trigger Trigger { get { return this._trig; } set { this._trig = value; } }
   }
-
-  /// <summary>
-  /// A Custom TreeNode
-  /// </summary>
-  public class ProjectQueuesTreeNode : TreeNode {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ProjectQueuesTreeNode"/> class.
-    /// </summary>
-    public ProjectQueuesTreeNode ( ) : base("Integration Queues") {
-
-    }
-    /// <summary>
-    /// Refreshes the queue.
-    /// </summary>
-    public void RefreshQueue ( ) { 
-    
-    }
-
-    /// <summary>
-    /// Creates the queue.
-    /// </summary>
-    /// <param name="project">The project.</param>
-    public void CreateQueue ( Project project ) {
-
-    }
-  }
-
-  /// <summary>
-  /// 
-  /// </summary>
-  public class IntegrationQueueTreeNode : TreeNode {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="IntegrationQueueTreeNode"/> class.
-    /// </summary>
-    /// <param name="name">The name.</param>
-    public IntegrationQueueTreeNode ( string name ) : base(name) {
-
-    }
-  }
-}
+ }
