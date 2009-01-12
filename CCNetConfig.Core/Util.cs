@@ -1398,9 +1398,9 @@ namespace CCNetConfig.Core {
 				// check if the object allows nulls
 				TypeConverterAttribute tca = Util.GetCustomAttribute<TypeConverterAttribute> ( pi );
 				// check the property for the nullorobject attribute
-				NullOrObjectAttribue nooa = Util.GetCustomAttribute<NullOrObjectAttribue> ( pi );
+				NullOrObjectAttribute nooa = Util.GetCustomAttribute<NullOrObjectAttribute> ( pi );
 				// check the property type for the nullorobject attribute
-				NullOrObjectAttribue nooat = Util.GetCustomAttribute<NullOrObjectAttribue> ( pi.PropertyType );
+				NullOrObjectAttribute nooat = Util.GetCustomAttribute<NullOrObjectAttribute> ( pi.PropertyType );
 				bool allowsNull = ( tca != null && string.Compare ( tca.ConverterTypeName, typeof ( ObjectOrNoneTypeConverter ).Name ) == 0 ) || nooa != null || nooat != null;
 				ConstructorInfo constructorInfo = pi.PropertyType.GetConstructor ( new Type[] { } );
 				if ( dva != null ) {

@@ -25,11 +25,11 @@ namespace CCNetConfig.Core.Components {
 	/// Indicates that an object can be a value or it can be null. Used to help the serializer.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
-	public class NullOrObjectAttribue : Attribute {
+	public class NullOrObjectAttribute : Attribute {
 		/// <summary>
-		/// Initializes a new instance of the <see cref="NullOrObjectAttribue"/> class.
+		/// Initializes a new instance of the <see cref="NullOrObjectAttribute"/> class.
 		/// </summary>
-		public NullOrObjectAttribue () {
+		public NullOrObjectAttribute () {
 
 		}
 	}

@@ -105,6 +105,13 @@ namespace CCNetConfig.CCNet {
 		public override void Deserialize ( XmlElement element ) {
 			if ( string.Compare ( element.Name, this.TypeName, false ) != 0 )
 				throw new InvalidCastException ( string.Format ( "Unable to convert {0} to a {1}", element.Name, this.TypeName ) );
+
+			Util.ResetObjectProperties<GForgePublisher> ( this );
+
+			new Serializer<GForgePublisher> ().Deserialize ( element, this );
+
+			/*if ( string.Compare ( element.Name, this.TypeName, false ) != 0 )
+				throw new InvalidCastException ( string.Format ( "Unable to convert {0} to a {1}", element.Name, this.TypeName ) );
 			this.CruiseControlId = 0;
 			this.Hash = string.Empty;
 			this.Host = string.Empty;
@@ -128,7 +135,7 @@ namespace CCNetConfig.CCNet {
 				if ( x > 0 ) {
 					this.Port = x;
 				}
-			}
+			}*/
 		}
 
 		/// <summary>

@@ -185,7 +185,6 @@ namespace CCNetConfig.Core.Serialization {
 		/// </summary>
 		/// <param name="element">The element.</param>
 		/// <param name="baseObject">The base object.</param>
-
 		public void Deserialize ( XmlElement element, T baseObject ) {
 			// this dynamically resets all the reflector properties only if they
 			// are writeable and public
@@ -205,10 +204,104 @@ namespace CCNetConfig.Core.Serialization {
 
 			foreach ( PropertyInfo pi in props ) {
 				string rname = Util.GetReflectorNameAttributeValue ( pi );
-				if ( pi.PropertyType.IsPrimitive || pi.PropertyType == typeof ( string ) ) {
+				RequiredAttribute ra = Util.GetCustomAttribute<RequiredAttribute> ( pi );
+				Type valType = pi.PropertyType;
+				XmlNode subElement = element.SelectSingleNode ( rname ) as XmlNode;
+				if ( subElement == null ) {
+					subElement = element.SelectSingleNode ( string.Format ( "@{0}", rname ) );
+				}
+				bool required = ra != null;
+				// property is required but it doesn't exist
+				if ( required && subElement == null ) {
+					throw new RequiredAttributeException ( baseObject, rname );
+				}
+				// element doesn't exist but it's not required so we can move on
+				if ( subElement == null ) {
+					continue;
+				}
 
+				if ( Util.IsNullable ( valType ) ) {
+					Type nullType = Nullable.GetUnderlyingType ( valType );
+					valType = nullType;
+				}
+
+				if ( valType.IsPrimitive || valType == typeof ( string ) ) {
+					pi.SetValue ( baseObject, StringTypeConverter.Convert ( subElement.InnerText, valType ), null );
 				} else {
+					if ( valType.IsAssignableFrom ( typeof ( ICCNetObject ) ) ) {
+						ConstructorInfo ci = valType.GetConstructor ( null );
+						if ( ci == null ) {
+							throw new ArgumentException ( string.Format ( "Unable to locate default constructor for type {0}", valType.Name ) );
+						} else {
+							ICCNetObject valObject = ci.Invoke ( null ) as ICCNetObject;
+							valObject.Deserialize ( subElement as XmlElement);
+						}
+					} else if ( valType.IsGenericType && valType.GetGenericTypeDefinition ().Equals ( typeof ( CloneableList<> ) ) ) {
+						IList vlist = pi.GetValue ( baseObject, null ) as IList;
+						Type gtype = valType.GetGenericArguments ()[ 0 ];
 
+						if ( vlist == null ) {
+							// create a new instance since it's null
+							ConstructorInfo ci = valType.GetConstructor ( null );
+							if ( ci == null ) {
+								throw new ArgumentException ( string.Format ( "Unable to locate default constructor for type {0}", valType.Name ) );
+							} else {
+								vlist = ci.Invoke ( null ) as IList;
+							}
+						}
+
+						ReflectorArrayAttribute raa = Util.GetCustomAttribute<ReflectorArrayAttribute> ( pi );
+						if ( raa != null ) {
+							XmlNodeList nodes = subElement.SelectNodes ( raa.ItemName );
+							foreach ( XmlElement itemElement in nodes ) {
+								if ( gtype.IsPrimitive || gtype == typeof ( string ) ) {
+									vlist.Add ( StringTypeConverter.Convert ( itemElement.InnerText, gtype ) );
+								} else if ( gtype.IsAssignableFrom ( typeof ( ICCNetObject ) ) ) {
+									ICCNetObject obj = null;
+									ConstructorInfo ci = gtype.GetConstructor ( null );
+									if ( ci == null ) {
+										throw new ArgumentException ( string.Format ( "Unable to locate default constructor for type {0}", valType.Name ) );
+									} else {
+										obj = ci.Invoke ( null ) as ICCNetObject;
+									}
+
+									obj.Deserialize ( itemElement );
+									vlist.Add ( obj );
+								}
+							}
+						} else {
+							// it doesn't have an reflector array attribute, so we can assume that all items are ICCNetObects.
+							XmlNodeList nodes = subElement.SelectNodes ( "*" );
+							foreach ( XmlElement itemElement in nodes ) {
+								if ( gtype.IsAssignableFrom ( typeof ( ICCNetObject ) ) ) {
+									ICCNetObject obj = null;
+									ConstructorInfo ci = gtype.GetConstructor ( null );
+									if ( ci == null ) {
+										throw new ArgumentException ( string.Format ( "Unable to locate default constructor for type {0}", valType.Name ) );
+									} else {
+										obj = ci.Invoke ( null ) as ICCNetObject;
+									}
+
+									obj.Deserialize ( itemElement );
+									vlist.Add ( obj );
+								} else {
+									throw new ArgumentException ( string.Format ( "Type {0} is not assignable from {1}", gtype.Name, typeof ( ICCNetObject ).Name ) );
+								}
+							}
+						}
+					} else if ( valType == typeof ( HiddenPassword ) ) {
+						HiddenPassword hp = pi.GetValue ( baseObject, null ) as HiddenPassword;
+						if ( hp == null ) {
+							// need to create it.
+							ConstructorInfo ci = valType.GetConstructor ( null );
+							if ( ci == null ) {
+								throw new ArgumentException ( string.Format ( "Unable to locate default constructor for type {0}", valType.Name ) );
+							} else {
+								hp = ci.Invoke ( null ) as HiddenPassword;
+							}
+						}
+						hp.Password = subElement.InnerText;
+					}
 				}
 			}
 		}
@@ -237,53 +330,6 @@ namespace CCNetConfig.Core.Serialization {
 			}
 			return props;
 		}
-
-		/*public void Deserialize ( System.Xml.XmlElement element, T baseObject ) {
-			Util.ResetObjectProperties<T> ( baseObject );
-			Type type = baseObject.GetType ();
-			// have to get the properties so we can enumerate through them and set the values.
-			PropertyInfo[ ] props = type.GetProperties ( BindingFlags.Public | BindingFlags.Instance );
-			string rootTypeName = Util.GetReflectorNameAttributeValue ( type );
-			Version versionInfo = Util.GetTypeDescriptionProviderVersion ( typeof ( T ) );
-			if ( string.Compare ( element.Name, rootTypeName, false ) != 0 )
-				throw new InvalidCastException ( string.Format ( "Unable to convert {0} to a {1}", element.Name, rootTypeName ) );
-
-			foreach ( PropertyInfo pi in props ) {
-				bool required = Util.GetCustomAttribute<RequiredAttribute> ( pi ) != null;
-				bool ignore = Util.GetCustomAttribute<ReflectorIgnoreAttribute> ( pi ) != null;
-				if ( ignore )
-					continue;
-				string name = Util.GetReflectorNameAttributeValue ( pi );
-				Type propType = pi.PropertyType;
-
-
-				if ( propType.IsPrimitive || propType == typeof(string) ) {
-					string propValue = Util.GetElementOrAttributeValue ( name, element );
-					object convertedValue = Convert.ChangeType ( propValue, pi.PropertyType );
-					pi.SetValue ( baseObject, convertedValue, null );
-				} else {
-					if ( propType.IsGenericType && propType.GetGenericTypeDefinition ().Equals ( typeof ( CloneableList<> ) ) ) {
-						string arrayItemName = Util.GetReflectorArrayAttributeValue ( pi );
-						XmlNodeList nl = element.SelectNodes ( "*" );
-						foreach ( XmlElement ele in nl ) {
-							
-						}
-					} else if ( propType.GetInterface ( typeof ( ICCNetObject ).FullName ) != null ) {
-						ICCNetObject obj = pi.GetValue ( baseObject, null ) as ICCNetObject;
-						new Serializer<ICCNetObject> ().Deserialize ( element.SelectSingleNode ( name ) as XmlElement, obj );
-						pi.SetValue ( baseObject, obj, null );
-					} else if ( propType == typeof ( HiddenPassword ) ) {
-						HiddenPassword hp = new HiddenPassword ();
-						hp.Password = Util.GetElementOrAttributeValue ( name, element );
-						pi.SetValue ( baseObject, hp, null );
-					} else {
-
-					}
-				}
-
-			}
-		}*/
-
 		#endregion
 	}
 }

@@ -69,7 +69,6 @@
     <Compile Include="PublisherTask\GForgePublisher.cs" />
     <Compile Include="PublisherTask\ModificationHistoryPublisher.cs" />
     <Compile Include="PublisherTask\RakeTask.cs" />
-    <Compile Include="PublisherTask\RssBuildsPublisher.cs" />
     <Compile Include="PublisherTask\RssPublisher.cs" />
     <Compile Include="PublisherTask\SourceGearFortressPublisher.cs" />
     <Compile Include="PublisherTask\TeamBuildTask.cs" />
