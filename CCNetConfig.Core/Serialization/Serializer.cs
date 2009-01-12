@@ -228,13 +228,14 @@ namespace CCNetConfig.Core.Serialization {
 				if ( valType.IsPrimitive || valType == typeof ( string ) ) {
 					pi.SetValue ( baseObject, StringTypeConverter.Convert ( subElement.InnerText, valType ), null );
 				} else {
-					if ( valType.IsAssignableFrom ( typeof ( ICCNetObject ) ) ) {
-						ConstructorInfo ci = valType.GetConstructor ( null );
+					if ( valType.GetInterface(typeof(ICCNetObject).FullName) != null ) {
+						ConstructorInfo ci = valType.GetConstructor ( new Type[] { } );
 						if ( ci == null ) {
 							throw new ArgumentException ( string.Format ( "Unable to locate default constructor for type {0}", valType.Name ) );
 						} else {
 							ICCNetObject valObject = ci.Invoke ( null ) as ICCNetObject;
 							valObject.Deserialize ( subElement as XmlElement);
+							pi.SetValue ( baseObject, valObject, null );
 						}
 					} else if ( valType.IsGenericType && valType.GetGenericTypeDefinition ().Equals ( typeof ( CloneableList<> ) ) ) {
 						IList vlist = pi.GetValue ( baseObject, null ) as IList;
@@ -242,7 +243,7 @@ namespace CCNetConfig.Core.Serialization {
 
 						if ( vlist == null ) {
 							// create a new instance since it's null
-							ConstructorInfo ci = valType.GetConstructor ( null );
+							ConstructorInfo ci = valType.GetConstructor ( new Type[] { } );
 							if ( ci == null ) {
 								throw new ArgumentException ( string.Format ( "Unable to locate default constructor for type {0}", valType.Name ) );
 							} else {
@@ -256,9 +257,9 @@ namespace CCNetConfig.Core.Serialization {
 							foreach ( XmlElement itemElement in nodes ) {
 								if ( gtype.IsPrimitive || gtype == typeof ( string ) ) {
 									vlist.Add ( StringTypeConverter.Convert ( itemElement.InnerText, gtype ) );
-								} else if ( gtype.IsAssignableFrom ( typeof ( ICCNetObject ) ) ) {
+								} else if ( gtype.GetInterface ( typeof ( ICCNetObject ).FullName ) != null ) {
 									ICCNetObject obj = null;
-									ConstructorInfo ci = gtype.GetConstructor ( null );
+									ConstructorInfo ci = gtype.GetConstructor ( new Type[] { } );
 									if ( ci == null ) {
 										throw new ArgumentException ( string.Format ( "Unable to locate default constructor for type {0}", valType.Name ) );
 									} else {
@@ -273,9 +274,9 @@ namespace CCNetConfig.Core.Serialization {
 							// it doesn't have an reflector array attribute, so we can assume that all items are ICCNetObects.
 							XmlNodeList nodes = subElement.SelectNodes ( "*" );
 							foreach ( XmlElement itemElement in nodes ) {
-								if ( gtype.IsAssignableFrom ( typeof ( ICCNetObject ) ) ) {
+								if ( gtype.GetInterface(typeof(ICCNetObject).FullName) != null ) {
 									ICCNetObject obj = null;
-									ConstructorInfo ci = gtype.GetConstructor ( null );
+									ConstructorInfo ci = gtype.GetConstructor ( new Type[] { } );
 									if ( ci == null ) {
 										throw new ArgumentException ( string.Format ( "Unable to locate default constructor for type {0}", valType.Name ) );
 									} else {
@@ -289,11 +290,12 @@ namespace CCNetConfig.Core.Serialization {
 								}
 							}
 						}
+						pi.SetValue ( baseObject, vlist, null );
 					} else if ( valType == typeof ( HiddenPassword ) ) {
 						HiddenPassword hp = pi.GetValue ( baseObject, null ) as HiddenPassword;
 						if ( hp == null ) {
 							// need to create it.
-							ConstructorInfo ci = valType.GetConstructor ( null );
+							ConstructorInfo ci = valType.GetConstructor ( new Type[] { } );
 							if ( ci == null ) {
 								throw new ArgumentException ( string.Format ( "Unable to locate default constructor for type {0}", valType.Name ) );
 							} else {
@@ -301,6 +303,7 @@ namespace CCNetConfig.Core.Serialization {
 							}
 						}
 						hp.Password = subElement.InnerText;
+						pi.SetValue ( baseObject, hp, null );
 					}
 				}
 			}
