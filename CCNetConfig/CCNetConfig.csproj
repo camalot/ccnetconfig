@@ -84,11 +84,11 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Components\CustomTreeNode.cs" />
-    <Compile Include="Components\Nodes\IInteractiveTreeNode.cs" />
-    <Compile Include="Components\Nodes\IntegrationQueueTreeNode.cs" />
     <Compile Include="Components\ListViewColumnDateTimeSorter.cs" />
     <Compile Include="Components\ListViewColumnSorter.cs" />
     <Compile Include="Components\NativeMethods.cs" />
+    <Compile Include="Components\Nodes\IInteractiveTreeNode.cs" />
+    <Compile Include="Components\Nodes\IntegrationQueueTreeNode.cs" />
     <Compile Include="Components\Nodes\ProjectQueuesTreeNode.cs" />
     <Compile Include="Components\Nodes\QueueImageKeys.cs" />
     <Compile Include="Components\Nodes\ValidatingTreeNode.cs" />
@@ -343,7 +343,6 @@
     <None Include="Resources\queueprojectlink_16x16.png" />
     <None Include="Resources\queueadd_16x16.png" />
     <None Include="Resources\queuedelete_16x16.png" />
-    <None Include="tick_16x16.png" />
     <None Include="Resources\Splash.png" />
     <None Include="Resources\updatesIcon.png" />
     <None Include="Resources\updates.png" />

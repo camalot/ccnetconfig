@@ -95,15 +95,58 @@ namespace CCNetConfig.Core {
 		/// <param name="name">The name.</param>
 		/// <returns></returns>
 		public static string GetRealNameFromSerializerValue<T> ( string name ) {
-			Type t = typeof ( T );
+			return GetRealNameFromSerializerValue ( typeof ( T ), name );
+		}
+
+		/// <summary>
+		/// Gets the real name from serializer value.
+		/// </summary>
+		/// <param name="t">The type.</param>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		public static string GetRealNameFromSerializerValue ( Type t, string name ) {
 			MemberInfo[] mis = t.GetMembers ( /*BindingFlags.DeclaredOnly | BindingFlags.IgnoreCase | BindingFlags.GetField*/ );
 			foreach ( MemberInfo mi in mis ) {
 				SerializerValueAttribute dna = GetSerializerValue ( mi );
-				if ( dna != null && string.Compare ( name, dna.Value , true ) == 0 )
+				if ( dna != null && string.Compare ( name, dna.Value, true ) == 0 )
 					return mi.Name;
 			}
 
-			throw new ArgumentException ( string.Format ( "Member not found for type of {0} with a name of {1}", typeof ( T ).Name, name ) );
+			throw new ArgumentException ( string.Format ( "Member not found for type of {0} with a name of {1}", t.Name, name ) );
+		}
+
+		/// <summary>
+		/// Creates the type of the generic.
+		/// </summary>
+		/// <param name="generic">The generic.</param>
+		/// <param name="paramTypes">The param types.</param>
+		/// <returns></returns>
+		public static Type CreateGenericType ( Type generic, Type[] paramTypes ) {
+			Type t = generic.MakeGenericType ( paramTypes );
+			return t;
+		}
+
+		/// <summary>
+		/// Creates the generic type instance.
+		/// </summary>
+		/// <param name="generic">The generic.</param>
+		/// <param name="paramTypes">The param types.</param>
+		/// <param name="constructParams">The construct params.</param>
+		/// <returns></returns>
+		public static object CreateGenericTypeInstance ( Type generic, Type[] paramTypes, object[] constructParams ) {
+			Type t = CreateGenericType ( generic, paramTypes );
+			List<Type> ctypes = new List<Type> ();
+			if ( constructParams != null ) {
+				foreach ( object o in constructParams ) {
+					ctypes.Add ( o.GetType () );
+				}
+			}
+			ConstructorInfo ci = t.GetConstructor ( ctypes.ToArray () );
+			if ( ci == null ) {
+				throw new ArgumentException ( "Unable to find a constructor for type with the specified types for parameters" );
+			} else {
+				return ci.Invoke ( constructParams );
+			}
 		}
 
 		/// <summary>
@@ -117,7 +160,7 @@ namespace CCNetConfig.Core {
 			PropertyInfo[] props = t.GetProperties ( BindingFlags.IgnoreCase | BindingFlags.Instance );
 			foreach ( PropertyInfo pi in props ) {
 				ReflectorNameAttribute rna = GetCustomAttribute<ReflectorNameAttribute> ( pi );
-				ReflectorIgnoreAttribute ria = GetCustomAttribute<ReflectorIgnoreAttribute> (pi );
+				ReflectorIgnoreAttribute ria = GetCustomAttribute<ReflectorIgnoreAttribute> ( pi );
 				if ( rna != null && ria == null ) {
 					if ( string.Compare ( name, rna.Name, false ) == 0 )
 						return pi;
@@ -1004,24 +1047,20 @@ namespace CCNetConfig.Core {
 				return default ( T );
 		}
 
-        /// <summary>
-        /// Gets the attribute.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="mi">The mi.</param>
-        /// <returns></returns>
-        public static T[] GetCustomAttributes<T>(MemberInfo mi) where T : Attribute
-        {
-            object[] attr = mi.GetCustomAttributes(typeof(T), true) as Attribute[];
-            if (attr != null)
-            {
-                return (T[])attr;
-            }
-            else
-            {
-                return new T[0];
-            }
-        }
+		/// <summary>
+		/// Gets the attribute.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="mi">The mi.</param>
+		/// <returns></returns>
+		public static T[] GetCustomAttributes<T> ( MemberInfo mi ) where T : Attribute {
+			object[] attr = mi.GetCustomAttributes ( typeof ( T ), true ) as Attribute[];
+			if ( attr != null ) {
+				return (T[])attr;
+			} else {
+				return new T[ 0 ];
+			}
+		}
 
 		/// <summary>
 		/// Gets all publisher tasks.

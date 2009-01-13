@@ -225,16 +225,16 @@ namespace CCNetConfig.Core.Serialization {
 					valType = nullType;
 				}
 
-				if ( valType.IsPrimitive || valType == typeof ( string ) ) {
+				if ( valType.IsPrimitive || valType == typeof ( string ) || valType == typeof(DateTime) || valType.IsEnum ) {
 					pi.SetValue ( baseObject, StringTypeConverter.Convert ( subElement.InnerText, valType ), null );
 				} else {
-					if ( valType.GetInterface(typeof(ICCNetObject).FullName) != null ) {
+					if ( valType.GetInterface ( typeof ( ICCNetObject ).FullName ) != null ) {
 						ConstructorInfo ci = valType.GetConstructor ( new Type[] { } );
 						if ( ci == null ) {
 							throw new ArgumentException ( string.Format ( "Unable to locate default constructor for type {0}", valType.Name ) );
 						} else {
 							ICCNetObject valObject = ci.Invoke ( null ) as ICCNetObject;
-							valObject.Deserialize ( subElement as XmlElement);
+							valObject.Deserialize ( subElement as XmlElement );
 							pi.SetValue ( baseObject, valObject, null );
 						}
 					} else if ( valType.IsGenericType && valType.GetGenericTypeDefinition ().Equals ( typeof ( CloneableList<> ) ) ) {
@@ -274,7 +274,7 @@ namespace CCNetConfig.Core.Serialization {
 							// it doesn't have an reflector array attribute, so we can assume that all items are ICCNetObects.
 							XmlNodeList nodes = subElement.SelectNodes ( "*" );
 							foreach ( XmlElement itemElement in nodes ) {
-								if ( gtype.GetInterface(typeof(ICCNetObject).FullName) != null ) {
+								if ( gtype.GetInterface ( typeof ( ICCNetObject ).FullName ) != null ) {
 									ICCNetObject obj = null;
 									ConstructorInfo ci = gtype.GetConstructor ( new Type[] { } );
 									if ( ci == null ) {

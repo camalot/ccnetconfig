@@ -15,9 +15,19 @@ namespace CCNetConfig.Core.Components {
 		/// <param name="newType">The new type.</param>
 		/// <returns></returns>
 		public static object Convert ( string value, Type newType ) {
-			if ( newType == typeof ( string ) ) {
+		  if ( newType.IsEnum ) {
+				if ( !Enum.IsDefined ( newType, value ) )
+					value = Util.GetRealNameFromSerializerValue ( newType, value );
+				return Enum.Parse ( newType, value );
+		  } else if ( newType == typeof ( string ) ) {
 				return value;
-			}  else if ( newType == typeof ( bool ) ) {
+			} else if ( newType == typeof ( DateTime ) ) {
+				DateTime dt;
+				if ( DateTime.TryParse ( value, out dt ) )
+					return dt;
+				else
+					throw new ArgumentException ( string.Format ( "Unable to convert {0} to a {1}", value, newType.Name ) );
+			} else if ( newType == typeof ( bool ) ) {
 				return string.Compare ( value, bool.TrueString, true ) == 0;
 			} else if ( newType == typeof ( int ) ) {
 				int i = 0;
