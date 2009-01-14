@@ -42,6 +42,8 @@ namespace CCNetConfig.UI {
       ProjectInfo pi = null;
       this.nameLabel.Text = string.IsNullOrEmpty ( Application.ProductName ) ? "CCNetConfig" : Application.ProductName;
       this.versionLabel.Text = string.IsNullOrEmpty ( Application.ProductVersion ) ? "0.0.0.0" : Application.ProductVersion;
+			this.homeLink.Text += DateTime.Now.Year.ToString ();
+
       try {
         XmlSerializer ser = new XmlSerializer ( typeof ( ProjectInfo ) );
         FileStream fs = new FileStream ( Path.Combine ( Application.StartupPath, Program.Configuration["Contributors"].Path ), FileMode.Open, FileAccess.Read );
@@ -320,5 +322,12 @@ namespace CCNetConfig.UI {
       }
       detailsTextBox.Text = sb.ToString ();
     }
+
+		private void donate_Click ( object sender, EventArgs e ) {
+			ProcessStartInfo psi = new ProcessStartInfo ( "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2485230", string.Empty );
+			Process p = new Process ();
+			p.StartInfo = psi;
+			p.Start ( );
+		}
   }
 }

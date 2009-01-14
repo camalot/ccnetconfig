@@ -206,7 +206,12 @@ namespace CCNetConfig.Core.Serialization {
 				string rname = Util.GetReflectorNameAttributeValue ( pi );
 				RequiredAttribute ra = Util.GetCustomAttribute<RequiredAttribute> ( pi );
 				Type valType = pi.PropertyType;
-				XmlNode subElement = element.SelectSingleNode ( rname ) as XmlNode;
+				XmlNode subElement = null;
+				if ( string.Compare ( element.Name, rname, false ) == 0 ) {
+					subElement = element;
+				} else {
+					subElement = element.SelectSingleNode ( rname ) as XmlNode;
+				}
 				if ( subElement == null ) {
 					subElement = element.SelectSingleNode ( string.Format ( "@{0}", rname ) );
 				}

@@ -325,6 +325,7 @@
     </Content>
     <None Include="Resources\green_arrow1.png" />
     <None Include="Resources\green_arrow2.png" />
+    <None Include="Resources\donate.png" />
     <Content Include="Resources\Images\ccnetconfig.ico" />
     <Content Include="Resources\Images\Green Down.png" />
     <Content Include="Resources\Images\Green Up.png" />
