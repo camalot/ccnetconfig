@@ -1,357 +1,336 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Font Name="Tahoma" Size="8.25" />
-  <Class Name="CCNetConfig.Core.AlienbrainUri" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="0.5" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <FileName>AlienbrainUri.cs</FileName>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
   <Class Name="CCNetConfig.Core.CruiseControl" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="4" Y="0.5" Width="1.5" />
     <TypeIdentifier>
+      <HashCode>IAAAAAQAAAAAAAAAAAAAgAAAQCBBAAAAABEAAAAAAQA=</HashCode>
       <FileName>CruiseControl.cs</FileName>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAACBBAAAAABABAAAAAQA=</HashCode>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="CCNetConfig.Core.ExternalLink" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="5.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
+      <HashCode>AAAAIAAAAAAAAAAMAAAAAAQAACRAAAAACBAAAAAAABA=</HashCode>
       <FileName>ExternalLink.cs</FileName>
-      <HashCode>AAAAIAAAAAAAAAAEAAAAAAQAACRAAAAACBAAAAAAAAA=</HashCode>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="CCNetConfig.Core.HiddenPassword" Collapsed="true">
     <Position X="9.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAgMAAAAAAAAAAAAAAACAAAAAAAAABA=</HashCode>
       <FileName>HiddenPassword.cs</FileName>
-      <HashCode>AAQAAAAAAAAAAAgEAAAAAAAAAAAAAAACAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="CCNetConfig.Core.Labeller" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="11" Y="1.5" Width="1.5" />
     <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQMAAAAAAAAACBAABAAAAAAAAAAABA=</HashCode>
       <FileName>Labeller.cs</FileName>
-      <HashCode>AAAAAAAAAAAAAAQEAAAAAAAAACBAABAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="CCNetConfig.Core.Project" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="5.75" Y="2.5" Width="1.5" />
     <TypeIdentifier>
+      <HashCode>AEiAIgCAgAAIBAANAAAACAwEXCRKEAAACBAIhgQASlA=</HashCode>
       <FileName>Project.cs</FileName>
-      <HashCode>AEiAIACAgAAIAAAFAAAACAQEHCRKAAAACBAIhgQAQEA=</HashCode>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="CCNetConfig.Core.PublisherTask" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="7.5" Y="2.5" Width="1.5" />
     <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAANAAAAAAAAACBAABAAAAAAAAAAABA=</HashCode>
       <FileName>PublisherTask.cs</FileName>
-      <HashCode>AAAAAAAAAAAAAAAFAAAAAAAAACBAABAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="CCNetConfig.Core.SourceControl" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="0.5" Y="3.5" Width="1.5" />
     <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAMAAAAAAAAACBAABAAAAAAAAAAABA=</HashCode>
       <FileName>SourceControl.cs</FileName>
-      <HashCode>AAAAAAAAAAAAAAAFAAAAAAAAACBAABAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="CCNetConfig.Core.State" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="4" Y="3.5" Width="1.5" />
     <TypeIdentifier>
+      <HashCode>EAAAABAAAAAAAAQMAAAAAAAAACBAAAAAAQAAAAAAABA=</HashCode>
       <FileName>State.cs</FileName>
-      <HashCode>EAAAABAAAAAAAAQEAAAAAAAAACBAAAAAAQAAAAAAAAA=</HashCode>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="CCNetConfig.Core.Timeout" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="11" Y="3.5" Width="1.5" />
     <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAAAMIBAAAAAAACBAAAAAABAAAAAAABI=</HashCode>
       <FileName>Timeout.cs</FileName>
-      <HashCode>AAAAAAAAAAACAAAEIBAAAAAAACBAAAAAABAAAAAAAAI=</HashCode>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="CCNetConfig.Core.Trigger" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="4" Y="4.5" Width="1.5" />
     <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAMAAAAAAAAACBAABAAAAAQAAAAABA=</HashCode>
       <FileName>Trigger.cs</FileName>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAACBAABAAAAAQAAAAAAA=</HashCode>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="CCNetConfig.Core.Util" Collapsed="true">
     <Position X="5.75" Y="5.5" Width="1.5" />
     <TypeIdentifier>
+      <HashCode>XGrxAsGJAgFCMIAAAAqAAKRNXAYCCACgIFIRxIBgaUA=</HashCode>
       <FileName>Util.cs</FileName>
-      <HashCode>CEoRAIAAAABAMAAAAAiAAIQEDAQACACAIFAAhIBAYEA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="CCNetConfig.Core.TypeComparer" Collapsed="true">
     <Position X="0.5" Y="5.5" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Util.cs</FileName>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>Util.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CCNetConfig.Core.WebUrlBuilder" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="7.5" Y="5.5" Width="1.5" />
     <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAMAAAAAAAAACBAAAAACQAAAAAAABA=</HashCode>
       <FileName>WebUrlBuilder.cs</FileName>
-      <HashCode>AAAAAAAAAAAAAAQEAAAAAAAAACRAAAAACQAAAAAAAAA=</HashCode>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="CCNetConfig.Core.Components.AlienbrainUriTypeConverter" Collapsed="true">
     <Position X="2.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Components\AlienbrainUriTypeConverter.cs</FileName>
       <HashCode>AAAAgAAAAAAAAAAAAAgAAAAAAAAAACAAAAIAAAAAAAA=</HashCode>
+      <FileName>Components\AlienbrainUriTypeConverter.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CCNetConfig.Core.Components.DayOfWeekUIEditor" Collapsed="true">
     <Position X="9.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Components\DayOfWeekUIEditor.cs</FileName>
       <HashCode>AAAAAAAAAgAAAABAAAAAAAAIAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>Components\DayOfWeekUIEditor.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CCNetConfig.Core.Components.DayOfWeekListTypeConverter" Collapsed="true">
     <Position X="7.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Components\DayOfWeekUIEditor.cs</FileName>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAIAAAAAAAA=</HashCode>
+      <FileName>Components\DayOfWeekUIEditor.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CCNetConfig.Core.Components.DefaultableBooleanUIEditor" Collapsed="true">
     <Position X="0.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
+      <HashCode>AAAEAAEAAgAAAABAAAAAAAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Components\DefaultableBooleanUIEditor.cs</FileName>
-      <HashCode>AAAAAAEAAgAAAABAAAAAAAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="CCNetConfig.Core.Components.DefaultableBooleanTypeConverter" Collapsed="true">
     <Position X="11" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Components\DefaultableBooleanUIEditor.cs</FileName>
       <HashCode>AAIAgAAAAAABAAAAAAgAAAAAAAAAACAAAAIAAAAAAAA=</HashCode>
+      <FileName>Components\DefaultableBooleanTypeConverter.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CCNetConfig.Core.Components.DefaultableEnumUIEditor" Collapsed="true">
     <Position X="4" Y="1.5" Width="1.5" />
     <TypeIdentifier>
+      <HashCode>AAAEAAEAAgAAAABAAAAAAAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Components\DefaultableEnumUIEditor.cs</FileName>
-      <HashCode>AAAAAAEAAgAAAABAAAAAAAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="CCNetConfig.Core.Components.DefaultableEnumTypeConverter" Collapsed="true">
     <Position X="2.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Components\DefaultableEnumUIEditor.cs</FileName>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAIAAAAAAAA=</HashCode>
+      <FileName>Components\DefaultableEnumTypeConverter.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CCNetConfig.Core.Components.PasswordTypeConverter" Collapsed="true">
     <Position X="2.25" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Components\PasswordTypeConverter.cs</FileName>
       <HashCode>AAAAgAAAAAAAAAAAAAgAAAAAAAAAACAAAAIAAAAAAAA=</HashCode>
+      <FileName>Components\PasswordTypeConverter.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CCNetConfig.Core.Components.SourceControlUIEditor" Collapsed="true">
     <Position X="2.25" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Components\SourceControlUIEditor.cs</FileName>
       <HashCode>AAAAAAEAAgAAAABAAAAAAAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Components\SourceControlUIEditor.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CCNetConfig.Core.Components.StringListUIEditor" Collapsed="true">
     <Position X="9.25" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Components\StringListUIEditor.cs</FileName>
       <HashCode>AAAAAAAAAgAAAABAAAAAAAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Components\StringListUIEditor.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CCNetConfig.Core.Components.StringListTypeConverter" Collapsed="true">
     <Position X="7.5" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Components\StringListUIEditor.cs</FileName>
       <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAAAAAACAAAAIAAAAAAAA=</HashCode>
+      <FileName>Components\StringListUIEditor.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CCNetConfig.Core.Components.TimeUIEditor" Collapsed="true">
     <Position X="2.25" Y="4.5" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Components\TimeUIEditor.cs</FileName>
       <HashCode>AAAAAAAAAgAAAABAAEAAAAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Components\TimeUIEditor.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CCNetConfig.Core.Components.TimeTypeConverter" Collapsed="true">
     <Position X="0.5" Y="4.5" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Components\TimeUIEditor.cs</FileName>
       <HashCode>AAAAgAAAAAAAAAAEAAgAAAAAAAAAACAAAAIAAAAAAAA=</HashCode>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="CCNetConfig.Core.Components.TriggerListEditor" Collapsed="true">
-    <Position X="5.75" Y="4.5" Width="1.5" />
-    <TypeIdentifier>
-      <FileName>Components\TriggerListEditor.cs</FileName>
-      <HashCode>AAACAwABACQAABAhAQCIAIAiCAAYEwABAAABE0AAQAQ=</HashCode>
+      <FileName>Components\TimeUIEditor.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CCNetConfig.Core.Components.TriggerListUIEditor" Collapsed="true">
     <Position X="9.25" Y="4.5" Width="1.5" />
     <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Components\TriggerListUIEditor.cs</FileName>
-      <HashCode>AAAAAAAAAgAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="CCNetConfig.Core.Components.TriggerSelectorUIEditor" Collapsed="true">
     <Position X="11" Y="4.5" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Components\TriggerSelectorUIEditor.cs</FileName>
       <HashCode>AAAAAAEAAgAAAABAAAAAAAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Components\TriggerSelectorUIEditor.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CCNetConfig.Core.Components.TriggerListTypeConverter" Collapsed="true">
     <Position X="7.5" Y="4.5" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Components\TriggerSelectorUIEditor.cs</FileName>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAIAAAAAAAA=</HashCode>
+      <FileName>Components\TriggerSelectorUIEditor.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CCNetConfig.Core.Components.UserGroupUIEditor" Collapsed="true">
     <Position X="2.25" Y="5.5" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Components\UserGroupUIEditor.cs</FileName>
       <HashCode>AAAAAAAAIgAAAABAAAAAAAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Components\UserGroupUIEditor.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CCNetConfig.Core.Components.IListTypeConverter" Collapsed="true">
     <Position X="7.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Components\IListTypeConverter.cs</FileName>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAIAAAAAAAA=</HashCode>
+      <FileName>Components\IListTypeConverter.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CCNetConfig.Core.Components.DatePickerUIEditor" Collapsed="true">
     <Position X="5.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Components\DatePickerUIEditor.cs</FileName>
       <HashCode>AAAAAAAAIgAAAABAAAAAAAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Components\DatePickerUIEditor.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CCNetConfig.Core.Components.LabellerUIEditor" Collapsed="true">
     <Position X="0.5" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Components\LabellerUIEditor.cs</FileName>
       <HashCode>AAAAAAEAAgAAAABAAAAAAAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Components\LabellerUIEditor.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CCNetConfig.Core.Components.StateUIEditor" Collapsed="true">
     <Position X="5.75" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Components\StateUIEditor.cs</FileName>
       <HashCode>AAAAAAEAAgAAAABAAAAAAAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Components\StateUIEditor.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CCNetConfig.Exceptions.RequiredAttributeException" Collapsed="true">
     <Position X="9.25" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Exceptions\RequiredAttributeException.cs</FileName>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Exceptions\RequiredAttributeException.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CCNetConfig.Core.Properties.Resources" Collapsed="true">
     <Position X="11" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+      <HashCode>AAAAAIAIAAAAAAAAAIAREAAAAQAAAAAAAAQAAAAAAIA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Interface Name="CCNetConfig.Core.ICCNetDocumentation" Collapsed="true">
     <Position X="0.5" Y="6.75" Width="1.5" />
     <TypeIdentifier>
-      <FileName>ICCNetDocumentation.cs</FileName>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>ICCNetDocumentation.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="CCNetConfig.Core.ICCNetObject" Collapsed="true">
     <Position X="2.25" Y="6.75" Width="1.5" />
     <TypeIdentifier>
-      <FileName>ICCNetObject.cs</FileName>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ICCNetObject.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="CCNetConfig.Core.Serialization.ISerialize" Collapsed="true">
     <Position X="4" Y="6.75" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Serialization\ISerialize.cs</FileName>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAACBAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Serialization\ISerialize.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Enum Name="CCNetConfig.Core.Enums.BuildCondition" Collapsed="true">
     <Position X="2.25" Y="7.75" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Enums.cs</FileName>
       <HashCode>AAAAAAAAAAAAAIAAAAAAAACAAAAAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>Enums.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="CCNetConfig.Core.Enums.AndOr" Collapsed="true">
     <Position X="0.5" Y="7.75" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Enums.cs</FileName>
       <HashCode>IAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
-    </TypeIdentifier>
-  </Enum>
-  <Enum Name="CCNetConfig.Core.Enums.TriggerStatus" Collapsed="true">
-    <Position X="11" Y="7.75" Width="1.5" />
-    <TypeIdentifier>
       <FileName>Enums.cs</FileName>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAgAAAACAAABAAAAAABA=</HashCode>
     </TypeIdentifier>
   </Enum>
   <Enum Name="CCNetConfig.Core.Enums.NotificationType" Collapsed="true">
     <Position X="5.75" Y="7.75" Width="1.5" />
     <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAAAAAAgAAAAAAABAgAABAAAA=</HashCode>
       <FileName>Enums.cs</FileName>
-      <HashCode>AAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAABAgAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Enum>
   <Enum Name="CCNetConfig.Core.Enums.IntegrationStatus" Collapsed="true">
     <Position X="4" Y="7.75" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Enums.cs</FileName>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAgAAAACAAABAAAAAAAA=</HashCode>
+      <FileName>Enums.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="CCNetConfig.Core.Enums.VSBuildType" Collapsed="true">
     <Position X="0.5" Y="8.5" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Enums.cs</FileName>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAACAAAAAAQAA=</HashCode>
+      <FileName>Enums.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="CCNetConfig.Core.Enums.TimeoutUnit" Collapsed="true">
     <Position X="9.25" Y="7.75" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Enums.cs</FileName>
       <HashCode>AAAAIAAAAAAQAAAAQAAAAAAAAAAAAAAAAAABAAAAAAA=</HashCode>
+      <FileName>Enums.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="CCNetConfig.Core.Enums.SourceControlSetFileTime" Collapsed="true">
     <Position X="7.5" Y="7.75" Width="1.5" />
     <TypeIdentifier>
-      <FileName>Enums.cs</FileName>
       <HashCode>AAAAAAAAAAAAAAAAAAKAAAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Enums.cs</FileName>
     </TypeIdentifier>
   </Enum>
+  <Font Name="Tahoma" Size="8.25" />
 </ClassDiagram>
