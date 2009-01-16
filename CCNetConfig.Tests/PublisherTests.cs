@@ -27,7 +27,6 @@ using System.Xml;
 namespace CCNetConfig.Tests {
 	[TestFixture]
 	public class PublisherTests {
-
 		[Test]
 		public void SourceGearFortressPublisherTest () {
 			SourceGearFortressPublisher sgfp = new SourceGearFortressPublisher ();
