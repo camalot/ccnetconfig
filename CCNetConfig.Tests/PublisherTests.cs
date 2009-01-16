@@ -39,7 +39,7 @@ namespace CCNetConfig.Tests {
 
 			XmlElement node = sgfp.Serialize ();
 			Assert.IsNotNull ( node, "Serialize failed for SourceGearFortressPublisher" );
-			Assert.AreEqual ( node.SelectSingleNode ( "useLabel" ).InnerText, sgfp.UseLabel );
+			Assert.AreEqual ( node.SelectSingleNode ( "useLabel" ).InnerText, sgfp.UseLabel.ToString() );
 			Assert.AreEqual ( node.SelectSingleNode ( "password" ).InnerText, sgfp.Password.GetPassword () );
 			Assert.AreEqual ( node.SelectSingleNode ( "username" ).InnerText, sgfp.Username );
 			Assert.AreEqual ( node.SelectSingleNode ( "repository" ).InnerText, sgfp.Repository );
@@ -47,7 +47,7 @@ namespace CCNetConfig.Tests {
 			sgfp = new SourceGearFortressPublisher ();
 			sgfp.Deserialize ( node );
 
-			Assert.AreEqual ( node.SelectSingleNode ( "useLabel" ).InnerText, sgfp.UseLabel );
+			Assert.AreEqual ( node.SelectSingleNode ( "useLabel" ).InnerText, sgfp.UseLabel.ToString () );
 			Assert.AreEqual ( node.SelectSingleNode ( "password" ).InnerText, sgfp.Password.GetPassword () );
 			Assert.AreEqual ( node.SelectSingleNode ( "username" ).InnerText, sgfp.Username );
 			Assert.AreEqual ( node.SelectSingleNode ( "repository" ).InnerText, sgfp.Repository );
