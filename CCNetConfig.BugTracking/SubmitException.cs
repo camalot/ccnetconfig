@@ -92,7 +92,7 @@ namespace CCNetConfig.BugTracking {
         } catch { }
       }
       string configXml = string.Empty;
-      if ( _configDoc != null )
+      if ( _configDoc != null && includeConfig.Checked )
         configXml = _configDoc.OuterXml;
       string details = string.Format ( format, _exception.ToString ( ), configXml, 
         loadedFileData.ToString(), Environment.NewLine, Utils.GetOSInformation(), Utils.GetAssemblyInformation());
@@ -123,12 +123,12 @@ namespace CCNetConfig.BugTracking {
     }
 
     private void showDetails_Click ( object sender, EventArgs e ) {
-      if ( this.Size != new Size ( 471, 152 ) ) {
-        this.Size = new Size ( 471, 152 );
+			if ( this.Size != new Size ( 471, 177 ) ) {
+				this.Size = new Size ( 471, 177 );
         this.showDetails.Text = "Show &Details";
         this.textdetails.Visible = false;
       } else {
-        this.Size = new Size ( 471, 306 );
+				this.Size = new Size ( 471, 336 );
         this.showDetails.Text = "Hide &Details";
         this.textdetails.Visible = true;
       }
