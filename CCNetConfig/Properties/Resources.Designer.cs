@@ -88,6 +88,34 @@ namespace CCNetConfig.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap assertion_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("assertion_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap assignpermissions_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("assignpermissions_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap auditlogger_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("auditlogger_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap auditreader_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("auditreader_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap block_16x16 {
             get {
                 object obj = ResourceManager.GetObject("block_16x16", resourceCulture);
@@ -582,6 +610,41 @@ namespace CCNetConfig.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap security_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("security_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap securitycache_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("securitycache_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap securitychange_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("securitychange_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap securitydelete_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("securitydelete_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap securitysetting_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("securitysetting_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap sourcecontrol_folder_16x16 {
             get {
                 object obj = ResourceManager.GetObject("sourcecontrol_folder_16x16", resourceCulture);
@@ -639,6 +702,20 @@ namespace CCNetConfig.Properties {
         internal static System.Drawing.Bitmap updatesIcon {
             get {
                 object obj = ResourceManager.GetObject("updatesIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap users_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("users_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap usersimport_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("usersimport_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

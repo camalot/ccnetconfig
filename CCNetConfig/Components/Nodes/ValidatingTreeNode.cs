@@ -55,6 +55,7 @@ namespace CCNetConfig.Components.Nodes
         public virtual ICCNetObject DataItem
         {
             get { return dataItem; }
+            protected set { dataItem = value; }
         }
         #endregion
 

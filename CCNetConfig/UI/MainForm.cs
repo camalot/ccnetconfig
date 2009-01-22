@@ -51,6 +51,7 @@ namespace CCNetConfig.UI {
   public partial class MainForm : Form {
     private CruiseControlTreeNode rootNode;
     private ProjectQueuesTreeNode queuesNode = null;
+    private ServerSecurityNode securityNode = null;
     private ContextMenuStrip genericContextMenu;
     private bool configModified = false;
     private TreeNode _dragNode = null;
@@ -59,6 +60,7 @@ namespace CCNetConfig.UI {
     private CloneableList<Version> _ccnetVersions = null;
     private BackupControler _backupControler = null;
     private QueueImageKeys queueImageKeys;
+    private SecurityImageKeys securityImageKeys;
     private ValidationForm validation;
 
     private EventHandler _pasteMenuItemEventHandler = null;
@@ -81,6 +83,8 @@ namespace CCNetConfig.UI {
             treeImages.Images.IndexOfKey("queue"),
             treeImages.Images.IndexOfKey("queueConfig"),
             treeImages.Images.IndexOfKey("project"));
+        securityImageKeys = new SecurityImageKeys(
+            treeImages.Images.IndexOfKey("security_16x16"));
         validation = new ValidationForm(this);
     }
 
@@ -1807,6 +1811,20 @@ namespace CCNetConfig.UI {
             queuesNode = new ProjectQueuesTreeNode(rootNode.CruiseControl, queueImageKeys);
             tvProjects.Nodes.Add(queuesNode);
         }
+        else
+        {
+            queuesNode = null;
+        }
+
+        if (version.CompareTo(new Version("1.5")) >= 0)
+        {
+            securityNode = new ServerSecurityNode(rootNode.CruiseControl, securityImageKeys);
+            tvProjects.Nodes.Add(securityNode);
+        }
+        else
+        {
+            securityNode = null;
+        }
     }
 
     /// <summary>
@@ -1828,11 +1846,15 @@ namespace CCNetConfig.UI {
         try {
           loadedConfigFile = file;
           this.rootNode.CruiseControl.Deserialize ( file );
-          queuesNode.Configuration = rootNode.CruiseControl;
+          if (queuesNode != null) queuesNode.Configuration = rootNode.CruiseControl;
           // now we need to setup the tree
           rootNode.Nodes.Clear();
           AddAllProjectsToTree();
           AddAllQueuesToTree();
+          if (securityNode != null)
+          {
+              securityNode.ChangeSecurity(rootNode.CruiseControl.Security);
+          }
 				} catch ( XmlException xe ) {
 					// look specifically for xml errors. 
 					// give the user the option to manually edit the config file
@@ -1924,8 +1946,11 @@ namespace CCNetConfig.UI {
       /// <param name="value"></param>
       private void AddQueueTreeNode(Queue value)
       {
-          IntegrationQueueTreeNode newNode = new IntegrationQueueTreeNode(value, queueImageKeys);
-          queuesNode.Nodes.Add(newNode);
+          if (queuesNode != null)
+          {
+              IntegrationQueueTreeNode newNode = new IntegrationQueueTreeNode(value, queueImageKeys);
+              queuesNode.Nodes.Add(newNode);
+          }
       }
       #endregion
 
@@ -1995,6 +2020,10 @@ namespace CCNetConfig.UI {
         rootNode.Nodes.Add ( tn );
       if ( !rootNode.IsExpanded )
         rootNode.Expand ( );
+
+      // This needs to be done after the project node has been added to the tree, otherwise the
+      // images will not be detected
+      ReflectionHelper.GenerateChildNodes(tn, project);
     }
 
     /// <summary>
@@ -2181,8 +2210,11 @@ namespace CCNetConfig.UI {
 
     private void validateToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        DisplayValidationResults();
-        validation.Validate(tvProjects);
+        if (CheckForConfiguration())
+        {
+            DisplayValidationResults();
+            validation.Validate(tvProjects);
+        }
     }
 
     private void validateToolStripButton_Click(object sender, EventArgs e)
@@ -2225,6 +2257,31 @@ namespace CCNetConfig.UI {
             validation.BringToFront();
         }
         validation.Select();
+    }
+
+    private void securityWizardsToolstripMenuItem_Click(object sender, EventArgs e)
+    {
+        if (CheckForConfiguration())
+        {
+            SecurityWizardsForm form = new SecurityWizardsForm(rootNode.CruiseControl);
+            form.ShowDialog(this);
+        }
+    }
+
+    private bool CheckForConfiguration()
+    {
+        if (rootNode == null)
+        {
+            MessageBox.Show("You must open or start a configuration before you can do this",
+                "Unable to continue",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
   }
 }

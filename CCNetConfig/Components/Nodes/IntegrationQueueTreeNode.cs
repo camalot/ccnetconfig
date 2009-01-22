@@ -55,7 +55,10 @@ namespace CCNetConfig.Components.Nodes
         public void UpdateImage()
         {
             int imageIndex = imageKeys.BaseImageIndex;
-            if (queue.HasConfig) imageIndex = imageKeys.ConfigImageIndex;
+            if (queue.HasConfig.GetValueOrDefault(false))
+            {
+                imageIndex = imageKeys.ConfigImageIndex;
+            }
             ImageIndex = imageIndex;
             SelectedImageIndex = imageIndex;
         }
@@ -96,7 +99,7 @@ namespace CCNetConfig.Components.Nodes
         #endregion
 
         #region Private methods
-        #region value_PropertyChanged()
+        #region OnQueuePropertyChanged()
         /// <summary>
         /// Updates the node with any relevant changes.
         /// </summary>
@@ -128,9 +131,9 @@ namespace CCNetConfig.Components.Nodes
         {
             ContextMenuStrip menu = new ContextMenuStrip();
 
-            menu.Items.Add(GenerateAssociateProjectsMenu());
             menu.Items.Add(GenerateValidateMenu());
             menu.Items.Add(new ToolStripSeparator());
+            menu.Items.Add(GenerateAssociateProjectsMenu());
             menu.Items.Add(GenerateRemoveQueueMenu());
 
             return menu;
@@ -149,7 +152,7 @@ namespace CCNetConfig.Components.Nodes
             menuItem.Click += delegate(object sender, EventArgs e)
             {
                 if (MessageBox.Show(MainForm,
-                    string.Format("Are you sure you want to delete the queue '{0}'", queue.Name),
+                    string.Format("Are you sure you want to delete the queue '{0}'?", queue.Name),
                     "Confirm delete",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Exclamation) == DialogResult.Yes)

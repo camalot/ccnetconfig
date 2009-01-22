@@ -45,6 +45,7 @@ namespace CCNetConfig.Core {
 		private static List<Type> _labellers;
 		private static List<Type> _states;
 		private static List<Type> _projectExtensions;
+        private static List<Type> serverSecurityModes;
 
 		private static CCNetConfigSettings _userSettings = null;
 		private static Dictionary<Type, TypeDescriptionProvider> _typeDescriptionProviders = null;
@@ -1047,20 +1048,45 @@ namespace CCNetConfig.Core {
 				return default ( T );
 		}
 
-		/// <summary>
-		/// Gets the attribute.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="mi">The mi.</param>
-		/// <returns></returns>
-		public static T[] GetCustomAttributes<T> ( MemberInfo mi ) where T : Attribute {
-			object[] attr = mi.GetCustomAttributes ( typeof ( T ), true ) as Attribute[];
-			if ( attr != null ) {
-				return (T[])attr;
-			} else {
-				return new T[ 0 ];
-			}
-		}
+        #region GetCustomAttributes()
+        /// <summary>
+        /// Gets the attribute.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="mi">The mi.</param>
+        /// <returns></returns>
+        public static T[] GetCustomAttributes<T>(MemberInfo mi) where T : Attribute
+        {
+            object[] attr = mi.GetCustomAttributes(typeof(T), true) as Attribute[];
+            if (attr != null)
+            {
+                return (T[])attr;
+            }
+            else
+            {
+                return new T[0];
+            }
+        }
+
+        /// <summary>
+        /// Gets the attribute.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="type">The source type.</param>
+        /// <returns></returns>
+        public static T[] GetCustomAttributes<T>(Type type) where T : Attribute
+        {
+            object[] attr = type.GetCustomAttributes(typeof(T), true) as Attribute[];
+            if (attr != null)
+            {
+                return (T[])attr;
+            }
+            else
+            {
+                return new T[0];
+            }
+        }
+        #endregion
 
 		/// <summary>
 		/// Gets all publisher tasks.
@@ -1112,7 +1138,42 @@ namespace CCNetConfig.Core {
 			;
 		}
 
-		/// <summary>
+        /// <summary>
+        /// Retrieves all the server security modes.
+        /// </summary>
+        /// <returns></returns>
+        public static List<Type> GetAllServerSecurityModes()
+        {
+            if (serverSecurityModes == null)
+            {
+                serverSecurityModes = GetAllServerSecurityModes(new DirectoryInfo(Application.StartupPath));
+            }
+            return serverSecurityModes;
+        }
+
+        /// <summary>
+        /// Retrieves all the server security modes in a plugin path.
+        /// </summary>
+        /// <param name="pluginPath">The plugin path.</param>
+        /// <returns></returns>
+        public static List<Type> GetAllServerSecurityModes(DirectoryInfo pluginPath)
+        {
+            return GetItemsByBaseType(pluginPath, typeof(ServerSecurity));
+        }
+
+        #region GetAllItemsOfType()
+        /// <summary>
+        /// Retrieves all the types that inherit from a base type.
+        /// </summary>
+        /// <param name="typeToFind">The base type.</param>
+        /// <returns>A list of <see cref="Type"/>s that inherit from the base type.</returns>
+        public static List<Type> GetAllItemsOfType(Type typeToFind)
+        {
+            return GetItemsByBaseType(new DirectoryInfo(Application.StartupPath), typeToFind);
+        }
+        #endregion
+
+        /// <summary>
 		/// Gets all project extensions.
 		/// </summary>
 		/// <param name="pluginPath">The plugin path.</param>
@@ -1213,10 +1274,33 @@ namespace CCNetConfig.Core {
 		public static object CreateInstanceOfType ( Type t ) {
 			Assembly asm = t.Assembly;
 			return asm.CreateInstance ( t.FullName, true );
-		}
+        }
 
+        #region CreateInstanceFromXmlName()
+        /// <summary>
+        /// Generates an instance of a type based on its xml name.
+        /// </summary>
+        /// <param name="xmlName">The name of the item in the XML.</param>
+        /// <returns></returns>
+        public static TItem CreateInstanceFromXmlName<TItem>(string xmlName)
+            where TItem : class
+        {
+            TItem value = null;
+            List<Type> types = GetAllItemsOfType(typeof(TItem));
+            foreach (Type type in types)
+            {
+                ReflectorNameAttribute attribute = GetCustomAttribute<ReflectorNameAttribute>(type);
+                if ((attribute != null) && (attribute.Name == xmlName))
+                {
+                    value = Activator.CreateInstance(type) as TItem;
+                    break;
+                }
+            }
+            return value;
+        }
+        #endregion
 
-		/// <summary>
+        /// <summary>
 		/// Creates the type from string.
 		/// </summary>
 		/// <param name="type">The type.</param>
@@ -1423,9 +1507,74 @@ namespace CCNetConfig.Core {
 				return ele.InnerText;
 
 			return string.Empty;
-		}
+        }
 
-		/// <summary>
+        #region GetEnumFromElementOrAttribute()
+        /// <summary>
+        /// Retrieves an enumeration value from the config.
+        /// </summary>
+        /// <typeparam name="TEnum"></typeparam>
+        /// <param name="name"></param>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        public static Nullable<TEnum> GetEnumFromElementOrAttribute<TEnum>(string name, XmlElement element)
+            where TEnum : struct
+        {
+            string value = GetElementOrAttributeValue(name, element);
+            if (!string.IsNullOrEmpty(value))
+            {
+                return StringToEnum<TEnum>(value);
+            }
+            else
+            {
+                return null;
+            }
+        }
+        #endregion
+
+        #region GetBoolFromElementOrAttribute()
+        /// <summary>
+        /// Retrieves a boolean value from the config.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        public static bool? GetBoolFromElementOrAttribute(string name, XmlElement element)
+        {
+            string value = GetElementOrAttributeValue(name, element);
+            if (!string.IsNullOrEmpty(value))
+            {
+                return (string.Compare(value, bool.TrueString, true) == 0);
+            }
+            else
+            {
+                return null;
+            }
+        }
+        #endregion
+
+        #region GetIntFromElementOrAttribute()
+        /// <summary>
+        /// Retrieves a integer value from the config.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        public static int? GetIntFromElementOrAttribute(string name, XmlElement element)
+        {
+            string value = GetElementOrAttributeValue(name, element);
+            if (!string.IsNullOrEmpty(value))
+            {
+                return Convert.ToInt32(value);
+            }
+            else
+            {
+                return null;
+            }
+        }
+        #endregion
+
+        /// <summary>
 		/// Creates the project comments.
 		/// </summary>
 		/// <param name="ccnet">The ccnet.</param>
@@ -1544,8 +1693,23 @@ namespace CCNetConfig.Core {
 		/// </returns>
 		public static bool IsNullable ( Type t ) {
 			return ( t.IsGenericType && t.GetGenericTypeDefinition ().Equals ( typeof ( Nullable<> ) ) );
-		}
-	}
+        }
+
+        #region CreateElement()
+        /// <summary>
+        /// Creates a new XmlElement and appends it to another.
+        /// </summary>
+        /// <param name="parent">The parent for the new node.</param>
+        /// <param name="name">The name of the new node.</param>
+        /// <returns></returns>
+        public static XmlElement CreateElement(XmlElement parent, string name)
+        {
+            XmlElement newElement = parent.OwnerDocument.CreateElement(name);
+            parent.AppendChild(newElement);
+            return newElement;
+        }
+        #endregion
+    }
 
 	/// <summary>
 	/// Compares 2 types of objects.

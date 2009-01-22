@@ -377,7 +377,37 @@ Would you like to update now to version {0}?</value>
   <data name="queueprojectlink_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\queueprojectlink_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="donate" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\donate.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="security_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\security_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="securitychange_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\securitychange_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="securitydelete_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\securitydelete_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="assertion_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\assertion_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="auditlogger_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\auditlogger_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="auditreader_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\auditreader_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="securitysetting_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\securitysetting_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="securitycache_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\securitycache_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="assignpermissions_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\assignpermissions_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="usersimport_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\usersimport_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="users_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\users_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

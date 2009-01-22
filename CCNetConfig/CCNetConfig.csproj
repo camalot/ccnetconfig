@@ -84,15 +84,48 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Components\CustomTreeNode.cs" />
+    <Compile Include="Components\Nodes\IImageUpdateNode.cs" />
+    <Compile Include="Components\Nodes\ReflectionHelper.cs" />
+    <Compile Include="Components\Nodes\ReflectionInstanceTreeNode.cs" />
+    <Compile Include="Components\Nodes\ReflectionListTreeNode.cs" />
+    <Compile Include="Components\Nodes\ReflectionItemTreeNode.cs" />
+    <Compile Include="Components\Nodes\SecurityImageKeys.cs" />
+    <Compile Include="Components\Nodes\IInteractiveTreeNode.cs" />
+    <Compile Include="Components\Nodes\IntegrationQueueTreeNode.cs" />
     <Compile Include="Components\ListViewColumnDateTimeSorter.cs" />
     <Compile Include="Components\ListViewColumnSorter.cs" />
     <Compile Include="Components\NativeMethods.cs" />
-    <Compile Include="Components\Nodes\IInteractiveTreeNode.cs" />
-    <Compile Include="Components\Nodes\IntegrationQueueTreeNode.cs" />
     <Compile Include="Components\Nodes\ProjectQueuesTreeNode.cs" />
     <Compile Include="Components\Nodes\QueueImageKeys.cs" />
+    <Compile Include="Components\Nodes\ServerSecurityNode.cs" />
     <Compile Include="Components\Nodes\ValidatingTreeNode.cs" />
     <Compile Include="Components\VersionFileDialog.cs" />
+    <Compile Include="Components\Wizards\ChangeSecurityAction.cs" />
+    <Compile Include="Components\Wizards\SecurityXmlAuditingWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\Wizards\SecurityXmlAuditingWizardPage.Designer.cs">
+      <DependentUpon>SecurityXmlAuditingWizardPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\Wizards\SecurityCacheWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\Wizards\SecurityCacheWizardPage.Designer.cs">
+      <DependentUpon>SecurityCacheWizardPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\Wizards\SecurityDefaultsWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\Wizards\SecurityDefaultsWizardPage.Designer.cs">
+      <DependentUpon>SecurityDefaultsWizardPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\Wizards\SecurityModeWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\Wizards\SecurityModeWizardPage.Designer.cs">
+      <DependentUpon>SecurityModeWizardPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\Wizards\SetSecurityPropertyAction.cs" />
     <Compile Include="Controls\CollapsibleSplitter.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -172,6 +205,12 @@
     <Compile Include="UI\QueueProjectLinkForm.Designer.cs">
       <DependentUpon>QueueProjectLinkForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\SecurityWizardsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\SecurityWizardsForm.Designer.cs">
+      <DependentUpon>SecurityWizardsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\SplashForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -211,6 +250,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Components\Wizards\SecurityCacheWizardPage.resx">
+      <DependentUpon>SecurityCacheWizardPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\Wizards\SecurityDefaultsWizardPage.resx">
+      <DependentUpon>SecurityDefaultsWizardPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\Wizards\SecurityModeWizardPage.resx">
+      <DependentUpon>SecurityModeWizardPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\Wizards\SecurityXmlAuditingWizardPage.resx">
+      <DependentUpon>SecurityXmlAuditingWizardPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\CollapsibleSplitter.resx">
       <DependentUpon>CollapsibleSplitter.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -255,6 +306,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\QueueProjectLinkForm.resx">
       <DependentUpon>QueueProjectLinkForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\SecurityWizardsForm.resx">
+      <DependentUpon>SecurityWizardsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\SplashForm.resx">
       <DependentUpon>SplashForm.cs</DependentUpon>
@@ -325,7 +379,10 @@
     </Content>
     <None Include="Resources\green_arrow1.png" />
     <None Include="Resources\green_arrow2.png" />
-    <None Include="Resources\donate.png" />
+    <None Include="Resources\assertion_16x16.png" />
+    <None Include="Resources\auditlogger_16x16.png" />
+    <None Include="Resources\auditreader_16x16.png" />
+    <None Include="Resources\assignpermissions_16x16.png" />
     <Content Include="Resources\Images\ccnetconfig.ico" />
     <Content Include="Resources\Images\Green Down.png" />
     <Content Include="Resources\Images\Green Up.png" />
@@ -341,6 +398,13 @@
     <Content Include="Data\UpdaterConfiguration.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\users_16x16.png" />
+    <None Include="Resources\usersimport_16x16.png" />
+    <None Include="Resources\securitycache_16x16.png" />
+    <None Include="Resources\securitysetting_16x16.png" />
+    <None Include="Resources\securitychange_16x16.png" />
+    <None Include="Resources\securitydelete_16x16.png" />
+    <None Include="Resources\security_16x16.png" />
     <None Include="Resources\queueprojectlink_16x16.png" />
     <None Include="Resources\queueadd_16x16.png" />
     <None Include="Resources\queuedelete_16x16.png" />
@@ -385,6 +449,10 @@
     <ProjectReference Include="..\CCNetConfig.BugTracking\CCNetConfig.BugTracking.csproj">
       <Project>{5B91896A-B9CB-4C25-BA45-7AA3A27AAC11}</Project>
       <Name>CCNetConfig.BugTracking</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CCNetConfig.CCNet\CCNetConfig.CCNet.csproj">
+      <Project>{A1B9DE7D-33B2-431A-A805-E52000592F51}</Project>
+      <Name>CCNetConfig.CCNet</Name>
     </ProjectReference>
     <ProjectReference Include="..\CCNetConfig.Core\CCNetConfig.Core.csproj">
       <Project>{1687DC58-3374-4D23-8820-1EBB162A32AE}</Project>

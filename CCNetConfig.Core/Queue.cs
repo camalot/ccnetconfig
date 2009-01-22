@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Xml;
 using CCNetConfig.Core.Components;
+using System.Drawing.Design;
 
 namespace CCNetConfig.Core
 {
@@ -14,9 +15,9 @@ namespace CCNetConfig.Core
     {
         #region Private fields
         private string name;
-        private QueueDuplicateHandlingMode handlingMode;
+        private QueueDuplicateHandlingMode? handlingMode;
         private string lockQueues;
-        private bool hasConfig = false;
+        private bool? hasConfig;
         private List<Project> projects = new List<Project>();
         #endregion
 
@@ -52,8 +53,10 @@ namespace CCNetConfig.Core
         [Description("How to handle duplicate force build requests.")]
         [DisplayName("Duplicates Handling Mode")]
         [Category("Optional")]
-        [DefaultValue(QueueDuplicateHandlingMode.UseFirst)]
-        public QueueDuplicateHandlingMode HandlingMode
+        [DefaultValue(null)]
+        [TypeConverter(typeof(DefaultableEnumTypeConverter))]
+        [Editor(typeof(DefaultableEnumUIEditor), typeof(UITypeEditor))]
+        public QueueDuplicateHandlingMode? HandlingMode
         {
             get { return handlingMode; }
             set { handlingMode = value; }
@@ -82,8 +85,10 @@ namespace CCNetConfig.Core
         [Description("Defines whether this queue exists as a separate item in the configuration or not.")]
         [DisplayName("Has Configuration")]
         [Category("Optional")]
-        [DefaultValue(false)]
-        public bool HasConfig
+        [DefaultValue(null)]
+        [TypeConverter(typeof(DefaultableBooleanTypeConverter))]
+        [Editor(typeof(DefaultableBooleanUIEditor), typeof(UITypeEditor))]
+        public bool? HasConfig
         {
             get { return hasConfig; }
             set
@@ -142,7 +147,7 @@ namespace CCNetConfig.Core
             XmlDocument doc = new XmlDocument();
             XmlElement root = doc.CreateElement("queue");
             root.SetAttribute("name", Util.CheckRequired(this, "name", name));
-            if (handlingMode != QueueDuplicateHandlingMode.UseFirst) root.SetAttribute("duplicates", handlingMode.ToString());
+            if (handlingMode.HasValue) root.SetAttribute("duplicates", handlingMode.Value.ToString());
 
             if (!string.IsNullOrEmpty(lockQueues))
             {
@@ -163,18 +168,9 @@ namespace CCNetConfig.Core
         public void Deserialize(XmlElement element)
         {
             name = Util.GetElementOrAttributeValue("name", element);
-            string duplicates = Util.GetElementOrAttributeValue("duplicates", element);
             lockQueues = Util.GetElementOrAttributeValue("lockqueues", element);
             hasConfig = true;
-
-            if (!string.IsNullOrEmpty(duplicates))
-            {
-                handlingMode = (QueueDuplicateHandlingMode)Enum.Parse(typeof(QueueDuplicateHandlingMode), duplicates);
-            }
-            else
-            {
-                handlingMode = QueueDuplicateHandlingMode.UseFirst;
-            }
+            handlingMode = Util.GetEnumFromElementOrAttribute<QueueDuplicateHandlingMode>("duplicates", element);
         }
         #endregion
 

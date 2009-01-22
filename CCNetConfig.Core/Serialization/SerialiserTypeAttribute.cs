@@ -5,7 +5,7 @@ namespace CCNetConfig.Core.Serialization
     /// <summary>
     /// Defines the tag name that a serialiser will handle.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class SerialiserTypeAttribute
         : Attribute
     {

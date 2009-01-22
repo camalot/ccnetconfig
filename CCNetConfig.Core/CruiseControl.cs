@@ -34,8 +34,13 @@ namespace CCNetConfig.Core {
 	/// The Cruise Control object. All CCNet Config interaction starts with this object.
 	/// </summary>
 	[ReflectorName ( "cruisecontrol" )]
-	public class CruiseControl : ICCNetObject, ICCNetDocumentation {
-		/// <summary>
+	public class CruiseControl : ICCNetObject, ICCNetDocumentation, INotifyPropertyChanged
+    {
+        #region Private fields
+        private ServerSecurity security;
+        #endregion
+
+        /// <summary>
 		/// Initializes a new instance of the <see cref="CruiseControl"/> class.
 		/// </summary>
 		public CruiseControl () : this ( new Version ( "1.3" ) ) { }
@@ -68,7 +73,24 @@ namespace CCNetConfig.Core {
 		/// </summary>
 		/// <value>The version.</value>
 		public Version Version { get; set; }
-		/// <summary>
+
+        #region Security
+        /// <summary>
+        /// Gets or sets the security settings.
+        /// </summary>
+        /// <value>The security settings.</value>
+        public ServerSecurity Security
+        {
+            get { return security; }
+            set
+            {
+                security = value;
+                FirePropertyChanged("Security");
+            }
+        }
+        #endregion
+
+        /// <summary>
 		/// Saves the config.
 		/// </summary>
 		/// <param name="stream">The stream.</param>
@@ -121,7 +143,15 @@ namespace CCNetConfig.Core {
 				ele.AppendChild ( doc.ImportNode ( proj.Serialize (), true ) );
             foreach (Queue queue in Queues)
             {
-                if (queue.HasConfig) ele.AppendChild(doc.ImportNode(queue.Serialize(), true));
+                if (queue.HasConfig.GetValueOrDefault(false))
+                {
+                    ele.AppendChild(doc.ImportNode(queue.Serialize(), true));
+                }
+            }
+            if (Security != null)
+            {
+                XmlElement securityEl = Security.Serialize();
+                if (securityEl != null) ele.AppendChild(doc.ImportNode(securityEl, true));
             }
 
 			return ele;
@@ -201,6 +231,10 @@ namespace CCNetConfig.Core {
                                 throw new Exception(string.Format("Duplicate queue definition: '{0}'", q.Name));
                             }
                         }
+                        else if (output is ServerSecurity)
+                        {
+                            Security = output as ServerSecurity;
+                        }
                     }
                     else
                     {
@@ -267,5 +301,30 @@ namespace CCNetConfig.Core {
 		}
 
 		#endregion
-	}
+
+        #region Public events
+        #region PropertyChanged
+        /// <summary>
+        /// Fired when a property has been changed.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+        #endregion
+        #endregion
+
+        #region Private methods
+        #region FirePropertyChanged
+        /// <summary>
+        /// Fires the <see cref="PropertyChanged"/> event.
+        /// </summary>
+        /// <param name="property">The property that has changed.</param>
+        private void FirePropertyChanged(string property)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+            }
+        }
+        #endregion
+        #endregion
+    }
 }

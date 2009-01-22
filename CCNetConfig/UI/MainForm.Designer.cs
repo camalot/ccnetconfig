@@ -76,6 +76,7 @@ namespace CCNetConfig.UI {
         this.documentationBrowserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.validateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        this.securityWizardsToolstripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
         this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -157,6 +158,13 @@ namespace CCNetConfig.UI {
         this.treeImages.Images.SetKeyName(11, "copy");
         this.treeImages.Images.SetKeyName(12, "queue");
         this.treeImages.Images.SetKeyName(13, "queueConfig");
+        this.treeImages.Images.SetKeyName(14, "auditlogger_16x16");
+        this.treeImages.Images.SetKeyName(15, "auditreader_16x16");
+        this.treeImages.Images.SetKeyName(16, "security_16x16");
+        this.treeImages.Images.SetKeyName(17, "assertion_16x16");
+        this.treeImages.Images.SetKeyName(18, "securitysetting_16x16");
+        this.treeImages.Images.SetKeyName(19, "securitycache_16x16");
+        this.treeImages.Images.SetKeyName(20, "users_16x16");
         // 
         // tvProjects
         // 
@@ -442,6 +450,7 @@ namespace CCNetConfig.UI {
         // 
         this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.validateToolStripMenuItem,
+            this.securityWizardsToolstripMenuItem,
             this.toolStripSeparator7,
             this.optionsToolStripMenuItem});
         this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
@@ -453,8 +462,17 @@ namespace CCNetConfig.UI {
         this.validateToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.checkmark_16x16;
         this.validateToolStripMenuItem.Name = "validateToolStripMenuItem";
         this.validateToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-        this.validateToolStripMenuItem.Text = "Validate...";
+        this.validateToolStripMenuItem.Text = "&Validate...";
         this.validateToolStripMenuItem.Click += new System.EventHandler(this.validateToolStripMenuItem_Click);
+        // 
+        // securityWizardsToolstripMenuItem
+        // 
+        this.securityWizardsToolstripMenuItem.Image = global::CCNetConfig.Properties.Resources.wizard_16x16;
+        this.securityWizardsToolstripMenuItem.Name = "securityWizardsToolstripMenuItem";
+        this.securityWizardsToolstripMenuItem.Size = new System.Drawing.Size(181, 22);
+        this.securityWizardsToolstripMenuItem.Text = "&Security Wizards...";
+        this.securityWizardsToolstripMenuItem.Visible = false;
+        this.securityWizardsToolstripMenuItem.Click += new System.EventHandler(this.securityWizardsToolstripMenuItem_Click);
         // 
         // toolStripSeparator7
         // 
@@ -556,7 +574,7 @@ namespace CCNetConfig.UI {
             this.checkForUpdatesToolStripButton});
         this.mainToolStrip.Location = new System.Drawing.Point(3, 24);
         this.mainToolStrip.Name = "mainToolStrip";
-        this.mainToolStrip.Size = new System.Drawing.Size(220, 25);
+        this.mainToolStrip.Size = new System.Drawing.Size(189, 25);
         this.mainToolStrip.TabIndex = 16;
         this.mainToolStrip.Text = "toolStrip1";
         // 
@@ -1078,5 +1096,6 @@ namespace CCNetConfig.UI {
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
     private System.Windows.Forms.ToolStripButton validateToolStripButton;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
+    private System.Windows.Forms.ToolStripMenuItem securityWizardsToolstripMenuItem;
   }
 }

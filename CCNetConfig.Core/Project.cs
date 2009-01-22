@@ -33,7 +33,9 @@ namespace CCNetConfig.Core {
   /// <summary>
   /// defines all the configuration for one project running in a CruiseControl.NET server
   /// </summary>
-  public class Project : ISerialize, ICCNetDocumentation, ICCNetObject, ICloneable {
+    [InstanceTreeNode(typeof(ProjectSecurity), "Security", ImageKey = "security_16x16")]
+    public class Project : ISerialize, ICCNetDocumentation, ICCNetObject, ICloneable
+    {
     private string _name = string.Empty;
     private string _workingDirectory = string.Empty;
     private string _artifactDirectory = string.Empty;
@@ -69,6 +71,14 @@ namespace CCNetConfig.Core {
     }
 
     #region Public Properties
+    #region Security
+    /// <summary>
+    /// The security settings for the project.
+    /// </summary>
+    [Browsable(false)]
+    public ProjectSecurity Security { get; set; }
+    #endregion
+
     /// <summary>
     /// <para>The name of your project - this must be unique for any given 
     /// <a href="http://confluence.public.thoughtworks.org/display/CCNET">CruiseControl.NET</a> server</para>
@@ -333,6 +343,12 @@ namespace CCNetConfig.Core {
           root.AppendChild ( doc.ImportNode ( ele, true ) );
       }
 
+      if (Security != null)
+      {
+          XmlElement securityEl = Security.Serialize();
+          if (securityEl != null) root.AppendChild(doc.ImportNode(securityEl, true));
+      }
+
       return root;
     }
 
@@ -471,6 +487,18 @@ namespace CCNetConfig.Core {
 
       foreach ( Type type in Util.ProjectExtensions )
         this.ProjectExtensions.Add ( (ProjectExtension)Util.CreateInstanceOfType ( type ) );
+
+      XmlElement securityEl = element.SelectSingleNode("security") as XmlElement;
+      if (securityEl != null)
+      {
+          string xmlName = securityEl.GetAttribute("type");
+          ProjectSecurity security = Util.CreateInstanceFromXmlName<ProjectSecurity>(xmlName);
+          if (security != null)
+          {
+              security.Deserialize(securityEl);
+              Security = security;
+          }
+      }
     }
     #endregion
 

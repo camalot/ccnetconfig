@@ -152,7 +152,7 @@ namespace CCNetConfig.Components.Nodes
                 definedQueues = 0;
                 foreach (IntegrationQueueTreeNode node in nodes)
                 {
-                    if (node.Queue.HasConfig) definedQueues++;
+                    if (node.Queue.HasConfig.GetValueOrDefault(false)) definedQueues++;
                 }
             }
             #endregion

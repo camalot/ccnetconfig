@@ -74,6 +74,14 @@
     <Compile Include="PublisherTask\TeamBuildTask.cs" />
     <Compile Include="PublisherTask\TwitterPublisher.cs" />
     <Compile Include="PublisherTask\TypeMockTask.cs" />
+    <Compile Include="Security\DefaultProjectSecurity.cs" />
+    <Compile Include="Security\FileXmlLogger.cs" />
+    <Compile Include="Security\FileXmlReader.cs" />
+    <Compile Include="Security\InMemorySessionCache.cs" />
+    <Compile Include="Security\InternalServerSecurity.cs" />
+    <Compile Include="Security\UserPermission.cs" />
+    <Compile Include="Security\UsernameAuthentication.cs" />
+    <Compile Include="Security\UserPasswordAuthentication.cs" />
     <Compile Include="SourceControl\AccuRevSourceControl.cs" />
     <Compile Include="SourceControl\ActionFilter.cs" />
     <Compile Include="SourceControl\BazaarSourceControl.cs" />
