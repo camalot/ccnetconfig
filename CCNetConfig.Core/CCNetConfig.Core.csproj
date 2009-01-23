@@ -153,15 +153,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Wizard\FinishedWizardPage.resx">
-      <DependentUpon>FinishedWizardPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Wizard\ProgressWizardPage.resx">
-      <DependentUpon>ProgressWizardPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Wizard\WizardForm.resx">
-      <DependentUpon>WizardForm.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="ccnet.xsd">
@@ -211,29 +202,6 @@
     <Compile Include="SessionExpiryMode.cs" />
     <Compile Include="ValidationException.cs" />
     <Compile Include="Validator.cs" />
-    <Compile Include="Wizard\FinishedWizardPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Wizard\FinishedWizardPage.Designer.cs">
-      <DependentUpon>FinishedWizardPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Wizard\IWizardAction.cs" />
-    <Compile Include="Wizard\ProgressWizardPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Wizard\ProgressWizardPage.Designer.cs">
-      <DependentUpon>ProgressWizardPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Wizard\WizardActionEventArgs.cs" />
-    <Compile Include="Wizard\WizardForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Wizard\WizardForm.Designer.cs">
-      <DependentUpon>WizardForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Wizard\WizardPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="License.txt" />

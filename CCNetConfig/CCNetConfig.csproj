@@ -100,32 +100,6 @@
     <Compile Include="Components\Nodes\ServerSecurityNode.cs" />
     <Compile Include="Components\Nodes\ValidatingTreeNode.cs" />
     <Compile Include="Components\VersionFileDialog.cs" />
-    <Compile Include="Components\Wizards\ChangeSecurityAction.cs" />
-    <Compile Include="Components\Wizards\SecurityXmlAuditingWizardPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Components\Wizards\SecurityXmlAuditingWizardPage.Designer.cs">
-      <DependentUpon>SecurityXmlAuditingWizardPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Components\Wizards\SecurityCacheWizardPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Components\Wizards\SecurityCacheWizardPage.Designer.cs">
-      <DependentUpon>SecurityCacheWizardPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Components\Wizards\SecurityDefaultsWizardPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Components\Wizards\SecurityDefaultsWizardPage.Designer.cs">
-      <DependentUpon>SecurityDefaultsWizardPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Components\Wizards\SecurityModeWizardPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Components\Wizards\SecurityModeWizardPage.Designer.cs">
-      <DependentUpon>SecurityModeWizardPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Components\Wizards\SetSecurityPropertyAction.cs" />
     <Compile Include="Controls\CollapsibleSplitter.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -159,12 +133,19 @@
     <Compile Include="UI\AboutForm.Designer.cs">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\CacheConfiguration.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\CacheConfiguration.Designer.cs">
+      <DependentUpon>CacheConfiguration.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\ConfigurationPropertiesForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\ConfigurationPropertiesForm.Designer.cs">
       <DependentUpon>ConfigurationPropertiesForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\ConfigureSecurityWizard.cs" />
     <Compile Include="UI\LoadErrorInformationForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -217,6 +198,7 @@
     <Compile Include="UI\SplashForm.Designer.cs">
       <DependentUpon>SplashForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\TextDisplayStep.cs" />
     <Compile Include="UI\UpdateChecker.cs" />
     <Compile Include="UI\UpdateInformationForm.cs">
       <SubType>Form</SubType>
@@ -230,6 +212,12 @@
     <Compile Include="UI\ValidationForm.Designer.cs">
       <DependentUpon>ValidationForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\XmlAuditingConfiguration.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\XmlAuditingConfiguration.Designer.cs">
+      <DependentUpon>XmlAuditingConfiguration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Util.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -239,6 +227,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Merlin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f91e8b0b46e989d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\Merlin.dll</HintPath>
+    </Reference>
+    <Reference Include="MerlinStepLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\MerlinStepLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
@@ -250,18 +246,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Components\Wizards\SecurityCacheWizardPage.resx">
-      <DependentUpon>SecurityCacheWizardPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Components\Wizards\SecurityDefaultsWizardPage.resx">
-      <DependentUpon>SecurityDefaultsWizardPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Components\Wizards\SecurityModeWizardPage.resx">
-      <DependentUpon>SecurityModeWizardPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Components\Wizards\SecurityXmlAuditingWizardPage.resx">
-      <DependentUpon>SecurityXmlAuditingWizardPage.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Controls\CollapsibleSplitter.resx">
       <DependentUpon>CollapsibleSplitter.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -273,6 +257,9 @@
     <EmbeddedResource Include="UI\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CacheConfiguration.resx">
+      <DependentUpon>CacheConfiguration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\ConfigurationPropertiesForm.resx">
       <DependentUpon>ConfigurationPropertiesForm.cs</DependentUpon>
@@ -319,6 +306,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\ValidationForm.resx">
       <DependentUpon>ValidationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\XmlAuditingConfiguration.resx">
+      <DependentUpon>XmlAuditingConfiguration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

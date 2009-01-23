@@ -471,7 +471,6 @@ namespace CCNetConfig.UI {
         this.securityWizardsToolstripMenuItem.Name = "securityWizardsToolstripMenuItem";
         this.securityWizardsToolstripMenuItem.Size = new System.Drawing.Size(181, 22);
         this.securityWizardsToolstripMenuItem.Text = "&Security Wizards...";
-        this.securityWizardsToolstripMenuItem.Visible = false;
         this.securityWizardsToolstripMenuItem.Click += new System.EventHandler(this.securityWizardsToolstripMenuItem_Click);
         // 
         // toolStripSeparator7

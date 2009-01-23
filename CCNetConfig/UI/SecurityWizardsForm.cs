@@ -6,9 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using CCNetConfig.Core;
-using CCNetConfig.Core.Wizard;
 using CCNetConfig.Components.Nodes;
-using CCNetConfig.Components.Wizards;
 
 namespace CCNetConfig.UI
 {
@@ -30,23 +28,30 @@ namespace CCNetConfig.UI
         }
         #endregion
 
+        #region Private methods
+        #region configureButton_Click()
         private void configureButton_Click(object sender, EventArgs e)
         {
-            SecurityModeWizardPage mode = new SecurityModeWizardPage();
-            Form owner = this.Owner;
-            WizardForm.Show(mode, "Configure Security", configuration, owner, Properties.Resources.logo48);
+            var wizard = new ConfigureSecurityWizard(configuration);
+            wizard.Run();
         }
+        #endregion
 
+        #region importUsersButton_Click()
         private void importUsersButton_Click(object sender, EventArgs e)
         {
             // TODO: Import users wizard
             MessageBox.Show("Import users wizard", "TODO");
         }
+        #endregion
 
+        #region permissionsButton_Click()
         private void permissionsButton_Click(object sender, EventArgs e)
         {
             // TODO: Assign permissions wizard
             MessageBox.Show("Assign permissions wizard", "TODO");
         }
+        #endregion
+        #endregion
     }
 }
