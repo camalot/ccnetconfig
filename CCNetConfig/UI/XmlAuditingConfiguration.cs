@@ -5,6 +5,8 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using CCNetConfig.Core;
+using CCNetConfig.CCNet.Security;
 
 namespace CCNetConfig.UI
 {
@@ -21,6 +23,58 @@ namespace CCNetConfig.UI
         {
             InitializeComponent();
         }
+        #endregion
+
+        #region Public methods
+        #region GenerateConfig()
+        /// <summary>
+        /// Generates the configuration.
+        /// </summary>
+        /// <returns>The new configuration.</returns>
+        public virtual FileXmlLogger GenerateConfig()
+        {
+            FileXmlLogger logger = null;
+            if (useXmlAuditing.Checked && (auditFailed.Checked || auditSuccessful.Checked))
+            {
+                logger = new FileXmlLogger
+                {
+                    LogFailureEvents = auditFailed.Checked,
+                    LogSuccessfulEvents = auditSuccessful.Checked
+                };
+            }
+            return logger;
+        }
+        #endregion
+
+        #region GenerateDescription()
+        /// <summary>
+        /// Generates the configuration.
+        /// </summary>
+        /// <returns>The new configuration.</returns>
+        public virtual string GenerateDescription()
+        {
+            var description = "No XML auditing";
+            if (useXmlAuditing.Checked && (auditFailed.Checked || auditSuccessful.Checked))
+            {
+                if (auditFailed.Checked)
+                {
+                    if (auditSuccessful.Checked)
+                    {
+                        description = "XML logging for all events";
+                    }
+                    else
+                    {
+                        description = "XML logging for failed events only";
+                    }
+                }
+                else
+                {
+                    description = "XML logging for successful events only";
+                }
+            }
+            return description;
+        }
+        #endregion
         #endregion
 
         #region Private methods

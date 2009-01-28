@@ -29,10 +29,9 @@
         private void InitializeComponent()
         {
             this.xmlSettings = new System.Windows.Forms.GroupBox();
+            this.auditFailed = new System.Windows.Forms.CheckBox();
+            this.auditSuccessful = new System.Windows.Forms.CheckBox();
             this.useXmlAuditing = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.xmlSettings.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -41,15 +40,36 @@
             this.xmlSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.xmlSettings.Controls.Add(this.checkBox4);
-            this.xmlSettings.Controls.Add(this.checkBox3);
-            this.xmlSettings.Controls.Add(this.checkBox2);
+            this.xmlSettings.Controls.Add(this.auditFailed);
+            this.xmlSettings.Controls.Add(this.auditSuccessful);
             this.xmlSettings.Enabled = false;
             this.xmlSettings.Location = new System.Drawing.Point(13, 13);
             this.xmlSettings.Name = "xmlSettings";
             this.xmlSettings.Size = new System.Drawing.Size(559, 300);
             this.xmlSettings.TabIndex = 0;
             this.xmlSettings.TabStop = false;
+            // 
+            // auditFailed
+            // 
+            this.auditFailed.AutoSize = true;
+            this.auditFailed.Checked = true;
+            this.auditFailed.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.auditFailed.Location = new System.Drawing.Point(14, 46);
+            this.auditFailed.Name = "auditFailed";
+            this.auditFailed.Size = new System.Drawing.Size(117, 17);
+            this.auditFailed.TabIndex = 1;
+            this.auditFailed.Text = "Audit Failed Events";
+            this.auditFailed.UseVisualStyleBackColor = true;
+            // 
+            // auditSuccessful
+            // 
+            this.auditSuccessful.AutoSize = true;
+            this.auditSuccessful.Location = new System.Drawing.Point(14, 23);
+            this.auditSuccessful.Name = "auditSuccessful";
+            this.auditSuccessful.Size = new System.Drawing.Size(141, 17);
+            this.auditSuccessful.TabIndex = 0;
+            this.auditSuccessful.Text = "Audit Successful Events";
+            this.auditSuccessful.UseVisualStyleBackColor = true;
             // 
             // useXmlAuditing
             // 
@@ -61,36 +81,6 @@
             this.useXmlAuditing.Text = "Use XML Auditing Logging";
             this.useXmlAuditing.UseVisualStyleBackColor = true;
             this.useXmlAuditing.CheckedChanged += new System.EventHandler(this.useXmlAuditing_CheckedChanged);
-            // 
-            // checkBox2
-            // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(14, 23);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(141, 17);
-            this.checkBox2.TabIndex = 0;
-            this.checkBox2.Text = "Audit Successful Events";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            // 
-            // checkBox3
-            // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(14, 46);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(117, 17);
-            this.checkBox3.TabIndex = 1;
-            this.checkBox3.Text = "Audit Failed Events";
-            this.checkBox3.UseVisualStyleBackColor = true;
-            // 
-            // checkBox4
-            // 
-            this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(14, 69);
-            this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(139, 17);
-            this.checkBox4.TabIndex = 2;
-            this.checkBox4.Text = "Set as the Audit Reader";
-            this.checkBox4.UseVisualStyleBackColor = true;
             // 
             // XmlAuditingConfiguration
             // 
@@ -111,9 +101,8 @@
         #endregion
 
         private System.Windows.Forms.GroupBox xmlSettings;
-        private System.Windows.Forms.CheckBox checkBox4;
-        private System.Windows.Forms.CheckBox checkBox3;
-        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox auditFailed;
+        private System.Windows.Forms.CheckBox auditSuccessful;
         private System.Windows.Forms.CheckBox useXmlAuditing;
     }
 }

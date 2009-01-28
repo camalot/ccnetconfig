@@ -13,6 +13,10 @@ namespace CCNetConfig.UI
     public class TextDisplayStep
         : TemplateStep
     {
+        #region Private fields
+        private TextBox textBox;
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initialise a new <see cref="TextDisplayStep"/>.
@@ -21,13 +25,14 @@ namespace CCNetConfig.UI
         public TextDisplayStep(string message)
             : base()
         {
-            var textBox = new TextBox
+            textBox = new TextBox
             {
                 Multiline = true,
                 ScrollBars = ScrollBars.Vertical,
                 ReadOnly = true,
                 Dock = DockStyle.Fill,
-                Text = message
+                Text = message,
+                BorderStyle = BorderStyle.None
             };
             textBox.Select(0, 0);
             var panel = new Panel
@@ -48,6 +53,19 @@ namespace CCNetConfig.UI
         {
             Title = title;
         }
+        #endregion
+
+        #region Public properties
+        #region Text
+        /// <summary>
+        /// The text to display.
+        /// </summary>
+        public string Text
+        {
+            get { return textBox.Text; }
+            set { textBox.Text = value; }
+        }
+        #endregion
         #endregion
     }
 }

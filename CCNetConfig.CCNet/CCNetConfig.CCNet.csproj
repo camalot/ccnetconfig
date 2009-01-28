@@ -74,6 +74,7 @@
     <Compile Include="PublisherTask\TeamBuildTask.cs" />
     <Compile Include="PublisherTask\TwitterPublisher.cs" />
     <Compile Include="PublisherTask\TypeMockTask.cs" />
+    <Compile Include="Security\FileBasedSessionCache.cs" />
     <Compile Include="Security\DefaultProjectSecurity.cs" />
     <Compile Include="Security\FileXmlLogger.cs" />
     <Compile Include="Security\FileXmlReader.cs" />

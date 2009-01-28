@@ -4,6 +4,7 @@ using System.Text;
 using Merlin;
 using MerlinStepLibrary;
 using CCNetConfig.Core;
+using CCNetConfig.CCNet.Security;
 
 namespace CCNetConfig.UI
 {
@@ -16,6 +17,9 @@ namespace CCNetConfig.UI
         private CruiseControl configuration;
         private WizardController controller;
         private List<string> settings = new List<string>();
+        private ServerSecurity security;
+        private Dictionary<Type, SecurityLogger> loggers = new Dictionary<Type, SecurityLogger>();
+        private TemplateStep.VoidDelegate configureProjects = null;
         #endregion
 
         #region Constructors
@@ -56,6 +60,14 @@ namespace CCNetConfig.UI
                     case "None":
                         settings.Add("No security");
                         controller.AddAfterCurrent(GenerateNoneSteps());
+                        configureProjects = () =>
+                        {
+                            foreach (var project in configuration.Projects)
+                            {
+                                project.Security = new ProjectSecurity();
+                            }
+                        };
+                        security = new ServerSecurity();
                         break;
                     case "Internal":
                         settings.AddRange(new string[] 
@@ -63,9 +75,11 @@ namespace CCNetConfig.UI
                                 "Internal security",
                                 "No cache",
                                 "No XML logging",
-                                "No default permission"
+                                "No default server permission",
+                                "No default project permission"
                             });
                         controller.AddAfterCurrent(GenerateInternalSteps());
+                        security = new InternalServerSecurity();
                         break;
                 }
                 return true;
@@ -90,6 +104,7 @@ namespace CCNetConfig.UI
 
             // Confirmation page
             steps.Add(GenerateConfirmation());
+            steps.Add(new TextDisplayStep("Security settings have been updated", "Finished"));
             return steps;
         }
         #endregion
@@ -104,21 +119,103 @@ namespace CCNetConfig.UI
             var steps = new List<IStep>();
 
             // Cache
-            steps.Add(new TemplateStep(new CacheConfiguration(), 0, "Session Caching"));
+            var cacheConfig = new CacheConfiguration();
+            var cacheStep = new TemplateStep(cacheConfig, 0, "Session Caching");
+            cacheStep.NextHandler += () =>
+            {
+                (security as InternalServerSecurity).Cache = cacheConfig.GenerateConfig();
+                settings[1] = cacheConfig.GenerateDescription();
+                return true;
+            };
+            steps.Add(cacheStep);
 
             // XML logging
-            steps.Add(new TemplateStep(new XmlAuditingConfiguration(), 0, "XML Auditing"));
+            var xmlConfig = new XmlAuditingConfiguration();
+            var xmlStep = new TemplateStep(xmlConfig, 0, "XML Auditing");
+            xmlStep.StepReachedHandler += () =>
+            {
+                if (loggers.ContainsKey(typeof(FileXmlLogger)))
+                {
+                    loggers.Remove(typeof(FileXmlLogger));
+                }
+            };
+            xmlStep.NextHandler += () =>
+            {
+                var newLogger = xmlConfig.GenerateConfig();
+                if (newLogger != null) loggers.Add(typeof(FileXmlLogger), newLogger);
+                settings[2] = xmlConfig.GenerateDescription();
+                return true;
+            };
+            steps.Add(xmlStep);
 
-            // Default permission
-            var defaultPermission = new SelectionStep("Default Permission",
-                "What do you want as the default permission:",
+            // Default server permission
+            var defaultServerPermission = new SelectionStep("Default Server Permission",
+                "What do you want as the default permission at the server level:",
                 "None",
                 "Allow",
                 "Deny");
-            steps.Add(defaultPermission);
+            defaultServerPermission.NextHandler += () =>
+            {
+                switch ((string)defaultServerPermission.Selected)
+                {
+                    case "None":
+                        (security as InternalServerSecurity).DefaultRight = null;
+                        settings[3] = "No default server permission";
+                        break;
+                    case "Allow":
+                        (security as InternalServerSecurity).DefaultRight = SecurityRight.Allow;
+                        settings[3] = "Default server permission is allow";
+                        break;
+                    case "Deny":
+                        (security as InternalServerSecurity).DefaultRight = SecurityRight.Deny;
+                        settings[3] = "Default server permission is deny";
+                        break;
+                }
+                return true;
+            };
+            steps.Add(defaultServerPermission);
+
+
+            // Default server permission
+            var defaultProjectPermission = new SelectionStep("Default Project Permission",
+                "What do you want as the default permission at the project level:",
+                "None",
+                "Allow",
+                "Deny");
+            defaultProjectPermission.NextHandler += () =>
+            {
+                SecurityRight? right = null;
+                switch ((string)defaultProjectPermission.Selected)
+                {
+                    case "None":
+                        settings[4] = "No default project permission";
+                        break;
+                    case "Allow":
+                        right = SecurityRight.Allow;
+                        settings[4] = "Default project permission is allow";
+                        break;
+                    case "Deny":
+                        right = SecurityRight.Deny;
+                        settings[4] = "Default project permission is deny";
+                        break;
+                }
+                configureProjects = () =>
+                {
+                    foreach (var project in configuration.Projects)
+                    {
+                        project.Security = new DefaultProjectSecurity
+                        {
+                            DefaultRight = right
+                        };
+                    }
+                };
+                return true;
+            };
+            steps.Add(defaultProjectPermission);
 
             // Confirmation page
             steps.Add(GenerateConfirmation());
+            steps.Add(new TextDisplayStep("Security settings have been updated", "Finished"));
             return steps;
         }
         #endregion
@@ -131,9 +228,22 @@ namespace CCNetConfig.UI
         private IStep GenerateConfirmation()
         {
             var sep = Environment.NewLine + "> ";
-            var details = string.Join(sep, settings.ToArray());
-            var step = new TextDisplayStep("The following settings will be applied:" + sep +
-                details, "Confirm settings");
+            var step = new TextDisplayStep(string.Empty, "Confirm settings");
+            step.StepReachedHandler += () =>
+            {
+                var details = string.Join(sep, settings.ToArray());
+                step.Text = "The following settings will be applied:" + sep + details;
+            };
+            step.NextHandler += () =>
+            {
+                if (security is InternalServerSecurity)
+                {
+                    (security as InternalServerSecurity).AuditLoggers.AddRange(loggers.Values);
+                }
+                configuration.Security = security;
+                configureProjects.Invoke();
+                return true;
+            };
             return step;
         }
         #endregion
