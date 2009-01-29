@@ -2263,8 +2263,34 @@ namespace CCNetConfig.UI {
     {
         if (CheckForConfiguration())
         {
-            SecurityWizardsForm form = new SecurityWizardsForm(rootNode.CruiseControl);
-            form.ShowDialog(this);
+            var options = new string[] {
+                    "Configure security",
+                    "Import users",
+                    "Setup permissions"
+                };
+            TaskDialog.ShowTaskDialogBox(
+                "Security Wizards",
+                "What would you like to do?",
+                string.Empty,
+                string.Empty,
+                string.Empty,
+                string.Empty,
+                string.Empty,
+                string.Join("|", options),
+                TaskDialogButtons.Cancel,
+                SysIcons.Information,
+                SysIcons.Information);
+            switch (TaskDialog.CommandButtonResult)
+            {
+                case 0:
+                    var wizard = new ConfigureSecurityWizard(rootNode.CruiseControl);
+                    wizard.Run();
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+            }
         }
     }
 
