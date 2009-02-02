@@ -20,29 +20,18 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Net;
-using System.Windows.Forms;
-using System.IO;
-using System.Xml.Serialization;
-using System.Xml;
-using CCNetConfig.Core;
-using CCNetConfig.Components;
-
-using CCNetConfig.BugTracking;
-using CCNetConfig.BugTracking.Configuration.Handlers;
-using CCNetConfig.Updater.Core.Configuration;
-using CCNetConfig.Updater.Core.Configuration.Handlers;
-using CCNetConfig.Updater.Core;
 using System.Diagnostics;
-using System.Threading;
-using CCNetConfig.Core.Exceptions;
-using CCNetConfig.Core.Enums;
-using CCNetConfig.Controls;
-using CCNetConfig.Exceptions;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
+using System.Xml;
+using CCNetConfig.Components;
 using CCNetConfig.Components.Nodes;
+using CCNetConfig.Controls;
+using CCNetConfig.Core;
+using CCNetConfig.Core.Exceptions;
+using CCNetConfig.Exceptions;
+using CCNetConfig.UI.Wizards;
 
 namespace CCNetConfig.UI {
   /// <summary>
@@ -2283,10 +2272,10 @@ namespace CCNetConfig.UI {
             switch (TaskDialog.CommandButtonResult)
             {
                 case 0:
-                    var wizard = new ConfigureSecurityWizard(rootNode.CruiseControl);
-                    wizard.Run();
+                    new ConfigureSecurityWizard(rootNode.CruiseControl).Run();
                     break;
                 case 1:
+                    new ImportUsersWizard(rootNode.CruiseControl).Run();
                     break;
                 case 2:
                     break;

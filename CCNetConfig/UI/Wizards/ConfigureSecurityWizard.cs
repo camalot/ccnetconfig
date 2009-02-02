@@ -6,7 +6,7 @@ using MerlinStepLibrary;
 using CCNetConfig.Core;
 using CCNetConfig.CCNet.Security;
 
-namespace CCNetConfig.UI
+namespace CCNetConfig.UI.Wizards
 {
     /// <summary>
     /// The wizard for configuring security.

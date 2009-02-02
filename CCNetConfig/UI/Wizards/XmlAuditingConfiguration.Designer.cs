@@ -1,4 +1,4 @@
-﻿namespace CCNetConfig.UI
+﻿namespace CCNetConfig.UI.Wizards
 {
     partial class XmlAuditingConfiguration
     {

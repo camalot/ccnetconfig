@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using CCNetConfig.Core;
 using CCNetConfig.CCNet.Security;
 
-namespace CCNetConfig.UI
+namespace CCNetConfig.UI.Wizards
 {
     /// <summary>
     /// Custom configuration settings for XML auditing.

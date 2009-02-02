@@ -182,6 +182,7 @@
     <Compile Include="Components\SvnUriTypeConverter.cs" />
     <Compile Include="Components\SerializerValueAttribute.cs" />
     <Compile Include="Components\UpdateFeedAttribute.cs" />
+    <Compile Include="CsvParser.cs" />
     <Compile Include="ProjectSecurity.cs" />
     <Compile Include="Queue.cs" />
     <Compile Include="QueueDuplicateHandlingMode.cs" />
