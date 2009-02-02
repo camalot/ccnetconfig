@@ -52,6 +52,20 @@ namespace CCNetConfig.CCNet.Security
         [Editor(typeof(DefaultableEnumUIEditor), typeof(UITypeEditor))]
         public SessionExpiryMode? CachingMode { get; set; }
         #endregion
+
+        #region CacheLocation
+        /// <summary>
+        /// The location of the cache.
+        /// </summary>
+        [Description("The location of the cache.")]
+        [DisplayName("Cache Location")]
+        [Category("Optional")]
+        [DefaultValue(null)]
+        [Editor(typeof(OpenFileDialogUIEditor), typeof(UITypeEditor))]
+        [FileTypeFilter("All files (*.*)|*.*" )]
+	    [OpenFileDialogTitle("Session cache location")]
+        public string CacheLocation { get; set; }
+        #endregion
         #endregion
 
         #region Public methods
@@ -67,6 +81,7 @@ namespace CCNetConfig.CCNet.Security
             root.SetAttribute("type", "fileBasedCache");
             if (Duration.HasValue) root.SetAttribute("duration", Duration.Value.ToString());
             if (CachingMode.HasValue) root.SetAttribute("mode", CachingMode.Value.ToString());
+            if (!string.IsNullOrEmpty(CacheLocation)) root.SetAttribute("location", CacheLocation);
             return root;
         }
         #endregion
@@ -81,6 +96,7 @@ namespace CCNetConfig.CCNet.Security
             Type = "In-Memory";
             Duration = Util.GetIntFromElementOrAttribute("duration", element);
             CachingMode = Util.GetEnumFromElementOrAttribute<SessionExpiryMode>("mode", element);
+            CacheLocation = Util.GetElementOrAttributeValue("location", element);
         }
         #endregion
 

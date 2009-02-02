@@ -74,12 +74,17 @@
     <Compile Include="PublisherTask\TeamBuildTask.cs" />
     <Compile Include="PublisherTask\TwitterPublisher.cs" />
     <Compile Include="PublisherTask\TypeMockTask.cs" />
+    <Compile Include="Security\ActiveDirectoryAuthentication.cs" />
+    <Compile Include="Security\ExternalFile.cs" />
+    <Compile Include="Security\ExternalFileBase.cs" />
+    <Compile Include="Security\ExternalFileServerSecurity.cs" />
     <Compile Include="Security\FileBasedSessionCache.cs" />
     <Compile Include="Security\DefaultProjectSecurity.cs" />
     <Compile Include="Security\FileXmlLogger.cs" />
     <Compile Include="Security\FileXmlReader.cs" />
     <Compile Include="Security\InMemorySessionCache.cs" />
     <Compile Include="Security\InternalServerSecurity.cs" />
+    <Compile Include="Security\RolePermission.cs" />
     <Compile Include="Security\UserPermission.cs" />
     <Compile Include="Security\UsernameAuthentication.cs" />
     <Compile Include="Security\UserPasswordAuthentication.cs" />

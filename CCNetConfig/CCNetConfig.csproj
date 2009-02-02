@@ -226,6 +226,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="UI\XmlPreviewWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\XmlPreviewWindow.Designer.cs">
+      <DependentUpon>XmlPreviewWindow.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Merlin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f91e8b0b46e989d4, processorArchitecture=MSIL">
@@ -235,6 +241,10 @@
     <Reference Include="MerlinStepLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\MerlinStepLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="ScintillaNet, Version=2.0.3138.25704, Culture=neutral, PublicKeyToken=948d6c9751444115, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\ScintillaNet.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -311,6 +321,9 @@
     <EmbeddedResource Include="UI\Wizards\XmlAuditingConfiguration.resx">
       <DependentUpon>XmlAuditingConfiguration.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\XmlPreviewWindow.resx">
+      <DependentUpon>XmlPreviewWindow.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -319,6 +332,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Lib\SciLexer.dll">
+      <Link>SciLexer.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="ccnetconfig.ico" />
     <None Include="Data\CCNetVersions.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

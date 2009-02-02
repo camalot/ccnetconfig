@@ -66,6 +66,8 @@ namespace CCNetConfig.UI {
         this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+        this.previewMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
         this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.cutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -265,28 +267,28 @@ namespace CCNetConfig.UI {
         // 
         this.triggersToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.appfolder_16x16;
         this.triggersToolStripMenuItem.Name = "triggersToolStripMenuItem";
-        this.triggersToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+        this.triggersToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
         this.triggersToolStripMenuItem.Text = "Triggers";
         // 
         // tasksToolStripMenuItem
         // 
         this.tasksToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.calendar_16x16;
         this.tasksToolStripMenuItem.Name = "tasksToolStripMenuItem";
-        this.tasksToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+        this.tasksToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
         this.tasksToolStripMenuItem.Text = "Tasks";
         // 
         // publishersToolStripMenuItem
         // 
         this.publishersToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.move_16x16;
         this.publishersToolStripMenuItem.Name = "publishersToolStripMenuItem";
-        this.publishersToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+        this.publishersToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
         this.publishersToolStripMenuItem.Text = "Publishers";
         // 
         // prebuildToolStripMenuItem
         // 
         this.prebuildToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.window_protected_16x16;
         this.prebuildToolStripMenuItem.Name = "prebuildToolStripMenuItem";
-        this.prebuildToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+        this.prebuildToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
         this.prebuildToolStripMenuItem.Text = "Prebuild";
         // 
         // toolStripSeparator3
@@ -329,9 +331,11 @@ namespace CCNetConfig.UI {
             this.saveAsToolStripMenuItem,
             this.openToolStripMenuItem,
             this.toolStripSeparator5,
+            this.previewMenuItem,
+            this.toolStripSeparator9,
             this.exitToolStripMenuItem});
         this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-        this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
+        this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
         this.fileToolStripMenuItem.Text = "&File";
         // 
         // newToolStripMenuItem
@@ -339,7 +343,7 @@ namespace CCNetConfig.UI {
         this.newToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.new_16x16;
         this.newToolStripMenuItem.Name = "newToolStripMenuItem";
         this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-        this.newToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+        this.newToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
         this.newToolStripMenuItem.Text = "&New";
         this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
         // 
@@ -348,7 +352,7 @@ namespace CCNetConfig.UI {
         this.saveToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.save2_16x16;
         this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
         this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-        this.saveToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+        this.saveToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
         this.saveToolStripMenuItem.Text = "&Save";
         this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
         // 
@@ -359,7 +363,7 @@ namespace CCNetConfig.UI {
         this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
         this.saveAsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
                     | System.Windows.Forms.Keys.S)));
-        this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+        this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
         this.saveAsToolStripMenuItem.Text = "Save &As...";
         this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
         // 
@@ -368,20 +372,32 @@ namespace CCNetConfig.UI {
         this.openToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.open_16x16;
         this.openToolStripMenuItem.Name = "openToolStripMenuItem";
         this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-        this.openToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+        this.openToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
         this.openToolStripMenuItem.Text = "&Open";
         this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
         // 
         // toolStripSeparator5
         // 
         this.toolStripSeparator5.Name = "toolStripSeparator5";
-        this.toolStripSeparator5.Size = new System.Drawing.Size(190, 6);
+        this.toolStripSeparator5.Size = new System.Drawing.Size(192, 6);
+        // 
+        // previewMenuItem
+        // 
+        this.previewMenuItem.Name = "previewMenuItem";
+        this.previewMenuItem.Size = new System.Drawing.Size(195, 22);
+        this.previewMenuItem.Text = "P&review";
+        this.previewMenuItem.Click += new System.EventHandler(this.previewMenuItem_Click);
+        // 
+        // toolStripSeparator9
+        // 
+        this.toolStripSeparator9.Name = "toolStripSeparator9";
+        this.toolStripSeparator9.Size = new System.Drawing.Size(192, 6);
         // 
         // exitToolStripMenuItem
         // 
         this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
         this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-        this.exitToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+        this.exitToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
         this.exitToolStripMenuItem.Text = "E&xit";
         this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
         // 
@@ -392,7 +408,7 @@ namespace CCNetConfig.UI {
             this.copyToolStripMenuItem,
             this.pasteToolStripMenuItem});
         this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-        this.editToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+        this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
         this.editToolStripMenuItem.Text = "&Edit";
         this.editToolStripMenuItem.Visible = false;
         // 
@@ -400,21 +416,21 @@ namespace CCNetConfig.UI {
         // 
         this.cutToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.cutfile_16x16;
         this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
-        this.cutToolStripMenuItem.Size = new System.Drawing.Size(101, 22);
+        this.cutToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
         this.cutToolStripMenuItem.Text = "Cut";
         // 
         // copyToolStripMenuItem
         // 
         this.copyToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.copy_16x16;
         this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-        this.copyToolStripMenuItem.Size = new System.Drawing.Size(101, 22);
+        this.copyToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
         this.copyToolStripMenuItem.Text = "Copy";
         // 
         // pasteToolStripMenuItem
         // 
         this.pasteToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.paste_16x16;
         this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-        this.pasteToolStripMenuItem.Size = new System.Drawing.Size(101, 22);
+        this.pasteToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
         this.pasteToolStripMenuItem.Text = "Paste";
         // 
         // viewToolStripMenuItem
@@ -423,7 +439,7 @@ namespace CCNetConfig.UI {
             this.configurationTreeToolStripMenuItem,
             this.documentationBrowserToolStripMenuItem});
         this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-        this.viewToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
+        this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
         this.viewToolStripMenuItem.Text = "&View";
         // 
         // configurationTreeToolStripMenuItem
@@ -433,7 +449,7 @@ namespace CCNetConfig.UI {
         this.configurationTreeToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.window_16x16;
         this.configurationTreeToolStripMenuItem.Name = "configurationTreeToolStripMenuItem";
         this.configurationTreeToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
-        this.configurationTreeToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+        this.configurationTreeToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
         this.configurationTreeToolStripMenuItem.Text = "&Configuration Tree";
         this.configurationTreeToolStripMenuItem.Click += new System.EventHandler(this.configurationTreeToolStripMenuItem_Click);
         // 
@@ -442,7 +458,7 @@ namespace CCNetConfig.UI {
         this.documentationBrowserToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.info_16x16;
         this.documentationBrowserToolStripMenuItem.Name = "documentationBrowserToolStripMenuItem";
         this.documentationBrowserToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F3;
-        this.documentationBrowserToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+        this.documentationBrowserToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
         this.documentationBrowserToolStripMenuItem.Text = "&Documentation Browser";
         this.documentationBrowserToolStripMenuItem.Click += new System.EventHandler(this.documentationBrowserToolStripMenuItem_Click);
         // 
@@ -454,14 +470,14 @@ namespace CCNetConfig.UI {
             this.toolStripSeparator7,
             this.optionsToolStripMenuItem});
         this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-        this.toolsToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+        this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
         this.toolsToolStripMenuItem.Text = "&Tools";
         // 
         // validateToolStripMenuItem
         // 
         this.validateToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.checkmark_16x16;
         this.validateToolStripMenuItem.Name = "validateToolStripMenuItem";
-        this.validateToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+        this.validateToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
         this.validateToolStripMenuItem.Text = "&Validate...";
         this.validateToolStripMenuItem.Click += new System.EventHandler(this.validateToolStripMenuItem_Click);
         // 
@@ -469,14 +485,14 @@ namespace CCNetConfig.UI {
         // 
         this.securityWizardsToolstripMenuItem.Image = global::CCNetConfig.Properties.Resources.wizard_16x16;
         this.securityWizardsToolstripMenuItem.Name = "securityWizardsToolstripMenuItem";
-        this.securityWizardsToolstripMenuItem.Size = new System.Drawing.Size(181, 22);
+        this.securityWizardsToolstripMenuItem.Size = new System.Drawing.Size(191, 22);
         this.securityWizardsToolstripMenuItem.Text = "&Security Wizards...";
         this.securityWizardsToolstripMenuItem.Click += new System.EventHandler(this.securityWizardsToolstripMenuItem_Click);
         // 
         // toolStripSeparator7
         // 
         this.toolStripSeparator7.Name = "toolStripSeparator7";
-        this.toolStripSeparator7.Size = new System.Drawing.Size(178, 6);
+        this.toolStripSeparator7.Size = new System.Drawing.Size(188, 6);
         // 
         // optionsToolStripMenuItem
         // 
@@ -484,7 +500,7 @@ namespace CCNetConfig.UI {
         this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
         this.optionsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
                     | System.Windows.Forms.Keys.O)));
-        this.optionsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+        this.optionsToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
         this.optionsToolStripMenuItem.Text = "&Options";
         this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
         // 
@@ -499,7 +515,7 @@ namespace CCNetConfig.UI {
             this.toolStripMenuItem1,
             this.aboutCCNetConfigToolStripMenuItem});
         this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-        this.helpToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
+        this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
         this.helpToolStripMenuItem.Text = "&Help";
         // 
         // cCNetDocumentationToolStripMenuItem
@@ -507,7 +523,7 @@ namespace CCNetConfig.UI {
         this.cCNetDocumentationToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.help_16x16;
         this.cCNetDocumentationToolStripMenuItem.Name = "cCNetDocumentationToolStripMenuItem";
         this.cCNetDocumentationToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-        this.cCNetDocumentationToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
+        this.cCNetDocumentationToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
         this.cCNetDocumentationToolStripMenuItem.Text = "&CCNetConfig Documentation";
         this.cCNetDocumentationToolStripMenuItem.Visible = false;
         this.cCNetDocumentationToolStripMenuItem.Click += new System.EventHandler(this.cCNetDocumentationToolStripMenuItem_Click);
@@ -516,21 +532,21 @@ namespace CCNetConfig.UI {
         // 
         this.cCNetConfigToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.logo16;
         this.cCNetConfigToolStripMenuItem.Name = "cCNetConfigToolStripMenuItem";
-        this.cCNetConfigToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
+        this.cCNetConfigToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
         this.cCNetConfigToolStripMenuItem.Text = "CC&NetConfig";
         this.cCNetConfigToolStripMenuItem.Click += new System.EventHandler(this.cCNetConfigToolStripMenuItem_Click);
         // 
         // toolStripMenuItem2
         // 
         this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-        this.toolStripMenuItem2.Size = new System.Drawing.Size(227, 6);
+        this.toolStripMenuItem2.Size = new System.Drawing.Size(247, 6);
         // 
         // checkForUpdatesToolStripMenuItem
         // 
         this.checkForUpdatesToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.updates;
         this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
         this.checkForUpdatesToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F10;
-        this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
+        this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
         this.checkForUpdatesToolStripMenuItem.Text = "Check For &Updates";
         this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdatesToolStripMenuItem_Click);
         // 
@@ -540,20 +556,20 @@ namespace CCNetConfig.UI {
         this.reportABugToolStripMenuItem.Name = "reportABugToolStripMenuItem";
         this.reportABugToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
                     | System.Windows.Forms.Keys.B)));
-        this.reportABugToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
+        this.reportABugToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
         this.reportABugToolStripMenuItem.Text = "&Report A Bug";
         this.reportABugToolStripMenuItem.Click += new System.EventHandler(this.reportABugToolStripMenuItem_Click);
         // 
         // toolStripMenuItem1
         // 
         this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-        this.toolStripMenuItem1.Size = new System.Drawing.Size(227, 6);
+        this.toolStripMenuItem1.Size = new System.Drawing.Size(247, 6);
         // 
         // aboutCCNetConfigToolStripMenuItem
         // 
         this.aboutCCNetConfigToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.help_16x16;
         this.aboutCCNetConfigToolStripMenuItem.Name = "aboutCCNetConfigToolStripMenuItem";
-        this.aboutCCNetConfigToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
+        this.aboutCCNetConfigToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
         this.aboutCCNetConfigToolStripMenuItem.Text = "&About CCNetConfig";
         this.aboutCCNetConfigToolStripMenuItem.Click += new System.EventHandler(this.aboutCCNetConfigToolStripMenuItem_Click);
         // 
@@ -573,7 +589,7 @@ namespace CCNetConfig.UI {
             this.checkForUpdatesToolStripButton});
         this.mainToolStrip.Location = new System.Drawing.Point(3, 24);
         this.mainToolStrip.Name = "mainToolStrip";
-        this.mainToolStrip.Size = new System.Drawing.Size(189, 25);
+        this.mainToolStrip.Size = new System.Drawing.Size(191, 25);
         this.mainToolStrip.TabIndex = 16;
         this.mainToolStrip.Text = "toolStrip1";
         // 
@@ -698,13 +714,13 @@ namespace CCNetConfig.UI {
             this.pasteNewItemToolStripMenuItem});
         this.projectContextMenu.Name = "projectContextMenu";
         this.projectContextMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-        this.projectContextMenu.Size = new System.Drawing.Size(164, 236);
+        this.projectContextMenu.Size = new System.Drawing.Size(168, 236);
         // 
         // addProjectToolStripMenuItem
         // 
         this.addProjectToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.addbox_16x16;
         this.addProjectToolStripMenuItem.Name = "addProjectToolStripMenuItem";
-        this.addProjectToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+        this.addProjectToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
         this.addProjectToolStripMenuItem.Text = "Add Project";
         this.addProjectToolStripMenuItem.Visible = false;
         this.addProjectToolStripMenuItem.Click += new System.EventHandler(this.addProjectToolButton_Click);
@@ -713,40 +729,40 @@ namespace CCNetConfig.UI {
         // 
         this.addTaskToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.calendar_16x16;
         this.addTaskToolStripMenuItem.Name = "addTaskToolStripMenuItem";
-        this.addTaskToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+        this.addTaskToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
         this.addTaskToolStripMenuItem.Text = "Add Tas&k";
         // 
         // addTriggerToolStripMenuItem
         // 
         this.addTriggerToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.appfolder_16x16;
         this.addTriggerToolStripMenuItem.Name = "addTriggerToolStripMenuItem";
-        this.addTriggerToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+        this.addTriggerToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
         this.addTriggerToolStripMenuItem.Text = "Add &Trigger";
         // 
         // addPublisherToolStripMenuItem
         // 
         this.addPublisherToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.move_16x16;
         this.addPublisherToolStripMenuItem.Name = "addPublisherToolStripMenuItem";
-        this.addPublisherToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+        this.addPublisherToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
         this.addPublisherToolStripMenuItem.Text = "Add &Publisher";
         // 
         // addPrebuildToolStripMenuItem
         // 
         this.addPrebuildToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.window_protected_16x16;
         this.addPrebuildToolStripMenuItem.Name = "addPrebuildToolStripMenuItem";
-        this.addPrebuildToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+        this.addPrebuildToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
         this.addPrebuildToolStripMenuItem.Text = "Add Pre&build";
         // 
         // copySepMenuItem
         // 
         this.copySepMenuItem.Name = "copySepMenuItem";
-        this.copySepMenuItem.Size = new System.Drawing.Size(160, 6);
+        this.copySepMenuItem.Size = new System.Drawing.Size(164, 6);
         // 
         // copyProjectMenuItem
         // 
         this.copyProjectMenuItem.Image = global::CCNetConfig.Properties.Resources.addbox_16x16;
         this.copyProjectMenuItem.Name = "copyProjectMenuItem";
-        this.copyProjectMenuItem.Size = new System.Drawing.Size(163, 22);
+        this.copyProjectMenuItem.Size = new System.Drawing.Size(167, 22);
         this.copyProjectMenuItem.Text = "Copy XXX";
         this.copyProjectMenuItem.Click += new System.EventHandler(this.copyProjectMenuItem_Click);
         // 
@@ -754,34 +770,34 @@ namespace CCNetConfig.UI {
         // 
         this.copyProjectAsMenuItem.Image = global::CCNetConfig.Properties.Resources.addbox_16x16;
         this.copyProjectAsMenuItem.Name = "copyProjectAsMenuItem";
-        this.copyProjectAsMenuItem.Size = new System.Drawing.Size(163, 22);
+        this.copyProjectAsMenuItem.Size = new System.Drawing.Size(167, 22);
         this.copyProjectAsMenuItem.Text = "Copy Project As...";
         this.copyProjectAsMenuItem.Click += new System.EventHandler(this.copyProjectAsMenuItem_Click);
         // 
         // toolStripSeparator6
         // 
         this.toolStripSeparator6.Name = "toolStripSeparator6";
-        this.toolStripSeparator6.Size = new System.Drawing.Size(160, 6);
+        this.toolStripSeparator6.Size = new System.Drawing.Size(164, 6);
         // 
         // copyItemsToolStripMenuItem
         // 
         this.copyItemsToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.copy_16x16;
         this.copyItemsToolStripMenuItem.Name = "copyItemsToolStripMenuItem";
-        this.copyItemsToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+        this.copyItemsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
         this.copyItemsToolStripMenuItem.Text = "Copy Items";
         // 
         // cutItemToolStripMenuItem
         // 
         this.cutItemToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.cutfile_16x16;
         this.cutItemToolStripMenuItem.Name = "cutItemToolStripMenuItem";
-        this.cutItemToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+        this.cutItemToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
         this.cutItemToolStripMenuItem.Text = "Cut Item";
         // 
         // pasteNewItemToolStripMenuItem
         // 
         this.pasteNewItemToolStripMenuItem.Image = global::CCNetConfig.Properties.Resources.paste_16x16;
         this.pasteNewItemToolStripMenuItem.Name = "pasteNewItemToolStripMenuItem";
-        this.pasteNewItemToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+        this.pasteNewItemToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
         this.pasteNewItemToolStripMenuItem.Text = "Paste New Item";
         // 
         // configPanel
@@ -943,7 +959,7 @@ namespace CCNetConfig.UI {
             this.pasteToolStripButton});
         this.editToolStrip.Location = new System.Drawing.Point(168, 24);
         this.editToolStrip.Name = "editToolStrip";
-        this.editToolStrip.Size = new System.Drawing.Size(79, 25);
+        this.editToolStrip.Size = new System.Drawing.Size(81, 25);
         this.editToolStrip.TabIndex = 17;
         this.editToolStrip.Visible = false;
         // 
@@ -1096,5 +1112,7 @@ namespace CCNetConfig.UI {
     private System.Windows.Forms.ToolStripButton validateToolStripButton;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
     private System.Windows.Forms.ToolStripMenuItem securityWizardsToolstripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem previewMenuItem;
+    private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
   }
 }

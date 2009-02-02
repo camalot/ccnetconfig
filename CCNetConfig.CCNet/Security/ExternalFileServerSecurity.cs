@@ -11,25 +11,23 @@ namespace CCNetConfig.CCNet.Security
     /// Exposes the security settings for session-based security.
     /// </summary>
     [MinimumVersion("1.5")]
-    [ReflectorName("internalSecurity")]
-    [DisplayName("Internal")]
-    [ListTreeNode(typeof(SecurityUser), "Users", AddMenuText = "Add a new user", ImageKey = "users_16x16")]
-    [ListTreeNode(typeof(SecurityPermission), "Permissions", AddMenuText = "Add a new permission", ImageKey="assertion_16x16")]
+    [ReflectorName("externalFileSecurity")]
+    [DisplayName("External File-based")]
     [ListTreeNode(typeof(SecurityLogger), "AuditLoggers", "Audit Loggers", AddMenuText = "Add a new logger", ImageKey = "auditlogger_16x16")]
+    [ListTreeNode(typeof(ExternalFileBase), "Files", "External Files", AddMenuText = "Add a new external file", ImageKey = "auditlogger_16x16")]
     [InstanceTreeNode(typeof(SecurityAuditReader), "AuditReader", "Audit Reader", ImageKey = "auditreader_16x16")]
     [InstanceTreeNode(typeof(SecurityCache), "Cache", ImageKey = "securitycache_16x16")]
-    public class InternalServerSecurity
+    public class ExternalFileServerSecurity
         : ServerSecurity
     {
         #region Constructors
         /// <summary>
-        /// Initialises a new instance of <see cref="InternalServerSecurity"/>.
+        /// Initialises a new instance of <see cref="ExternalFileServerSecurity"/>.
         /// </summary>
-        public InternalServerSecurity()
+        public ExternalFileServerSecurity()
         {
-            Type = "Internal";
-            Users = new List<SecurityUser>();
-            Permissions = new List<SecurityPermission>();
+            Type = "External File-based";
+            Files = new CloneableList<ExternalFileBase>();
             AuditLoggers = new List<SecurityLogger>();
         }
         #endregion
@@ -56,20 +54,12 @@ namespace CCNetConfig.CCNet.Security
         public SecurityRight? DefaultRight { get; set; }
         #endregion
 
-        #region Users
+        #region Files
         /// <summary>
-        /// The users.
+        /// The files.
         /// </summary>
         [Browsable(false)]
-        public List<SecurityUser> Users { get; private set; }
-        #endregion
-
-        #region Permissions
-        /// <summary>
-        /// The server-level permissions.
-        /// </summary>
-        [Browsable(false)]
-        public List<SecurityPermission> Permissions { get; private set; }
+        public CloneableList<ExternalFileBase> Files { get; private set; }
         #endregion
 
         #region AuditLoggers
@@ -98,19 +88,14 @@ namespace CCNetConfig.CCNet.Security
         public override XmlElement Serialize()
         {
             XmlDocument doc = new XmlDocument();
-            XmlElement root = doc.CreateElement("internalSecurity");
+            XmlElement root = doc.CreateElement("externalFileSecurity");
 
             if (DefaultRight.HasValue) root.SetAttribute("defaultRight", DefaultRight.Value.ToString());
 
-            XmlElement usersNode = Util.CreateElement(root, "users");
-            foreach (SecurityUser user in Users)
+            XmlElement usersNode = Util.CreateElement(root, "files");
+            foreach (ExternalFile file in Files)
             {
-                usersNode.AppendChild(doc.ImportNode(user.Serialize(), true));
-            }
-            XmlElement permissionsNode = Util.CreateElement(root, "permissions");
-            foreach (SecurityPermission permission in Permissions)
-            {
-                permissionsNode.AppendChild(doc.ImportNode(permission.Serialize(), true));
+                root.AppendChild(doc.ImportNode(file.Serialize(), true));
             }
             if (AuditLoggers.Count > 0)
             {
@@ -144,27 +129,14 @@ namespace CCNetConfig.CCNet.Security
         /// <param name="element">The <see cref="XmlElement"/> to deserialise.</param>
         public override void Deserialize(XmlElement element)
         {
-            Type = "Internal";
+            Type = "External File-based";
             DefaultRight = Util.GetEnumFromElementOrAttribute<SecurityRight>("defaultRight", element);
 
-            foreach (XmlElement ele in element.SelectNodes("users/*"))
+            foreach (XmlElement ele in element.SelectNodes("files/*"))
             {
-                SecurityUser user = Util.CreateInstanceFromXmlName<SecurityUser>(ele.Name);
-                if (user != null)
-                {
-                    user.Deserialize(ele);
-                    Users.Add(user);
-                }
-            }
-
-            foreach (XmlElement ele in element.SelectNodes("permissions/*"))
-            {
-                SecurityPermission permission = Util.CreateInstanceFromXmlName<SecurityPermission>(ele.Name);
-                if (permission != null)
-                {
-                    permission.Deserialize(ele);
-                    Permissions.Add(permission);
-                }
+                var externalFile = new ExternalFile();
+                externalFile.Deserialize(ele);
+                Files.Add(externalFile);
             }
 
             foreach (XmlElement ele in element.SelectNodes("audit/*"))
@@ -210,7 +182,7 @@ namespace CCNetConfig.CCNet.Security
         /// <returns></returns>
         public override object Clone()
         {
-            InternalServerSecurity newValue = new InternalServerSecurity();
+            ExternalFileServerSecurity newValue = new ExternalFileServerSecurity();
             CopyTo(newValue);
             return newValue;
         }
@@ -223,7 +195,7 @@ namespace CCNetConfig.CCNet.Security
         /// Copies the values of this instance to another.
         /// </summary>
         /// <param name="value">The target instance.</param>
-        protected void CopyTo(InternalServerSecurity value)
+        protected void CopyTo(ExternalFileServerSecurity value)
         {
             base.CopyTo(value);
         }

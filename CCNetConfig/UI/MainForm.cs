@@ -2298,5 +2298,17 @@ namespace CCNetConfig.UI {
             return true;
         }
     }
+
+    private void previewMenuItem_Click(object sender, EventArgs e)
+    {
+        if (CheckForConfiguration())
+        {
+            var window = new XmlPreviewWindow();
+            window.GeneratePreview(rootNode.CruiseControl);
+            window.ShowDialog(this);
+            window.Dispose();
+            window = null;
+        }
+    }
   }
 }
