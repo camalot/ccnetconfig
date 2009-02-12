@@ -116,6 +116,13 @@ namespace CCNetConfig.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap blank_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("blank_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap block_16x16 {
             get {
                 object obj = ResourceManager.GetObject("block_16x16", resourceCulture);

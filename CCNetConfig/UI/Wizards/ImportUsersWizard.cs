@@ -45,7 +45,7 @@ namespace CCNetConfig.UI.Wizards
                 if (MessageBox.Show("Importing users is only valid for internal security, do you want to change to internal security now?",
                     "Invalid security manager",
                     MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Warning) == DialogResult.Cancel)
+                    MessageBoxIcon.Warning) == DialogResult.No)
                 {
                     return;
                 }

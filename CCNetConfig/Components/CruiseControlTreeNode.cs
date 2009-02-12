@@ -33,7 +33,7 @@ namespace CCNetConfig.Components {
     /// Initializes a new instance of the <see cref="CruiseControlTreeNode"/> class.
     /// </summary>
     public CruiseControlTreeNode(Version version)
-      : base ("CruiseControl") {
+      : base ("Projects") {
       _cruiseControl = new CruiseControl ( version );
     }
 

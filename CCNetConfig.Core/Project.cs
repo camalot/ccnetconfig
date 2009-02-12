@@ -34,7 +34,7 @@ namespace CCNetConfig.Core {
   /// defines all the configuration for one project running in a CruiseControl.NET server
   /// </summary>
     [InstanceTreeNode(typeof(ProjectSecurity), "Security", ImageKey = "security_16x16")]
-    public class Project : ISerialize, ICCNetDocumentation, ICCNetObject, ICloneable
+    public class Project : ISerialize, ICCNetDocumentation, ICCNetObject, ICloneable, INotifyPropertyChanged
     {
     private string _name = string.Empty;
     private string _workingDirectory = string.Empty;
@@ -53,6 +53,7 @@ namespace CCNetConfig.Core {
     private string _category = string.Empty;
     private int? _queuePriority = null;
     private string _queueId = string.Empty;
+    private ProjectSecurity security = null;
 
     private CloneableList<ProjectExtension> _extensions;
     /// <summary>
@@ -76,7 +77,15 @@ namespace CCNetConfig.Core {
     /// The security settings for the project.
     /// </summary>
     [Browsable(false)]
-    public ProjectSecurity Security { get; set; }
+    public ProjectSecurity Security
+    {
+        get { return security; }
+        set
+        {
+            security = value;
+            FirePropertyChanged("Security");
+        }
+    }
     #endregion
 
     /// <summary>
@@ -558,5 +567,29 @@ namespace CCNetConfig.Core {
     }
 
     #endregion
-  }
+
+
+    #region INotifyPropertyChanged members
+    #region PropertyChanged
+    /// <summary>
+    /// Notifies any listeners that a property has changed.
+    /// </summary>
+    public event PropertyChangedEventHandler PropertyChanged;
+    #endregion
+
+        #region FirePropertyChanged()
+    /// <summary>
+    /// Fires the <see cref="PropertyChanged"/> event.
+    /// </summary>
+    /// <param name="property">The name of the property that was changed.</param>
+    protected virtual void FirePropertyChanged(string property)
+    {
+        if (PropertyChanged != null)
+        {
+            PropertyChanged(this, new PropertyChangedEventArgs(property));
+        }
+    }
+    #endregion
+    #endregion
+    }
 }

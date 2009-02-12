@@ -17,31 +17,7 @@ namespace CCNetConfig.CCNet.Security
     public class ActiveDirectoryAuthentication
         : SecurityUser
     {
-        #region Private fields
-        private string userName;
-        #endregion
-
         #region Public properties
-        #region UserName
-        /// <summary>
-        /// The login name of the user.
-        /// </summary>
-        [Description("The user (login) name of the user.")]
-        [DisplayName("User Name")]
-        [Category("Required")]
-        [DefaultValue(null)]
-        [Required(MinimumVersion="1.5")]
-        public virtual string UserName
-        {
-            get { return userName; }
-            set
-            {
-                userName = value;
-                FirePropertyChanged("UserName");
-            }
-        }
-        #endregion
-
         #region DomainName
         /// <summary>
         /// The login name of the user.
@@ -51,6 +27,14 @@ namespace CCNetConfig.CCNet.Security
         [Category("Optional")]
         [DefaultValue(null)]
         public virtual string DomainName { get; set; }
+        #endregion
+
+        #region DisplayName
+        /// <summary>
+        /// The login name of the user.
+        /// </summary>
+        [Browsable(false)]
+        public override string DisplayName { get; set; }
         #endregion
         #endregion
 

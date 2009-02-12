@@ -2013,6 +2013,20 @@ namespace CCNetConfig.UI {
       // This needs to be done after the project node has been added to the tree, otherwise the
       // images will not be detected
       ReflectionHelper.GenerateChildNodes(tn, project);
+      project.PropertyChanged += (o, e) =>
+      {
+          // This is a bit of a hack, since security uses the new reflection attributes to generate the tree structure, but
+          // the rest of the project node is "old-style"
+          if (e.PropertyName == "Security")
+          {
+              // Remove the current dynamically generated nodes
+              ReflectionHelper.RemoveDynamicNodes(tn);
+
+              // Now we can regenerate the dynamic nodes
+              ReflectionHelper.GenerateChildNodes(tn, project);
+          }
+      };
+
     }
 
     /// <summary>
@@ -2278,6 +2292,7 @@ namespace CCNetConfig.UI {
                     new ImportUsersWizard(rootNode.CruiseControl).Run();
                     break;
                 case 2:
+                    new SetPermissionsWizard(rootNode.CruiseControl).Run();
                     break;
             }
         }

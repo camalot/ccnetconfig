@@ -207,6 +207,19 @@
     <Compile Include="UI\ValidationForm.Designer.cs">
       <DependentUpon>ValidationForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Wizards\SelectProjectStep.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Wizards\SelectProjectStep.Designer.cs">
+      <DependentUpon>SelectProjectStep.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Wizards\SelectUsersStep.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Wizards\SelectUsersStep.Designer.cs">
+      <DependentUpon>SelectUsersStep.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Wizards\SetPermissionsWizard.cs" />
     <Compile Include="UI\Wizards\UserDisplay.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -315,6 +328,12 @@
     <EmbeddedResource Include="UI\ValidationForm.resx">
       <DependentUpon>ValidationForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Wizards\SelectProjectStep.resx">
+      <DependentUpon>SelectProjectStep.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Wizards\SelectUsersStep.resx">
+      <DependentUpon>SelectUsersStep.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Wizards\UserDisplay.resx">
       <DependentUpon>UserDisplay.cs</DependentUpon>
     </EmbeddedResource>
@@ -391,6 +410,8 @@
     <None Include="Resources\auditlogger_16x16.png" />
     <None Include="Resources\auditreader_16x16.png" />
     <None Include="Resources\assignpermissions_16x16.png" />
+    <None Include="Resources\blank_16x16.png" />
+    <None Include="Resources\donate.png" />
     <Content Include="Resources\Images\ccnetconfig.ico" />
     <Content Include="Resources\Images\Green Down.png" />
     <Content Include="Resources\Images\Green Up.png" />

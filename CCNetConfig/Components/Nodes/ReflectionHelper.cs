@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
-using CoreUtil = CCNetConfig.Core.Util;
-using CCNetConfig.Core.Components;
 using CCNetConfig.Core;
+using CCNetConfig.Core.Components;
+using CoreUtil = CCNetConfig.Core.Util;
+using System.Collections.Generic;
 
 namespace CCNetConfig.Components.Nodes
 {
@@ -29,6 +28,32 @@ namespace CCNetConfig.Components.Nodes
                 GenerateInstanceNodes(parent, source, sourceType);
             }
             UpdateImages(parent);
+        }
+        #endregion
+
+        #region RemoveDynamicNodes()
+        /// <summary>
+        /// Removes any nodes that were added dynamically (i.e. by GenerateChildNodes()).
+        /// </summary>
+        /// <param name="parent">The node to remove the dynamic nodes from.</param>
+        public static void RemoveDynamicNodes(TreeNode parent)
+        {
+            // Find any dynamic nodes ...
+            var dynamicNodes = new List<TreeNode>();
+            foreach (TreeNode node in parent.Nodes)
+            {
+                if ((node is ReflectionInstanceTreeNode) ||
+                    (node is ReflectionListTreeNode))
+                {
+                    dynamicNodes.Add(node);
+                }
+            }
+
+            // ... and remove them
+            foreach (var node in dynamicNodes)
+            {
+                parent.Nodes.Remove(node);
+            }
         }
         #endregion
         #endregion

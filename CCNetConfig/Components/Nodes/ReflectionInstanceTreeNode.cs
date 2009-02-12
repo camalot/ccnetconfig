@@ -86,6 +86,17 @@ namespace CCNetConfig.Components.Nodes
             }
         }
         #endregion
+
+        #region Refresh()
+        /// <summary>
+        /// Refreshes the data item.
+        /// </summary>
+        public virtual void Refresh()
+        {
+            DataItem = RetrieveDataValue();
+            Text = DataItem.ToString();
+        }
+        #endregion
         #endregion
 
         #region Private methods
@@ -244,7 +255,10 @@ namespace CCNetConfig.Components.Nodes
         /// </summary>
         private void UpdateDisplay()
         {
-            if (TreeView.SelectedNode == this) MainForm.DisplayItem(DataItem);
+            if ((TreeView != null) && (TreeView.SelectedNode == this)) 
+            {
+                MainForm.DisplayItem(DataItem);
+            }
         }
         #endregion
         #endregion

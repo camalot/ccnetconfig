@@ -175,8 +175,7 @@ namespace CCNetConfig.UI.Wizards
             };
             steps.Add(defaultServerPermission);
 
-
-            // Default server permission
+            // Default project permission
             var defaultProjectPermission = new SelectionStep("Default Project Permission",
                 "What do you want as the default permission at the project level:",
                 "None",
